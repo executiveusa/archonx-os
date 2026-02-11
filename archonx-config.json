@@ -1,0 +1,52 @@
+{
+  "system": {
+    "name": "ARCHONX-OS",
+    "version": "1.0.0",
+    "architecture": "dual-crew"
+  },
+  "agents": {
+    "core": {
+      "pauli": {
+        "enabled": true,
+        "priority": "high",
+        "capabilities": [
+          "analytics",
+          "logic",
+          "diagnostics",
+          "mathematics"
+        ]
+      },
+      "synthia": {
+        "enabled": true,
+        "priority": "high",
+        "capabilities": [
+          "synthesis",
+          "creativity",
+          "nlp",
+          "communication"
+        ]
+      }
+    },
+    "total_count": 64
+  },
+  "integration": {
+    "openclaw": {
+      "enabled": true,
+      "backend_url": "http://localhost:8080"
+    },
+    "visualization": {
+      "enabled": true,
+      "ui_type": "game",
+      "port": 3000
+    }
+  },
+  "deployment": {
+    "mode": "development",
+    "environments": [
+      "local",
+      "cloud",
+      "edge",
+      "hybrid"
+    ]
+  }
+}
