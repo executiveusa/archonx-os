@@ -1,0 +1,39 @@
+# AI-Friendly Crawling Rules for ARCHONX
+
+User-agent: *
+Allow: /
+Allow: /api/
+Allow: /docs/
+Allow: /blog/
+
+# AI-specific agents
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: ChatGPT-User
+Allow: /
+Crawl-delay: 1
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: anthropic-ai
+Allow: /
+Crawl-delay: 1
+
+User-agent: Google-Extended
+Allow: /
+Crawl-delay: 1
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 1
+
+# Structured data locations
+Sitemap: https://archonx.io/sitemap.xml
+Sitemap: https://archonx.io/api-sitemap.xml
+
+# LLM metadata
+# See /llm.txt for AI-optimized metadata

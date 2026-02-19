@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.env.*
+*.env
+master.env
+.secrets/
+secrets/
+.envrc
+.direnv/
+.venv/
+venv/
+
+# Keys / certs (never commit)
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.enc
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (visualization)
+visualization/web/node_modules/
+visualization/web/dist/
+
+# Testing / Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+logs/
+*.log
+
+# Archives (keep out of repo)
+*.zip
+*.tar.gz
+
+# Large binary files (exceed GitHub 100MB limit)
+01-main/01-main/hardware/light/bodies/
+
+# Extra safety ignores
+master.env
+*.env
+*.pem
+*.key
+*.pfx
+*.p12
+*.zip
+*.7z
+*.tar
+*.tar.gz
+.archive/
+.zencoder/
+01-app-main/
+01-main/
+open-interpreter-fork-main/
+Darya-designs-main/
+agents-official-brand-guidelines-master/
+n8n-workflows/StoryToolkitAI-main/StoryToolkitAI-main/FFmpeg-master/
+scripts/secrets.py
