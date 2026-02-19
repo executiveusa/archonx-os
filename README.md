@@ -66,6 +66,45 @@ archonx status
 archonx meetings
 ```
 
+## 🖥️ Working Front End (Mission Console)
+
+ARCHONX now serves a live frontend from `public/index.html` at the root URL.
+
+```bash
+# Start API + frontend
+uvicorn archonx.server:create_app --factory --host 0.0.0.0 --port 8080 --reload
+```
+
+Then open:
+
+- `http://localhost:8080/` (Mission Console UI)
+- `http://localhost:8080/api/agents`
+- `http://localhost:8080/api/skills`
+- `http://localhost:8080/api/flywheel`
+
+How to use this:
+
+1. Click `Refresh Signals` to pull live system metrics.
+2. Click `Run Sample Task` to dispatch a collaborative `crew="both"` task.
+3. Watch Task Output + Agent Theater events update in the UI.
+
+## ▲ Vercel Link (Project)
+
+Project ID: `prj_T19WSaUiqLmrAewXECfctQyw4jKe`
+
+```bash
+# Requires Vercel CLI + token in environment
+npm i -g vercel
+vercel link --project prj_T19WSaUiqLmrAewXECfctQyw4jKe
+vercel --prod
+```
+
+If your token is stored in your own secret manager, export it before deploy:
+
+```bash
+setx VERCEL_TOKEN "<your-token>"
+```
+
 ##  Requirements
 
 - Python 3.11+
@@ -219,6 +258,7 @@ ARCHONX is proprietary software. For licensing inquiries, contact:
 Proprietary - © 2026 The Pauli Effect
 
 Built with the Four Pillars: LOYALTY, HONOR, TRUTH, RESPECT
+built by the pauli effect
 
 ---
 
