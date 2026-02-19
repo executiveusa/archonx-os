@@ -1,0 +1,7 @@
+{
+  "name": "beads_manager",
+  "version": "1.0.0",
+  "bead_id": "BEAD-0004",
+  "description": "Track BEADS milestones, IDs, and enforcement state.",
+  "entrypoint": "archonx-os/ops/runner/main.py"
+}

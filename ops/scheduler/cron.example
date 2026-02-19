@@ -1,0 +1,5 @@
+# Run report-only scan every hour
+0 * * * * cd /opt/archonx-os && ./ops/scripts/run_ops.sh --report-only >> ops/reports/cron.log 2>&1
+
+# Run active scan every 6 hours
+0 */6 * * * cd /opt/archonx-os && ./ops/scripts/run_ops.sh >> ops/reports/cron.log 2>&1

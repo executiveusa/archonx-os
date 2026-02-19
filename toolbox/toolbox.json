@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "bead_id": "BEAD-0004",
+  "skills": [
+    {
+      "name": "pauliwheel_coding_protocol",
+      "manifest": "toolbox/skills/pauliwheel_coding_protocol/manifest.json"
+    },
+    {
+      "name": "beads_manager",
+      "manifest": "toolbox/skills/beads_manager/manifest.json"
+    },
+    {
+      "name": "ralphy_loop_enforcer",
+      "manifest": "toolbox/skills/ralphy_loop_enforcer/manifest.json"
+    },
+    {
+      "name": "agent_lightning_bootstrap",
+      "manifest": "toolbox/skills/agent_lightning_bootstrap/manifest.json"
+    }
+  ]
+}
