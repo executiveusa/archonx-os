@@ -1,0 +1,77 @@
+[
+  {
+    "repo": "executiveusa/phone-call-assistant",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/VisionClaw",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/clawdbot-Whatsapp-agent",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/dashboard-agent-swarm",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/agent-zero-Fork",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/archonx-os",
+    "status": "updated_local",
+    "detail": "template_synced"
+  },
+  {
+    "repo": "executiveusa/Darya-designs",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/cult-directory-template",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/pauli-comic-funnel",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/Pauli-claw-work",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/amentislibrary",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/agent_flywheel_clawdbot_skills_and_integrations",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/goat-alliance-scaffold",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/vallarta-voyage-explorer",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  },
+  {
+    "repo": "executiveusa/paulisworld-openclaw-3d",
+    "status": "dry_run",
+    "detail": "clone_failed_no_credentials"
+  }
+]

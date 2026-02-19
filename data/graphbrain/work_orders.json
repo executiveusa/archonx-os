@@ -1,0 +1,25 @@
+[
+  {
+    "id": "wo-risk-1",
+    "assignee": "Devika",
+    "type": "execution",
+    "summary": "Mitigate risk 'insecure_http_reference' in executiveusa/archonx-os.",
+    "source": {
+      "repo": "executiveusa/archonx-os",
+      "severity": "medium",
+      "risk": "insecure_http_reference"
+    }
+  },
+  {
+    "id": "wo-risk-2",
+    "assignee": "Devika",
+    "type": "execution",
+    "summary": "Mitigate risk 'endpoint_not_allowlisted' in executiveusa/archonx-os.",
+    "source": {
+      "repo": "executiveusa/archonx-os",
+      "severity": "low",
+      "risk": "endpoint_not_allowlisted",
+      "endpoint": "https://placeholder.com/polly/\u0001xz"
+    }
+  }
+]

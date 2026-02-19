@@ -1,0 +1,4 @@
+{
+  "report_webhook": "https://api.github.com/repos/executiveusa/archonx-os/dispatches",
+  "events": ["daily_report", "security_alert"]
+}

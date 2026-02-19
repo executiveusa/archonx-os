@@ -265,3 +265,42 @@ built by the pauli effect
 **"Speed beats power"** - Tyrone Davis
 
 For humanity. For the 7-generation vision.
+
+## 🧠 GraphBrain Runtime
+
+GraphBrain is the ArchonX ecosystem intelligence runtime that indexes repositories, builds co-occurrence graphs, detects cross-repo bridges/gaps, and emits work orders for Agent-Zero (reasoning) and Devika (execution).
+
+### Commands
+
+```bash
+archonx graphbrain run --mode=full
+archonx graphbrain run --mode=light
+archonx graphbrain init-repo executiveusa/archonx-os --path .
+archonx graphbrain propagate --all
+```
+
+### Outputs
+
+GraphBrain writes machine-readable artifacts to:
+
+- `data/graphbrain/global_graph.json`
+- `data/graphbrain/repo_graphs/<repo>.json`
+- `data/graphbrain/similarity.json`
+- `data/graphbrain/consolidation_candidates.json`
+- `data/graphbrain/risk_findings.json`
+- `data/graphbrain/work_orders.json`
+- `data/audit/graphbrain.log` (append-only hash audit lines)
+- `data/dashboard/registry.json`
+- `data/dashboard/status.json`
+
+### Adding a repository
+
+1. Add repo slug to `data/graphbrain/targets.json` (`{"repos": ["owner/repo"]}`) or rely on defaults.
+2. Run `archonx graphbrain init-repo <owner/repo> --path <local-path>` to install mandatory `.archonx/` controls.
+3. Run `archonx graphbrain propagate --all` to apply ecosystem-wide propagation (PR-ready where credentials exist; dry-run report otherwise).
+
+### Interpreting results
+
+- High similarity pairs in `similarity.json` and `consolidation_candidates.json` indicate merge/shared-module opportunities.
+- `risk_findings.json` lists security/reporting risks (insecure HTTP or non-allowlisted endpoints).
+- `work_orders.json` is the actionable queue for Agent-Zero + Devika.
