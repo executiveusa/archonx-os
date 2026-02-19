@@ -26,6 +26,7 @@ from fastapi.staticfiles import StaticFiles
 
 from archonx.kernel import ArchonXKernel
 from archonx.core.metrics import Leaderboard
+from archonx.onboarding.voice_agent.runner import OnboardingVoiceRunner
 from archonx.visualization.chessboard import ChessboardView
 from archonx.visualization.dashboard import MetricsDashboard
 from archonx.visualization.paulis_place_view import PaulisPlaceView
@@ -236,6 +237,25 @@ def create_app() -> FastAPI:
             return JSONResponse({"error": "not ready"}, status_code=503)
         tools = _kernel.tools.list_tools()
         return JSONResponse({"tools": tools})
+
+    @app.post("/api/onboarding/run")
+    async def run_onboarding(body: dict[str, Any]) -> JSONResponse:
+        if _kernel is None:
+            return JSONResponse({"error": "not ready"}, status_code=503)
+
+        org_id = str(body.get("org_id", "default-org"))
+        project_id = str(body.get("project_id", "default-project"))
+        transcript = str(body.get("transcript", "")).strip()
+
+        runner = OnboardingVoiceRunner()
+        transcript_text = transcript or runner.load_transcript()
+        result = await runner.run_plan(
+            executor=_kernel.execute_task,
+            transcript_text=transcript_text,
+            org_id=org_id,
+            project_id=project_id,
+        )
+        return JSONResponse(result)
 
     # ----- WebSocket -----
 

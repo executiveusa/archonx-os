@@ -24,6 +24,7 @@ import json
 import logging
 import sys
 from pathlib import Path
+from typing import Any
 
 logging.basicConfig(
     level=logging.INFO,
@@ -197,6 +198,37 @@ def _theater(_args: argparse.Namespace) -> None:
         print(f"  {k:25s}: {v}")
 
 
+def _onboard(args: argparse.Namespace) -> None:
+    """Run onboarding voice flow and execute onboarding task bundle."""
+    from archonx.kernel import ArchonXKernel
+    from archonx.onboarding.voice_agent.runner import OnboardingVoiceRunner
+
+    async def _run() -> dict[str, Any]:
+        kernel = ArchonXKernel()
+        await kernel.boot()
+        try:
+            default_runner = OnboardingVoiceRunner()
+            runner = OnboardingVoiceRunner(
+                transcript_path=Path(args.transcript) if args.transcript else default_runner.transcript_path,
+                tasks_path=Path(args.tasks) if args.tasks else default_runner.tasks_path,
+            )
+            transcript_text = (
+                Path(args.transcript).read_text(encoding="utf-8")
+                if args.transcript
+                else runner.load_transcript()
+            )
+            return await runner.run_plan(
+                executor=kernel.execute_task,
+                transcript_text=transcript_text,
+                org_id=args.org,
+                project_id=args.project,
+            )
+        finally:
+            await kernel.shutdown()
+
+    print(json.dumps(asyncio.run(_run()), indent=2))
+
+
 def _graphbrain_run(args: argparse.Namespace) -> None:
     """Run GraphBrain runtime in full or light mode."""
     from services.graphbrain import GraphBrainRuntime, Reporter
@@ -274,6 +306,13 @@ def main() -> None:
     # theater
     sub.add_parser("theater", help="Show agent theater stats")
 
+    # onboard
+    p_onboard = sub.add_parser("onboard", help="Run onboarding voice flow")
+    p_onboard.add_argument("--org", default="default-org", help="Organization identifier")
+    p_onboard.add_argument("--project", default="default-project", help="Project identifier")
+    p_onboard.add_argument("--transcript", help="Path to transcript markdown file")
+    p_onboard.add_argument("--tasks", help="Path to onboarding task bundle JSON")
+
     # graphbrain
     p_graphbrain = sub.add_parser("graphbrain", help="GraphBrain runtime commands")
     gb_sub = p_graphbrain.add_subparsers(dest="graphbrain_command")
@@ -301,6 +340,7 @@ def main() -> None:
         "flywheel": _flywheel,
         "scout": _scout,
         "theater": _theater,
+        "onboard": _onboard,
     }
 
     if args.command == "graphbrain":
