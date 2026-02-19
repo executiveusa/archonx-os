@@ -1,0 +1,175 @@
+﻿{
+    "generatedAt":  "2026-02-19T01:19:13.9064000-06:00",
+    "bead_id":  "BEAD-0001",
+    "repos":  [
+                  {
+                      "repo":  "archonx-os",
+                      "path":  "C:\\Users\\execu\\archonx-os",
+                      "git":  true,
+                      "stack":  [
+                                    "unknown"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "agent-zero-Fork",
+                      "path":  "C:\\Users\\execu\\agent-zero-Fork",
+                      "git":  true,
+                      "stack":  [
+                                    "node",
+                                    "python"
+                                ],
+                      "commands":  {
+                                       "dev":  "npm run dev",
+                                       "test":  "npm run test",
+                                       "lint":  "npm run lint",
+                                       "build":  "npm run build"
+                                   }
+                  },
+                  {
+                      "repo":  "dashboard-agent-swarm",
+                      "path":  "C:\\Users\\execu\\dashboard-agent-swarm",
+                      "git":  true,
+                      "stack":  [
+                                    "node"
+                                ],
+                      "commands":  {
+                                       "dev":  "npm run dev",
+                                       "test":  "npm run test",
+                                       "lint":  "npm run lint",
+                                       "build":  "npm run build"
+                                   }
+                  },
+                  {
+                      "repo":  "devika-agent",
+                      "path":  "C:\\Users\\execu\\devika-agent",
+                      "git":  true,
+                      "stack":  [
+                                    "python"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "MetaGPT",
+                      "path":  "C:\\Users\\execu\\MetaGPT",
+                      "git":  true,
+                      "stack":  [
+                                    "python"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "open-agent-platform-pauli",
+                      "path":  "C:\\Users\\execu\\open-agent-platform-pauli",
+                      "git":  true,
+                      "stack":  [
+                                    "node"
+                                ],
+                      "commands":  {
+                                       "dev":  "npm run dev",
+                                       "test":  null,
+                                       "lint":  "npm run lint",
+                                       "build":  "npm run build"
+                                   }
+                  },
+                  {
+                      "repo":  "clawdbot-Whatsapp-agent",
+                      "path":  "C:\\Users\\execu\\clawdbot-Whatsapp-agent",
+                      "git":  true,
+                      "stack":  [
+                                    "node"
+                                ],
+                      "commands":  {
+                                       "dev":  "npm run dev",
+                                       "test":  "npm run test",
+                                       "lint":  "npm run lint",
+                                       "build":  "npm run build"
+                                   }
+                  },
+                  {
+                      "repo":  "voice-agents-fork",
+                      "path":  "C:\\Users\\execu\\voice-agents-fork",
+                      "git":  true,
+                      "stack":  [
+                                    "python"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "GPT-Agent-im-ready",
+                      "path":  "C:\\Users\\execu\\GPT-Agent-im-ready",
+                      "git":  true,
+                      "stack":  [
+                                    "unknown"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "phone-call-assistant",
+                      "path":  "C:\\Users\\execu\\phone-call-assistant",
+                      "git":  true,
+                      "stack":  [
+                                    "python"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "VisionClaw",
+                      "path":  "C:\\Users\\execu\\VisionClaw",
+                      "git":  true,
+                      "stack":  [
+                                    "unknown"
+                                ],
+                      "commands":  {
+                                       "dev":  null,
+                                       "test":  null,
+                                       "lint":  null,
+                                       "build":  null
+                                   }
+                  },
+                  {
+                      "repo":  "voice-web-architect",
+                      "path":  "C:\\Users\\execu\\voice-web-architect",
+                      "git":  true,
+                      "stack":  [
+                                    "node"
+                                ],
+                      "commands":  {
+                                       "dev":  "npm run dev",
+                                       "test":  null,
+                                       "lint":  "npm run lint",
+                                       "build":  "npm run build"
+                                   }
+                  }
+              ]
+}

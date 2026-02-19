@@ -1,0 +1,11 @@
+[Unit]
+Description=ArchonX Ops Runner
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/archonx-os
+ExecStart=/usr/bin/env bash /opt/archonx-os/ops/scripts/run_ops.sh
+
+[Install]
+WantedBy=multi-user.target
