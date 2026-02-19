@@ -15,11 +15,13 @@ import asyncio
 import json
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from archonx.kernel import ArchonXKernel
 from archonx.core.metrics import Leaderboard
@@ -28,6 +30,7 @@ from archonx.visualization.dashboard import MetricsDashboard
 from archonx.visualization.paulis_place_view import PaulisPlaceView
 
 logger = logging.getLogger("archonx.server")
+_PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
 
 # ---------------------------------------------------------------------------
 # Globals (populated at startup)
@@ -238,6 +241,10 @@ def create_app() -> FastAPI:
         except WebSocketDisconnect:
             _ws_clients.discard(ws)
             logger.info("WebSocket client disconnected (%d remaining)", len(_ws_clients))
+
+    # Frontend static app (served last so /api and /ws stay authoritative)
+    if _PUBLIC_DIR.exists():
+        app.mount("/", StaticFiles(directory=str(_PUBLIC_DIR), html=True), name="frontend")
 
     return app
 
