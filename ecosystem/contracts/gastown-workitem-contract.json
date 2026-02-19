@@ -1,0 +1,18 @@
+{
+  "contract": "gastown-workitem-v1",
+  "work_item_pattern": "^gt-[a-z0-9]{5,}$",
+  "required_for": [
+    "ssh",
+    "db",
+    "cloud",
+    "deployment",
+    "secrets",
+    "github_write",
+    "external_api"
+  ],
+  "on_missing": {
+    "decision": "deny",
+    "audit_reason": "missing_work_item_id",
+    "include_grant_request_url": true
+  }
+}
