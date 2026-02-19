@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archonx.local/contracts/graphbrain-report.schema.json",
+  "title": "GraphBrain Consolidation Report",
+  "type": "object",
+  "required": ["report_id", "generated_at", "repos_indexed", "graph", "recommendations"],
+  "properties": {
+    "report_id": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "repos_indexed": {"type": "integer", "minimum": 0},
+    "graph": {
+      "type": "object",
+      "required": ["nodes", "edges", "clusters", "bridge_terms_top"],
+      "properties": {
+        "nodes": {"type": "integer", "minimum": 0},
+        "edges": {"type": "integer", "minimum": 0},
+        "clusters": {"type": "integer", "minimum": 0},
+        "bridge_terms_top": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["term", "betweenness"],
+            "properties": {
+              "term": {"type": "string"},
+              "betweenness": {"type": "number", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rec_id", "type", "repos", "confidence", "why"],
+        "properties": {
+          "rec_id": {"type": "string"},
+          "type": {"enum": ["consolidate", "extract_shared_lib", "deprecate", "keep_separate"]},
+          "repos": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "why": {"type": "object"},
+          "evidence_pack": {"type": "object"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "report_id": "graphbrain.graph_snapshot.v1",
+  "generated_at": "2026-02-19T09:00:59.071723+00:00",
+  "repos_indexed": 1,
+  "mode": "incremental",
+  "bead_id": "bead.graphbrain.bootstrap.v1",
+  "graph": {
+    "nodes": 56,
+    "edges": 200,
+    "clusters": 1,
+    "bridge_terms_top": [
+      {
+        "term": "toolbox",
+        "betweenness": 18.333333333333332
+      },
+      {
+        "term": "reportback",
+        "betweenness": 14.0
+      },
+      {
+        "term": "contracts",
+        "betweenness": 10.666666666666666
+      },
+      {
+        "term": "archonx",
+        "betweenness": 10.0
+      },
+      {
+        "term": "json",
+        "betweenness": 9.166666666666666
+      },
+      {
+        "term": "security",
+        "betweenness": 7.333333333333333
+      },
+      {
+        "term": "bootstrap",
+        "betweenness": 7.333333333333333
+      },
+      {
+        "term": "bash",
+        "betweenness": 7.333333333333333
+      },
+      {
+        "term": "metadata",
+        "betweenness": 7.333333333333333
+      },
+      {
+        "term": "ecosystem",
+        "betweenness": 7.333333333333332
+      }
+    ]
+  },
+  "confidence_example": 0.665,
+  "dry_run": true
+}

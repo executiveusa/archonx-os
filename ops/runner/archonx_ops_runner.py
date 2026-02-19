@@ -161,6 +161,10 @@ def main():
     sub.add_parser("meeting")
     sub.add_parser("doctor")
 
+    gb_cmd = sub.add_parser("graphbrain")
+    gb_cmd.add_argument("--mode", choices=["incremental", "full", "weekly-deep"], default="incremental")
+    gb_cmd.add_argument("--dry-run", action="store_true")
+
     args = parser.parse_args()
 
     if args.command == "run":
@@ -178,6 +182,12 @@ def main():
         print(meeting())
     elif args.command == "doctor":
         print(json.dumps(run_doctor(), indent=2))
+    elif args.command == "graphbrain":
+        import subprocess
+        cmd = ["python", str(ROOT / "ops" / "runner" / "archonx_graphbrain_runner.py"), "--mode", args.mode]
+        if args.dry_run:
+            cmd.append("--dry-run")
+        subprocess.check_call(cmd)
 
 
 if __name__ == "__main__":

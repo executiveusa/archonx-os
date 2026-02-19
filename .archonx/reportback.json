@@ -2,5 +2,8 @@
   "repo": "executiveusa/archonx-os",
   "status": "managed",
   "agent_lightning": "stub",
-  "notes": ["Root compliance pointer for ArchonX ecosystem automation."]
+  "notes": [
+    "Root compliance pointer for ArchonX ecosystem automation."
+  ],
+  "contract": "openclaw-reportback-v1"
 }

@@ -15,3 +15,7 @@ Reports are emitted under `ops/reports/`:
 - `PAULIWHEEL_COMPLIANCE_MATRIX_<timestamp>.json`
 - `pauliwheel_meeting_<timestamp>.json`
 - `FINAL_ECO_PROMPT_REPORT.json`
+
+## GraphBrain
+
+Run `python ops/runner/archonx_graphbrain_runner.py --mode incremental --dry-run` to emit GraphBrain snapshots under `ops/reports/graphbrain/`.
