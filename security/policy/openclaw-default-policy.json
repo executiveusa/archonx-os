@@ -1,0 +1,19 @@
+{
+  "policy": "openclaw-default-v1",
+  "deny_by_default": true,
+  "rules": [
+    {
+      "id": "allow-heartbeat",
+      "effect": "allow",
+      "actions": ["agent.heartbeat", "agent.register"],
+      "requires_work_item": false
+    },
+    {
+      "id": "gated-privileged-actions",
+      "effect": "allow",
+      "actions": ["message.send", "tool.execute", "external.api", "github.write", "deploy"],
+      "requires_grant": true,
+      "requires_work_item": true
+    }
+  ]
+}

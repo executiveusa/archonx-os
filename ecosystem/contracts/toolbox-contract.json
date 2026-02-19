@@ -1,0 +1,10 @@
+{
+  "contract": "toolbox-v1",
+  "source_of_truth": "toolbox/toolbox.json",
+  "sync_mode": "git-pull",
+  "future_upgrade": "http-served-toolbox-v2",
+  "security": {
+    "requires_grant": true,
+    "requires_work_item": true
+  }
+}
