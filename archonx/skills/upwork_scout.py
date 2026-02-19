@@ -125,17 +125,40 @@ class UpworkScoutSkill(BaseSkill):
     async def _generate_video_proposal(self, ctx: SkillContext) -> dict[str, Any]:
         """Generate a Remotion video proposal for maximum impact."""
         job_url = ctx.params.get("job_url", "")
+        job_title = ctx.params.get("job_title", "")
+        client_name = ctx.params.get("client_name", "")
 
-        # In production: trigger Remotion rendering pipeline
+        video_result = None
+
+        # Trigger Remotion rendering pipeline if available
         if ctx.tools:
             remotion_tool = ctx.tools.get("remotion")
             if remotion_tool:
                 # Dispatch to Remotion tool for video generation
-                pass
+                try:
+                    video_result = await remotion_tool(
+                        template="video_proposal",
+                        data={
+                            "job_url": job_url,
+                            "job_title": job_title,
+                            "client_name": client_name,
+                            "duration": 60,
+                            "sections": [
+                                "personalized_intro",
+                                "problem_understanding",
+                                "solution_demo",
+                                "portfolio_showcase",
+                                "call_to_action",
+                            ],
+                        }
+                    )
+                except Exception as e:
+                    logger.warning("Remotion video generation failed: %s", e)
+                    video_result = {"error": str(e), "render_status": "failed"}
 
         return {
             "job_url": job_url,
-            "video_proposal": {
+            "video_proposal": video_result or {
                 "format": "remotion",
                 "duration_seconds": 60,
                 "sections": [
@@ -146,6 +169,7 @@ class UpworkScoutSkill(BaseSkill):
                     "call_to_action",
                 ],
                 "render_status": "queued",
+                "message": "Remotion tool not available - video queued for manual rendering",
             },
         }
 

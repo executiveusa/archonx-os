@@ -1,7 +1,7 @@
 # 🧰 ARCHONX OS - AGENT TOOLBOX
 ## Shared Tools for All 64 Agents
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Location:** `C:\archonx-os-main\archonx\tools\toolbox.md`  
 **Last Updated:** 2026-02-19
 
@@ -46,8 +46,9 @@
 ---
 
 ### 2. Orgo MCP (Virtual Computer Control)
+**Location:** `archonx/tools/orgo-mcp/`  
 **Repository:** https://github.com/nickvasilescu/orgo-mcp.git  
-**Status:** 📋 Pending Installation
+**Status:** ✅ Installed
 
 **Capabilities:**
 - Create and manage virtual computers
@@ -56,25 +57,63 @@
 - Stream to Twitch
 - File operations
 
-**Installation:**
-```bash
-git clone https://github.com/nickvasilescu/orgo-mcp.git
-cd orgo-mcp
-pip install -e .
-export ORGO_API_KEY="your_key"
+**Usage:**
+```json
+{
+  "mcpServers": {
+    "orgo": {
+      "command": "python",
+      "args": ["-m", "orgo_mcp"],
+      "env": {
+        "ORGO_API_KEY": "your_key"
+      }
+    }
+  }
+}
 ```
+
+**Available Tools:**
+- `orgo_create_computer` - Create a virtual computer
+- `orgo_screenshot` - Take a screenshot
+- `orgo_execute` - Execute shell commands
+- `orgo_file_read` - Read files
+- `orgo_file_write` - Write files
+- `orgo_stream_start` - Start Twitch stream
+- `orgo_stream_stop` - Stop streaming
 
 ---
 
 ### 3. Bright Data MCP (Research & Scraping)
+**Location:** `archonx/tools/brightdata-mcp/`  
 **Repository:** https://github.com/brightdata/brightdata-mcp.git  
-**Status:** 📋 Pending Installation
+**Status:** ✅ Installed
 
 **Capabilities:**
 - Web scraping with residential proxies
 - Search engine results
 - Structured data extraction
 - Anti-bot bypass
+
+**Usage:**
+```json
+{
+  "mcpServers": {
+    "brightdata": {
+      "command": "npx",
+      "args": ["-y", "@brightdata/mcp"],
+      "env": {
+        "BRIGHT_DATA_API_KEY": "your_key"
+      }
+    }
+  }
+}
+```
+
+**Available Tools:**
+- `brightdata_scrape` - Scrape web pages
+- `brightdata_search` - Search engine queries
+- `brightdata_extract` - Structured data extraction
+- `brightdata_screenshot` - Page screenshots
 
 ---
 
@@ -126,18 +165,20 @@ export ORGO_API_KEY="your_key"
 
 All agents MUST log tool usage to the canonical log:
 
-```json
-{
-  "timestamp": "2026-02-19T12:00:00Z",
-  "agent_id": "White-Queen",
-  "tool": "chrome_screenshot",
-  "purpose": "Capture page state for design review",
-  "success": true,
-  "duration_ms": 450
-}
+```python
+from archonx.logs.canonical_log import get_logger
+
+logger = get_logger()
+logger.log_tool_use(
+    agent_id="White-Queen",
+    tool="chrome_screenshot",
+    purpose="Capture page state for design review",
+    success=True,
+    duration_ms=450
+)
 ```
 
-Log file: `archonx/logs/tool_usage.jsonl`
+Log file: `archonx/logs/agents_{session_id}.jsonl`
 
 ---
 
@@ -152,7 +193,7 @@ cat archonx/tools/toolbox.md
 npx chrome-devtools-mcp@latest --version
 
 # Check tool logs
-tail -f archonx/logs/tool_usage.jsonl
+tail -f archonx/logs/agents_*.jsonl
 ```
 
 ### Tool Invocation Pattern
@@ -176,8 +217,8 @@ class MySkill(BaseSkill):
 | Tool | Status | Last Check | Success Rate |
 |------|--------|------------|--------------|
 | Chrome DevTools MCP | ✅ Active | 2026-02-19 | 100% |
-| Orgo MCP | 📋 Pending | - | - |
-| Bright Data MCP | 📋 Pending | - | - |
+| Orgo MCP | ✅ Active | 2026-02-19 | - |
+| Bright Data MCP | ✅ Active | 2026-02-19 | - |
 | Context7 MCP | 📋 Pending | - | - |
 | Perplexity MCP | 📋 Pending | - | - |
 | Remotion | ✅ Active | 2026-02-19 | 95% |
@@ -194,5 +235,35 @@ class MySkill(BaseSkill):
 
 ---
 
-**Document Version:** 1.0.0  
+## 📚 MCP SERVER CONFIGURATION
+
+### Complete MCP Config for Claude Desktop
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "orgo": {
+      "command": "python",
+      "args": ["-m", "orgo_mcp"],
+      "env": {
+        "ORGO_API_KEY": "${ORGO_API_KEY}"
+      }
+    },
+    "brightdata": {
+      "command": "npx",
+      "args": ["-y", "@brightdata/mcp"],
+      "env": {
+        "BRIGHT_DATA_API_KEY": "${BRIGHT_DATA_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+---
+
+**Document Version:** 1.1.0  
 **Maintained By:** ArchonX Orchestrator (White-e1)
