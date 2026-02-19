@@ -1,0 +1,9 @@
+[submodule "archonx/tools/chrome-devtools-mcp"]
+	path = archonx/tools/chrome-devtools-mcp
+	url = https://github.com/ChromeDevTools/chrome-devtools-mcp.git
+[submodule "archonx/tools/orgo-mcp"]
+	path = archonx/tools/orgo-mcp
+	url = https://github.com/nickvasilescu/orgo-mcp.git
+[submodule "archonx/tools/brightdata-mcp"]
+	path = archonx/tools/brightdata-mcp
+	url = https://github.com/brightdata/brightdata-mcp.git
