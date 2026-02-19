@@ -1,0 +1,9 @@
+# ArchonX Access Kernel schedules
+# Health check every 5 minutes
+*/5 * * * * /bin/bash /opt/archonx-os/ops/scripts/access-kernel_healthcheck.sh
+
+# Daily self-test and evidence export at 02:15 UTC
+15 2 * * * /bin/bash /opt/archonx-os/ops/scripts/access-kernel_selftest.sh
+
+# Policy drift check 3x/day
+0 6,14,22 * * * /bin/bash /opt/archonx-os/ops/scripts/access-kernel_policy_drift.sh
