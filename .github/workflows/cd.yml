@@ -1,0 +1,51 @@
+name: CD - Continuous Deployment
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: |
+          pip install -e ".[dev]"
+      
+      - name: Run tests before deploy
+        run: pytest
+      
+      - name: Build Docker image
+        run: |
+          docker build -t archonx:${{ github.sha }} .
+          docker tag archonx:${{ github.sha }} archonx:latest
+      
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging..."
+          # Add staging deployment commands
+      
+      - name: Run smoke tests on staging
+        run: |
+          pytest tests/integration/ --env=staging
+      
+      - name: Deploy to production (if tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "Deploying to production..."
+          # Add production deployment commands
+      
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed - rolling back..."
+          # Add rollback commands

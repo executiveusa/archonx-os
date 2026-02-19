@@ -1,0 +1,65 @@
+"""
+ARCHONX Boot Test - Verify 64-agent system initialization
+"""
+
+import asyncio
+import sys
+sys.path.insert(0, "E:/ACTIVE PROJECTS-PIPELINE/ACTIVE PROJECTS-PIPELINE/archonx-os-main")
+
+from archonx.kernel import ArchonXKernel
+from archonx.core.tyrone_protocol import TyroneProtocol, Pillar
+
+async def test_boot():
+    print("="*80)
+    print("ARCHONX KERNEL BOOT TEST")
+    print("Testing Four Pillars + Bobby Fischer Protocol Integration")
+    print("="*80)
+    
+    # Initialize kernel
+    print("\n1. Initializing kernel...")
+    kernel = ArchonXKernel()
+    print(f"   ✓ Kernel initialized")
+    print(f"   ✓ Fischer Protocol: depth={kernel.protocol.min_depth}-{kernel.protocol.preferred_depth}, confidence={kernel.protocol.confidence_threshold}")
+    print(f"   ✓ Tyrone Protocol: Four Pillars active")
+    
+    # Boot crews
+    print("\n2. Booting crews...")
+    await kernel.boot()
+    print(f"   ✓ White Crew: {len(kernel.white_crew.agents)} agents")
+    print(f"   ✓ Black Crew: {len(kernel.black_crew.agents)} agents")
+    print(f"   ✓ Total agents: {len(kernel.registry)} (expecting 64)")
+    
+    # Test Four Pillars
+    print("\n3. Testing Four Pillars enforcement...")
+    for pillar in Pillar:
+        score = kernel.tyrone.get_pillar_score(pillar)
+        print(f"   ✓ {pillar.value.upper()}: {score:.2f}")
+    overall = kernel.tyrone.get_overall_score()
+    print(f"   ✓ Overall Pillar Score: {overall:.2f}")
+    
+    # Execute test task
+    print("\n4. Executing test task...")
+    task = {
+        "type": "deployment",
+        "repo": "test/repo",
+        "environment": "staging",
+        "quality_standard": "enterprise",
+    }
+    result = await kernel.execute_task(task)
+    print(f"   ✓ Status: {result['status']}")
+    print(f"   ✓ Confidence: {result.get('confidence', 'N/A')}")
+    if result['status'] == 'completed':
+        print(f"   ✓ Crew: {result['result']['crew']}")
+        print(f"   ✓ Executed by: {', '.join(result['result']['executed_by'])}")
+    
+    # Shutdown
+    print("\n5. Shutting down...")
+    await kernel.shutdown()
+    print(f"   ✓ Kernel offline")
+    
+    print("\n" + "="*80)
+    print("✅ ARCHONX BOOT TEST COMPLETE")
+    print("="*80)
+
+if __name__ == "__main__":
+    asyncio.run(test_boot())

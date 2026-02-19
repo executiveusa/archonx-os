@@ -1,0 +1,116 @@
+{
+  "system": {
+    "name": "ArchonX Operating System",
+    "version": "0.1.0",
+    "codename": "Daily at Pauli's",
+    "type": "full_operating_system",
+    "target": "enterprise_clients"
+  },
+  "protocol": {
+    "name": "Bobby Fischer",
+    "min_depth": 5,
+    "preferred_depth": 10,
+    "confidence_threshold": 0.7,
+    "require_rollback_plan": true,
+    "data_driven_only": true
+  },
+  "crews": {
+    "white": {
+      "name": "White Crew",
+      "agent_count": 32,
+      "king": "pauli_king_white",
+      "queen": "synthia_queen_white"
+    },
+    "black": {
+      "name": "Black Crew",
+      "agent_count": 32,
+      "king": "mirror_king_black",
+      "queen": "shadow_queen_black"
+    }
+  },
+  "scoring": {
+    "tasks_completed_weight": 0.30,
+    "quality_scores_weight": 0.25,
+    "speed_metrics_weight": 0.20,
+    "client_satisfaction_weight": 0.15,
+    "innovation_points_weight": 0.10
+  },
+  "meetings": {
+    "morning_briefing": "08:00 UTC",
+    "chess_match": "12:00 UTC",
+    "card_games": "15:00 UTC",
+    "war_room": "18:00 UTC",
+    "evening_review": "21:00 UTC"
+  },
+  "openclaw": {
+    "gateway_port": 18789,
+    "protocol": "websocket",
+    "channels": ["whatsapp", "telegram", "slack", "orgo"],
+    "orgo": {
+      "enabled": true,
+      "base_url": "https://api.orgo.ai",
+      "default_computer_use": true
+    },
+    "tools": [
+      "multi_tenant_session_management",
+      "whatsapp_telegram_slack_handlers",
+      "deployment_orchestration",
+      "tool_execution",
+      "agent_coordination",
+      "client_isolation",
+      "computer_use",
+      "remotion_video"
+    ]
+  },
+  "flywheel": {
+    "enabled": true,
+    "auto_cycle": true,
+    "max_micro_tasks_per_cycle": 5,
+    "self_build_quality_threshold": 0.8
+  },
+  "skills": {
+    "auto_discover": true,
+    "categories": [
+      "automation", "research", "creative", "deployment",
+      "communication", "security", "financial", "personal", "computer_use"
+    ]
+  },
+  "theater": {
+    "enabled": true,
+    "token_cost_per_minute": 10,
+    "max_event_history": 10000
+  },
+  "billing": {
+    "enabled": true,
+    "default_credits": 100
+  },
+  "upwork_scout": {
+    "enabled": true,
+    "auto_search": false,
+    "video_proposals": true,
+    "remotion_template": "upwork_proposal"
+  },
+  "models": {
+    "default": "anthropic/claude-sonnet-4-20250514",
+    "agents": {
+      "synthia_queen_white": "anthropic/claude-sonnet-4-20250514",
+      "pauli_king_white": "anthropic/claude-sonnet-4-20250514"
+    }
+  },
+  "deployment": {
+    "components": [
+      "archonx_kernel",
+      "64_agent_swarm",
+      "openclaw_backend",
+      "visualization_ui",
+      "deployment_automation",
+      "monitoring_stack"
+    ],
+    "customization": [
+      "agent_specializations",
+      "competitive_mode",
+      "white_label_branding",
+      "integration_points"
+    ]
+  }
+}

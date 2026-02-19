@@ -1,0 +1,337 @@
+/**
+ * POLLY PROMPT API SCHEMA
+ * JSON structure for React component rendering
+ * Version 1.0
+ */
+
+{
+  "pollyPromptAPI": {
+    "version": "1.0",
+    "character": "Polly",
+    "basePromptPath": "/brand/polly/prompt.master.txt",
+    "generationFormat": "black-and-white-ink",
+    
+    // CORE SCHEMA
+    "promptBuilder": {
+      "template": "{basePrompt}\n\n[SCENE INJECTION]\n\nCharacter Lock: {identityLock}\n\nStyle: {styleLock}\n\nComposition: {positionInstruction}\n\nMood: {moodInstruction}",
+      
+      "components": {
+        "basePrompt": {
+          "type": "static",
+          "source": "prompt.master.txt",
+          "description": "Master character definition (loaded once per session)"
+        },
+        "sceneDescription": {
+          "type": "dynamic",
+          "required": true,
+          "examples": [
+            "Polly standing at a food delivery dispatch desk",
+            "Polly holding a glowing pizza box",
+            "Polly scheming in a dark alley",
+            "Polly celebrating a successful delivery"
+          ],
+          "maxLength": 200,
+          "description": "What is Polly doing in this scene?"
+        },
+        "positionInstruction": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "centered in the frame",
+            "in the foreground on the left",
+            "in the background, framed by the scene",
+            "occupying half the frame, looking at camera",
+            "small but detailed in lower right corner",
+            "dominating the entire scene",
+            "peeking from behind an object",
+            "in dynamic action pose"
+          ],
+          "description": "Where should Polly appear in composition?"
+        },
+        "moodInstruction": {
+          "type": "enum",
+          "required": true,
+          "options": [
+            "looking confident and sly",
+            "appearing surprised but collecting himself",
+            "scheming, with a knowing smirk",
+            "triumphant, raising his arms",
+            "defensive, arms crossed",
+            "casual and cool, leaning against a wall",
+            "curious, looking at something off-frame",
+            "intense and focused",
+            "playful and mischievous",
+            "contemplative, stroking his beard"
+          ],
+          "description": "What emotion/attitude should Polly express?"
+        },
+        "identityLock": {
+          "type": "static",
+          "value": "Polly must match the reference character exactly in face, body, clothing, and attitude. Always: sheep species, fluffy wool, scruffy beard, round dark sunglasses, oversized bare hooves, long worn coat, confident posture. Never: change species, add shoes, remove sunglasses, soften character."
+        },
+        "styleLock": {
+          "type": "static",
+          "value": "Black-and-white gritty ink illustration, heavy linework, stippling, underground comic style, vintage graphic novel, high contrast, no color, no shading gradients, no realism, no 3D."
+        }
+      }
+    },
+
+    // SCENE PACK DEFINITIONS
+    "scenePacks": {
+      "delivery": {
+        "packName": "Food Delivery Adventures",
+        "scenes": [
+          {
+            "id": "delivery_dispatch",
+            "scene": "Polly standing at a neon-lit food delivery dispatch desk with glowing order tickets surrounding him",
+            "position": "centered in the frame",
+            "mood": "looking confident and sly"
+          },
+          {
+            "id": "delivery_receipt",
+            "scene": "Polly holding a glowing pizza box with a mysterious delivery slip",
+            "position": "in the foreground on the left",
+            "mood": "examining the order with expertise"
+          },
+          {
+            "id": "delivery_night_run",
+            "scene": "Polly delivering food through a rainy night city street",
+            "position": "dominating the entire scene",
+            "mood": "focused and determined"
+          },
+          {
+            "id": "delivery_customer_meeting",
+            "scene": "Polly at a customer's door presenting a delivery with a sly grin",
+            "position": "centered in the frame",
+            "mood": "confident and sly"
+          },
+          {
+            "id": "delivery_success",
+            "scene": "Polly celebrating a completed delivery route with arms raised triumphantly",
+            "position": "dominating the entire scene",
+            "mood": "triumphant, raising his arms"
+          }
+        ]
+      },
+      "pauli_effect": {
+        "packName": "Pauli Effect Brand",
+        "scenes": [
+          {
+            "id": "pauli_presentation",
+            "scene": "Polly presenting the Pauli Effect delivery system to an audience",
+            "position": "centered in the frame",
+            "mood": "confident and sly"
+          },
+          {
+            "id": "pauli_referral",
+            "scene": "Polly holding a golden coin (Pauli coin) with dollar signs floating around him",
+            "position": "in the foreground on the left",
+            "mood": "scheming, with a knowing smirk"
+          },
+          {
+            "id": "pauli_wally_vs",
+            "scene": "Polly standing victoriously over a pile of bloated WordPress plugin boxes",
+            "position": "dominating the entire scene",
+            "mood": "triumphant, raising his arms"
+          }
+        ]
+      },
+      "lifestyle": {
+        "packName": "Polly Lifestyle",
+        "scenes": [
+          {
+            "id": "lifestyle_alley",
+            "scene": "Polly scheming in a shadowy urban alley with neon signs reflecting off wet pavement",
+            "position": "centered in the frame",
+            "mood": "scheming, with a knowing smirk"
+          },
+          {
+            "id": "lifestyle_cool",
+            "scene": "Polly leaning casually against a brick wall in a dimly lit street corner",
+            "position": "in the foreground on the left",
+            "mood": "casual and cool, leaning against a wall"
+          },
+          {
+            "id": "lifestyle_shocked",
+            "scene": "Polly looking shocked and taken aback by an unexpected turn of events",
+            "position": "centered in the frame",
+            "mood": "appearing surprised but collecting himself"
+          },
+          {
+            "id": "lifestyle_thinking",
+            "scene": "Polly sitting on a curb, stroking his beard thoughtfully, contemplating his next move",
+            "position": "in the foreground on the left",
+            "mood": "contemplative, stroking his beard"
+          },
+          {
+            "id": "lifestyle_playful",
+            "scene": "Polly in a playful tussle or playful moment with another character or object",
+            "position": "centered in the frame",
+            "mood": "playful and mischievous"
+          }
+        ]
+      },
+      "promotional": {
+        "packName": "Marketing & Promotional",
+        "scenes": [
+          {
+            "id": "promo_hero",
+            "scene": "Polly as a heroic figure standing on a rooftop overlooking a city skyline",
+            "position": "dominating the entire scene",
+            "mood": "confident and sly"
+          },
+          {
+            "id": "promo_banner",
+            "scene": "Polly peeking from behind a large promotional banner for a special offer",
+            "position": "peeking from behind an object",
+            "mood": "playful and mischievous"
+          },
+          {
+            "id": "promo_action",
+            "scene": "Polly in a dynamic action pose, leaping or gesturing energetically",
+            "position": "in dynamic action pose",
+            "mood": "intense and focused"
+          },
+          {
+            "id": "promo_mystery",
+            "scene": "Polly in shadows, partially obscured, with only his sunglasses glowing",
+            "position": "small but detailed in lower right corner",
+            "mood": "mysterious and intriguing"
+          }
+        ]
+      }
+    },
+
+    // REACT IMPLEMENTATION INTERFACE
+    "reactInterface": {
+      "componentName": "PollyAsset",
+      "props": {
+        "sceneId": {
+          "type": "string",
+          "required": true,
+          "description": "ID from scenePacks (e.g., 'delivery_dispatch')"
+        },
+        "customScene": {
+          "type": "string",
+          "required": false,
+          "description": "Override with custom scene description"
+        },
+        "customMood": {
+          "type": "string",
+          "required": false,
+          "description": "Override mood instruction"
+        },
+        "customPosition": {
+          "type": "string",
+          "required": false,
+          "description": "Override position instruction"
+        },
+        "width": {
+          "type": "number",
+          "default": 512,
+          "description": "Image width in pixels"
+        },
+        "height": {
+          "type": "number",
+          "default": 512,
+          "description": "Image height in pixels"
+        },
+        "cacheKey": {
+          "type": "string",
+          "required": false,
+          "description": "Cache identifier (auto-generated if not provided)"
+        },
+        "onLoad": {
+          "type": "function",
+          "required": false,
+          "description": "Callback when image loads"
+        },
+        "altText": {
+          "type": "string",
+          "required": false,
+          "default": "Polly the mischievous sheep"
+        }
+      },
+      "exampleUsage": [
+        "import PollyAsset from '@/components/PollyAsset';\n\n<PollyAsset sceneId=\"delivery_dispatch\" />",
+        "<PollyAsset\n  customScene=\"Polly riding a motorcycle through a cyberpunk city\"\n  position=\"dominating the entire scene\"\n  mood=\"intense and focused\"\n/>",
+        "<PollyAsset\n  sceneId=\"pauli_referral\"\n  width={1024}\n  height={1024}\n  cacheKey=\"hero-image\"\n/>"
+      ]
+    },
+
+    // GENERATION API ENDPOINTS
+    "generationEndpoints": {
+      "default": {
+        "provider": "huggingface",
+        "model": "black-and-white-ink-generator",
+        "endpoint": "/api/polly/generate",
+        "method": "POST",
+        "requestSchema": {
+          "prompt": "string (fully injected prompt)",
+          "width": "number (512, 768, 1024)",
+          "height": "number (512, 768, 1024)",
+          "steps": "number (optional, default 30)",
+          "seed": "number (optional, for reproducibility)"
+        },
+        "responseSchema": {
+          "imageUrl": "string",
+          "format": "png or webp",
+          "cached": "boolean",
+          "generationTime": "number (milliseconds)",
+          "prompt": "string (returned for auditing)"
+        }
+      }
+    },
+
+    // CACHING STRATEGY
+    "caching": {
+      "strategy": "sceneId + customizations hash",
+      "ttl": 30,
+      "ttlUnit": "days",
+      "storageLocation": "Vercel Blob Storage or Cloudinary",
+      "keyFormat": "polly_{sceneId}_{hash(customizations)}.webp"
+    },
+
+    // QUALITY ASSURANCE
+    "qualityChecks": {
+      "characterIdentity": {
+        "description": "Verify Polly matches reference in all generations",
+        "checks": [
+          "Sunglasses present and correctly styled",
+          "Sheep species maintained",
+          "Coat visible and worn-looking",
+          "Oversized bare hooves present",
+          "Confident posture evident",
+          "Scruffy beard and wool texture visible"
+        ]
+      },
+      "styleConsistency": {
+        "description": "Verify black & white gritty ink style maintained",
+        "checks": [
+          "No colors present (except grayscale)",
+          "Heavy linework visible",
+          "Stippling texture evident",
+          "High contrast composition",
+          "Hand-drawn appearance (not 3D/vector)",
+          "Comic/graphic novel aesthetic"
+        ]
+      }
+    },
+
+    // FALLBACK & ERROR HANDLING
+    "errorHandling": {
+      "generationFailed": "Display placeholder with Polly silhouette",
+      "cacheExpired": "Regenerate with same seed for consistency",
+      "invalidSceneId": "Log error and use 'lifestyle_cool' default",
+      "apiTimeout": "Retry up to 2x with 5-second delays"
+    },
+
+    // VERSIONING & BACKWARDS COMPATIBILITY
+    "versioning": {
+      "apiVersion": "1.0",
+      "minReactVersion": "18.0",
+      "supportedImageFormats": ["png", "webp", "jpg"],
+      "breakingChanges": "None (schema is locked)"
+    }
+  }
+}

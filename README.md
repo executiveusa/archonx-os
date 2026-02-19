@@ -1,32 +1,267 @@
-# ArchonX OS
+# ARCHONX Operating System
 
-ArchonX OS is the source-of-truth repository for Poly Effect security contracts, ecosystem manifests, and toolbox standards.
+**Enterprise AI Infrastructure - 64-Agent Swarm**
 
-## Purpose
-- Define canonical Access Kernel + Gastown work-item requirements.
-- Publish ecosystem-wide contracts for OpenClaw reportback, toolbox, and skills.
-- Provide operator bootstrap guidance (`archonxctl`) and baseline policies.
+[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
+[![Security](https://img.shields.io/badge/security-AES--256-green.svg)](docs/SECURITY.md)
 
-## Quickstart
-```bash
-./security/bin/bootstrap.sh
+---
+
+## 🎯 What is ARCHONX?
+
+ARCHONX is a **full operating system** for AI-powered business automation. Not a chatbot. Not a website. A complete turnkey infrastructure deployed to enterprise clients.
+
+- **64 AI Agents** organized as dual chess crews (White + Black, 32 each)
+- **Dual Protocol** decision engine (Bobby Fischer + Tyrone Davis)
+- **Multi-tenant** architecture with client isolation
+- **Real-time** visualization and monitoring
+- **Production-grade** security and encryption
+
+## 🏗️ Architecture
+
+```
+ARCHONX Kernel
+├── 64 Agents (White Crew + Black Crew)
+├── Bobby Fischer Protocol (technical correctness)
+├── Tyrone Protocol (ethical alignment - LOYALTY, HONOR, TRUTH, RESPECT)
+├── OpenClaw Backend (WebSocket gateway on port 18789)
+├── Daily Meetings (Pauli's Place - 5 strategic sessions)
+└── Tool Dispatch (deploy, analytics, security, testing)
 ```
 
-## Required environment variables
-- `ARCHONX_KERNEL_URL`
-- `ARCHONX_YAPP_URL`
-- `ARCHONX_TOOLBOX_URL`
-- `ARCHONX_WORK_ITEM_ID`
-- `ARCHONX_AGENT_ID`
-- `ARCHONX_REPO_SLUG`
+### White Crew (32 agents)
+- **Pauli** (King) - Strategic decisions
+- **Synthia** (Queen) - Tactical execution  
+- 2 Rooks, 2 Knights, 2 Bishops, 24 Pawns
 
-## Test commands
+### Black Crew (32 agents)
+- **Mirror** (King) - Strategic decisions
+- **Shadow** (Queen) - Tactical execution
+- 2 Rooks, 2 Knights, 2 Bishops, 24 Pawns
+
+Crews compete in friendly rivalry while serving the same client goals.
+
+## 🚀 Quick Start
+
 ```bash
-python -m pytest
-python -m compileall core toolbox
+# Clone repository
+git clone https://github.com/executiveusa/archonx-os.git
+cd archonx-os
+
+# Install dependencies
+pip install -e ".[dev]"
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your settings
+
+# Boot the kernel
+archonx boot
+
+# Check system status
+archonx status
+
+# View today's meeting schedule
+archonx meetings
 ```
 
-## Reporting contract
-- Repo-level reportback metadata: `.archonx/reportback.json`
-- Toolbox pointer metadata: `.archonx/toolbox.json`
-- OpenClaw reportback contract: `ecosystem/contracts/openclaw-reporting-contract.json`
+## 🖥️ Working Front End (Mission Console)
+
+ARCHONX now serves a live frontend from `public/index.html` at the root URL.
+
+```bash
+# Start API + frontend
+uvicorn archonx.server:create_app --factory --host 0.0.0.0 --port 8080 --reload
+```
+
+Then open:
+
+- `http://localhost:8080/` (Mission Console UI)
+- `http://localhost:8080/api/agents`
+- `http://localhost:8080/api/skills`
+- `http://localhost:8080/api/flywheel`
+
+How to use this:
+
+1. Click `Refresh Signals` to pull live system metrics.
+2. Click `Run Sample Task` to dispatch a collaborative `crew="both"` task.
+3. Watch Task Output + Agent Theater events update in the UI.
+
+## ▲ Vercel Link (Project)
+
+Project ID: `prj_T19WSaUiqLmrAewXECfctQyw4jKe`
+
+```bash
+# Requires Vercel CLI + token in environment
+npm i -g vercel
+vercel link --project prj_T19WSaUiqLmrAewXECfctQyw4jKe
+vercel --prod
+```
+
+If your token is stored in your own secret manager, export it before deploy:
+
+```bash
+setx VERCEL_TOKEN "<your-token>"
+```
+
+##  Requirements
+
+- Python 3.11+
+- 8GB RAM minimum (16GB recommended)
+- Docker (for deployment)
+- PostgreSQL or SQLite (for pattern library)
+
+## 🔒 Security
+
+ARCHONX implements defense-in-depth security:
+
+- **Encryption**: AES-256-GCM at rest, TLS 1.3 in transit
+- **Anti-scraping**: Rate limiting, bot detection
+- **Prompt injection defense**: Input sanitization
+- **Audit logging**: Immutable logs for all actions
+- **Auto-rollback**: Automated deployment rollback on failures
+
+See [SECURITY.md](docs/SECURITY.md) for details.
+
+## 🧪 Testing
+
+```bash
+# Run full test suite
+pytest
+
+# Run specific test modules
+pytest tests/test_kernel.py
+pytest tests/test_security.py
+
+# Run integration tests
+pytest tests/integration/
+
+# Coverage report
+pytest --cov=archonx --cov-report=html
+```
+
+## 📖 Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) - System design
+- [API Reference](docs/API.md) - Endpoints and schemas
+- [Deployment Guide](docs/DEPLOYMENT.md) - Production setup
+- [Security Best Practices](docs/SECURITY.md) - Hardening guide
+
+## 🤖 AI Integration (ChatGPT App Store Ready)
+
+ARCHONX is optimized for AI discovery and integration:
+
+- `/public/llm.txt` - ChatGPT App Store metadata
+- `/public/robots.txt` - AI-friendly crawling rules
+- OpenAPI spec for function calling
+- OAuth 2.0 authentication flow
+- Structured data (JSON-LD) on all endpoints
+
+## 🎨 The Four Pillars (Tyrone Protocol)
+
+Every decision in ARCHONX passes through:
+
+1. **LOYALTY** - Build together, no half-measures
+2. **HONOR** - Do what we say, ship what we promise
+3. **TRUTH** - Data-driven only, Bobby Fischer style
+4. **RESPECT** - Speed beats power, respect the craft
+
+Named in honor of Tyrone Davis (boxer, Culture Shock Sports founder).
+
+## 🏆 Bobby Fischer Protocol
+
+Technical decision validation:
+
+1. Calculate 5-10 moves ahead
+2. Data-driven only (no guessing)
+3. Confidence threshold ≥ 0.7
+4. Pattern matching from history
+5. Rollback plan required
+
+## 📅 Daily at Pauli's Place
+
+5 mandatory meetings (all times UTC):
+
+- **08:00** - Morning Briefing  
+- **12:00** - Chess Match (strategy learning)
+- **15:00** - Card Games (probability training)
+- **18:00** - War Room (tactical discussion)
+- **21:00** - Evening Review
+
+## 🌐 Deployment
+
+### Turnkey Client Instance
+
+```bash
+archonx deploy --client ClientName --config client-config.json
+```
+
+### Docker Deployment
+
+```bash
+docker build -t archonx:latest .
+docker run -p 18789:18789 -p 8080:8080 archonx:latest
+```
+
+### Kubernetes (Production)
+
+```bash
+kubectl apply -f k8s/
+```
+
+See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for complete guide.
+
+## 🔧 Configuration
+
+Edit `archonx-config.json`:
+
+```json
+{
+  "protocol": {
+    "min_depth": 5,
+    "preferred_depth": 10,
+    "confidence_threshold": 0.7
+  },
+  "openclaw": {
+    "gateway_port": 18789,
+    "channels": ["whatsapp", "telegram", "slack"]
+  },
+  "meetings": {
+    "morning_briefing": "08:00 UTC",
+    "chess_match": "12:00 UTC",
+    "card_games": "15:00 UTC",
+    "war_room": "18:00 UTC",
+    "evening_review": "21:00 UTC"
+  }
+}
+```
+
+## 📊 Monitoring
+
+Access dashboards:
+
+- Chessboard View: `http://localhost:8080/chessboard`
+- Metrics Dashboard: `http://localhost:8080/dashboard`
+- Pauli's Place: `http://localhost:8080/meetings`
+- API Health: `http://localhost:8080/health`
+
+## 🤝 Contributing
+
+ARCHONX is proprietary software. For licensing inquiries, contact:
+
+- **The Pauli Effect**: [Contact Info]
+- **New World Kids**: [Nonprofit Partnership Inquiries]
+
+## 📄 License
+
+Proprietary - © 2026 The Pauli Effect
+
+Built with the Four Pillars: LOYALTY, HONOR, TRUTH, RESPECT
+built by the pauli effect
+
+---
+
+**"Speed beats power"** - Tyrone Davis
+
+For humanity. For the 7-generation vision.
