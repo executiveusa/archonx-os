@@ -1,0 +1,23 @@
+{
+  "name": "ArchonX Toolbox",
+  "version": "1.0.0",
+  "skills": [
+    "toolbox/skills/remotion_video_generator.json",
+    "toolbox/skills/access_grant_orchestrator.json"
+  ],
+  "tools": [
+    "toolbox/tools/request_grant.py",
+    "toolbox/tools/audit_emit.py"
+  ],
+  "workflows": [
+    "toolbox/workflows/grant-request-approval-playbook.json",
+    "toolbox/workflows/restricted-mode-recovery-playbook.json"
+  ],
+  "security": {
+    "requires_grant": true,
+    "requires_work_item": true
+  },
+  "endpoints": {
+    "remotion_render_url": "${ARCHONX_REMOTION_RENDER_URL:-http://localhost:7555/v1/render}"
+  }
+}

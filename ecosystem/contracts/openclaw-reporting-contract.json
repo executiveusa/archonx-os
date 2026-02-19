@@ -1,0 +1,14 @@
+{
+  "contract_id": "openclaw-reportback-v1",
+  "endpoints": {
+    "agent_register": "POST /v1/agents/register",
+    "heartbeat": "POST /v1/agents/heartbeat",
+    "audit_event": "POST /v1/audit",
+    "work_item_link": "POST /v1/workitems/link"
+  },
+  "heartbeat_interval_seconds": 15,
+  "deny_defaults": [
+    "missing_work_item_id",
+    "provider_unavailable_unless_mock"
+  ]
+}
