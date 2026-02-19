@@ -1,0 +1,44 @@
+{
+  "name": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
+  "version": "1.0.0",
+  "bead_id": "BEAD-0002",
+  "owner": "executiveusa",
+  "source_of_truth_repo": "executiveusa/archonx-os",
+  "doctrine": [
+    "PAULIWHEEL",
+    "RALPHY",
+    "BEADS"
+  ],
+  "execution_policy": {
+    "agent_lightning_first": true,
+    "require_bead_id_in_commit": true,
+    "allow_destructive_git": false,
+    "minimal_diff_only": true
+  },
+  "steps": [
+    {
+      "id": "enrollment",
+      "title": "Enroll repos and validate ArchonX pointers",
+      "enabled": true
+    },
+    {
+      "id": "meetings",
+      "title": "Record coordination checkpoints",
+      "enabled": true
+    },
+    {
+      "id": "repo_compliance_scan",
+      "title": "Scan for AGENTS shim, toolbox/reportback files, and command contracts",
+      "enabled": true
+    },
+    {
+      "id": "optional_auto_patch",
+      "title": "Apply minimal compliance patch where safe",
+      "enabled": true
+    }
+  ],
+  "report_targets": {
+    "compliance_matrix": "ops/reports/PAULIWHEEL_COMPLIANCE_MATRIX_<timestamp>.json",
+    "final_report": "ops/reports/FINAL_ECO_PROMPT_REPORT.json"
+  }
+}
