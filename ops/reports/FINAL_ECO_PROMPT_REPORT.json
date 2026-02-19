@@ -1,0 +1,165 @@
+{
+  "eco_prompt": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
+  "timestamp": "2026-02-19T06:39:04Z",
+  "repos_scanned": [
+    {
+      "repo": "executiveusa/archonx-os",
+      "status": "partial",
+      "required_files_present": true,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/dashboard-agent-swarm",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/paulisworld-openclaw-3d",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/clawdbot-Whatsapp-agent",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/devika-agent",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/agent-zero",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    }
+  ],
+  "agents_scanned": [
+    {
+      "agent_id": "dashboard_agent_swarm",
+      "agent_type": "coding",
+      "repo": "executiveusa/dashboard-agent-swarm",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:38:59Z"
+    },
+    {
+      "agent_id": "paulisworld_openclaw_3d",
+      "agent_type": "coding",
+      "repo": "executiveusa/paulisworld-openclaw-3d",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:38:59Z"
+    },
+    {
+      "agent_id": "clawdbot_Whatsapp_agent",
+      "agent_type": "coding",
+      "repo": "executiveusa/clawdbot-Whatsapp-agent",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:39:00Z"
+    },
+    {
+      "agent_id": "devika_agent",
+      "agent_type": "coding",
+      "repo": "executiveusa/devika-agent",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:39:01Z"
+    },
+    {
+      "agent_id": "agent_zero",
+      "agent_type": "coding",
+      "repo": "executiveusa/agent-zero",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:39:02Z"
+    }
+  ],
+  "scheduler": {
+    "installed": true,
+    "mode": "cron",
+    "schedules": [
+      "0 9 * * *",
+      "0 15 * * *",
+      "0 21 * * *"
+    ],
+    "last_run": "2026-02-19T06:39:04Z"
+  },
+  "blocking_issues": [
+    "Ecosystem repositories are declared but not locally checked out; emitted partial compliance."
+  ],
+  "next_steps": [
+    "Mount or clone ecosystem repos and rerun archonx-ops sync --all.",
+    "Implement repo-specific test commands in ops runner config."
+  ]
+}

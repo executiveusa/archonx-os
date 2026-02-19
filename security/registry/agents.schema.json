@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ArchonX Agent Registry",
+  "type": "object",
+  "required": ["version", "required_skills_for_coding_agents", "agents"],
+  "properties": {
+    "version": {"type": "string"},
+    "required_skills_for_coding_agents": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["agent_id", "agent_type", "required_skills_attached", "compliance_state"],
+        "properties": {
+          "agent_id": {"type": "string"},
+          "agent_type": {"type": "string"},
+          "repo": {"type": "string"},
+          "required_skills_attached": {"type": "boolean"},
+          "skills": {"type": "array", "items": {"type": "string"}},
+          "compliance_state": {"type": "string", "enum": ["compliant", "restricted", "unknown"]},
+          "last_ack_at": {"type": ["string", "null"]},
+          "ack_hash": {"type": ["string", "null"]},
+          "last_synced_at": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

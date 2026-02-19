@@ -1,0 +1,91 @@
+{
+  "version": "1.0.0",
+  "required_skills_for_coding_agents": [
+    "pauliwheel_coding_protocol",
+    "beads_manager",
+    "ralphy_loop_enforcer",
+    "agent_lightning_bootstrap"
+  ],
+  "agents": [
+    {
+      "agent_id": "dashboard_agent_swarm",
+      "agent_type": "coding",
+      "repo": "executiveusa/dashboard-agent-swarm",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:38:59Z"
+    },
+    {
+      "agent_id": "paulisworld_openclaw_3d",
+      "agent_type": "coding",
+      "repo": "executiveusa/paulisworld-openclaw-3d",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:38:59Z"
+    },
+    {
+      "agent_id": "clawdbot_Whatsapp_agent",
+      "agent_type": "coding",
+      "repo": "executiveusa/clawdbot-Whatsapp-agent",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:39:00Z"
+    },
+    {
+      "agent_id": "devika_agent",
+      "agent_type": "coding",
+      "repo": "executiveusa/devika-agent",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:39:01Z"
+    },
+    {
+      "agent_id": "agent_zero",
+      "agent_type": "coding",
+      "repo": "executiveusa/agent-zero",
+      "required_skills_attached": true,
+      "skills": [
+        "pauliwheel_coding_protocol",
+        "beads_manager",
+        "ralphy_loop_enforcer",
+        "agent_lightning_bootstrap"
+      ],
+      "compliance_state": "compliant",
+      "last_ack_at": "2026-02-19T06:39:04Z",
+      "ack_hash": "35896c20bf9824cce1d497c9e807bf6154dfe901856ecda53d192835c0fc8bd6",
+      "last_synced_at": "2026-02-19T06:39:02Z"
+    }
+  ]
+}

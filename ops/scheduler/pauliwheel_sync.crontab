@@ -1,0 +1,5 @@
+# ArchonX PAULIWHEEL sync schedule (3x/day)
+0 9 * * * cd /workspace/archonx-os && python3 ops/runner/archonx_ops_runner.py sync --all >> ops/reports/cron.log 2>&1
+0 15 * * * cd /workspace/archonx-os && python3 ops/runner/archonx_ops_runner.py sync --all >> ops/reports/cron.log 2>&1
+0 21 * * * cd /workspace/archonx-os && python3 ops/runner/archonx_ops_runner.py sync --all >> ops/reports/cron.log 2>&1
+*/20 * * * * cd /workspace/archonx-os && bash ops/scripts/archonx_scan_for_new_agents.sh >> ops/reports/enroll.log 2>&1
