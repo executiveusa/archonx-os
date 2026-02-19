@@ -1,0 +1,8 @@
+{
+  "name": "pauliwheel_coding_protocol",
+  "version": "1.0.0",
+  "description": "Default coding protocol enforcing beads + Ralphy loop + verification.",
+  "inputs": ["bead_id", "task"],
+  "requires": ["bead_id"],
+  "logs_to": ["ops/reports", "artifacts/beads"]
+}

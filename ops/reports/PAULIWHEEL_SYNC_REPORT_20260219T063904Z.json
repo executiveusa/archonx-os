@@ -1,0 +1,87 @@
+{
+  "eco_prompt": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
+  "timestamp": "2026-02-19T06:39:04Z",
+  "dry_run": false,
+  "report_only": false,
+  "doctor": {
+    "timestamp": "2026-02-19T06:39:04Z",
+    "status": "ok",
+    "checks": {
+      "runner_exists": true,
+      "eco_prompt_dir_exists": true,
+      "registry_exists": true,
+      "toolbox_exists": true,
+      "cron_exists": true
+    }
+  },
+  "meeting_report": "/workspace/archonx-os/ops/reports/pauliwheel_meeting_20260219T063904Z.json",
+  "repos_scanned": [
+    {
+      "repo": "executiveusa/archonx-os",
+      "status": "partial",
+      "required_files_present": true,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/dashboard-agent-swarm",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/paulisworld-openclaw-3d",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/clawdbot-Whatsapp-agent",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/devika-agent",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    },
+    {
+      "repo": "executiveusa/agent-zero",
+      "status": "partial",
+      "required_files_present": false,
+      "agent_lightning": "stub",
+      "tests": "not_found",
+      "notes": [
+        "External repo scan requires checkout in this environment."
+      ]
+    }
+  ],
+  "blocking_issues": [
+    "Ecosystem repositories are declared but not locally checked out; emitted partial compliance."
+  ],
+  "next_steps": [
+    "Mount or clone ecosystem repos and rerun archonx-ops sync --all.",
+    "Implement repo-specific test commands in ops runner config."
+  ]
+}

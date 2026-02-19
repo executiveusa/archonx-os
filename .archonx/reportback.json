@@ -1,10 +1,6 @@
 {
-  "source_of_truth_repo": "executiveusa/archonx-os",
-  "control_tower_repo": "executiveusa/dashboard-agent-swarm",
-  "kernel_url_env": "ARCHONX_KERNEL_URL",
-  "yapp_url_env": "ARCHONX_YAPP_URL",
-  "work_item_env": "ARCHONX_WORK_ITEM_ID",
-  "agent_id_env": "ARCHONX_AGENT_ID",
-  "repo_slug_env": "ARCHONX_REPO_SLUG",
-  "contract": "openclaw-reportback-v1"
+  "repo": "executiveusa/archonx-os",
+  "status": "managed",
+  "agent_lightning": "stub",
+  "notes": ["Root compliance pointer for ArchonX ecosystem automation."]
 }
