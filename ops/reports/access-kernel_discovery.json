@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-02-19T07:45:00Z",
+  "sourceOfTruth": "archonx-os",
+  "bead_id": "BEAD-ACCESS-KERNEL-0001",
+  "reposInspected": [
+    {
+      "name": "archonx-os",
+      "path": "C:\\Users\\execu\\archonx-os",
+      "findings": [
+        "No existing docs/ecosystem/services/cli directories for Access Kernel.",
+        "Existing ops skeleton and compliance runner available under ops/.",
+        "Suitable as greenfield host for new subsystem."
+      ]
+    },
+    {
+      "name": "dashboard-agent-swarm",
+      "path": "C:\\Users\\execu\\dashboard-agent-swarm",
+      "findings": [
+        "Frontend routing in src/App.tsx and nav in src/components/AppSidebar.tsx.",
+        "Backend API in backend/server/src/index.ts with route modules under backend/server/src/routes.",
+        "Can add Access Kernel pages and a backend proxy route with minimal diffs."
+      ]
+    },
+    {
+      "name": "devika-agent",
+      "path": "C:\\Users\\execu\\devika-agent",
+      "findings": [
+        "GitHub integration layer at src/integrations/github_integration.py.",
+        "Current usage is mostly read-only GET calls; write-call guard can be enforced centrally in _request method.",
+        "CLI exists at src/cli/__init__.py for future command-level integration."
+      ]
+    },
+    {
+      "name": "agent-zero-Fork",
+      "path": "C:\\Users\\execu\\agent-zero-Fork",
+      "findings": [
+        "Proxy endpoint at src/app/api/proxy/agents/route.ts is suitable to enforce work_item_id + Access Kernel checks before external calls."
+      ]
+    },
+    {
+      "name": "clawdbot-Whatsapp-agent",
+      "path": "C:\\Users\\execu\\clawdbot-Whatsapp-agent",
+      "findings": [
+        "Modular TypeScript codebase; suitable place for approval status/links utility under src/agents/.",
+        "No need to expose secrets; integration can remain message/status only."
+      ]
+    },
+    {
+      "name": "paulisworld-openclaw-3d",
+      "path": "C:\\Users\\execu\\paulisworld-openclaw-3d",
+      "findings": [
+        "Room/IPC project cloned and inspected; no direct Access Kernel changes required for v1 deliverables."
+      ]
+    }
+  ],
+  "vendor": {
+    "octelium": {
+      "path": "C:\\Users\\execu\\archonx-os\\vendor\\octelium",
+      "pinnedCommit": "b4f621edcfe880effb8a9c351edc0ae34d1e76c2",
+      "mapping": [
+        "CLI login patterns (client/common/commands/login) inform one-shot login UX.",
+        "Policy/access and access-log proto models indicate deny/allow and audit-first architecture.",
+        "Secretless access/gateway concepts reused as design inputs; no wholesale replacement."
+      ]
+    }
+  },
+  "repoSubstitutions": [
+    {
+      "requested": "executiveusa/agent-zero",
+      "status": "not-clonable in current environment (SSH denied, HTTPS repo not found)",
+      "used": "agent-zero-Fork"
+    }
+  ],
+  "plannedInsertionPoints": {
+    "archonx-os": [
+      "services/access-kernel",
+      "services/voice-gateway",
+      "cli/archonxctl",
+      "ecosystem/contracts",
+      "docs/access-kernel",
+      "ops/scripts and ops/scheduler"
+    ],
+    "dashboard-agent-swarm": [
+      "src/pages/*",
+      "src/services/accessKernelApi.ts",
+      "src/App.tsx",
+      "src/components/AppSidebar.tsx",
+      "backend/server/src/routes/accessKernel.ts",
+      "backend/server/src/index.ts"
+    ],
+    "devika-agent": [
+      "src/integrations/access_kernel_client.py",
+      "src/integrations/github_integration.py"
+    ],
+    "agent-zero-Fork": [
+      "src/lib/accessKernel.ts",
+      "src/app/api/proxy/agents/route.ts"
+    ],
+    "clawdbot-Whatsapp-agent": [
+      "src/agents/access-kernel-approval.ts"
+    ]
+  }
+}
