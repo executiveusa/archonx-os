@@ -159,6 +159,15 @@
 **Location:** `archonx/tools/browser_test.py`  
 **Purpose:** Browser testing automation
 
+### Grep MCP Tool
+**Location:** `archonx/tools/grep_mcp.py`  
+**Purpose:** Shared codebase search (`rg`/`grep`) for all crews
+
+**Primary Params:**
+- `query` - Text or regex pattern to search
+- `include` - Optional glob include filter (for `rg --glob`)
+- `max_results` - Cap returned lines to keep outputs bounded
+
 ---
 
 ## 📝 TOOL USAGE LOGGING

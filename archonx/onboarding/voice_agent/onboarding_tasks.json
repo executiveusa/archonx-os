@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "tasks": [
+    {
+      "id": "onboard-01",
+      "type": "mission_parse",
+      "crew": "both",
+      "specialty_hint": "strategy",
+      "params": {
+        "source": "transcript",
+        "output": "onboarding_profile"
+      }
+    },
+    {
+      "id": "onboard-02",
+      "type": "capability_map",
+      "crew": "white",
+      "specialty_hint": "architecture",
+      "params": {
+        "include": ["skills", "tools", "flywheel", "theater"]
+      }
+    },
+    {
+      "id": "onboard-03",
+      "type": "launch_plan",
+      "crew": "black",
+      "specialty_hint": "deployment",
+      "params": {
+        "targets": ["coolify", "cloudflare", "vercel"]
+      }
+    }
+  ]
+}
