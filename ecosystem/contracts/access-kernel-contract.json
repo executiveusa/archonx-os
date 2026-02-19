@@ -1,0 +1,12 @@
+{
+  "contract": "access-kernel-v1",
+  "grant_required": true,
+  "work_item_required": true,
+  "deny_by_default": true,
+  "error_codes": [
+    "missing_work_item_id",
+    "policy_denied",
+    "provider_unavailable",
+    "contract_out_of_date"
+  ]
+}

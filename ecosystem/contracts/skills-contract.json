@@ -1,0 +1,15 @@
+{
+  "contract": "skills-v1",
+  "required_fields": [
+    "name",
+    "version",
+    "description",
+    "inputs",
+    "outputs",
+    "security"
+  ],
+  "execution_constraints": {
+    "require_work_item_id": true,
+    "emit_audit_events": true
+  }
+}

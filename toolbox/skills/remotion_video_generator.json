@@ -1,0 +1,12 @@
+{
+  "name": "remotion_video_generator",
+  "version": "1.0.0",
+  "description": "Generate policy-compliant videos from Remotion templates",
+  "inputs": ["work_item_id", "template", "brand", "script", "assets", "output_format"],
+  "outputs": ["video_url_or_path", "audit_event_id"],
+  "security": {
+    "requires_grant": true,
+    "requires_work_item": true,
+    "audit_required": true
+  }
+}

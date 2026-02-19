@@ -1,0 +1,11 @@
+{
+  "name": "restricted-mode-recovery",
+  "trigger": "contract_hash_mismatch",
+  "steps": [
+    "allow_heartbeat_only",
+    "allow_grant_request_intents",
+    "fetch_latest_manifest_and_contracts",
+    "verify_hash",
+    "exit_restricted_mode"
+  ]
+}

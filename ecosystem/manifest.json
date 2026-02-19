@@ -1,0 +1,34 @@
+{
+  "name": "archonx-ecosystem",
+  "version": "1.0.0",
+  "source_of_truth": "executiveusa/archonx-os",
+  "required_operator_tool": "archonxctl",
+  "contracts": {
+    "access_kernel": "ecosystem/contracts/access-kernel-contract.json",
+    "openclaw_reporting": "ecosystem/contracts/openclaw-reporting-contract.json",
+    "gastown_workitem": "ecosystem/contracts/gastown-workitem-contract.json",
+    "toolbox": "ecosystem/contracts/toolbox-contract.json",
+    "skills": "ecosystem/contracts/skills-contract.json"
+  },
+  "repos": [
+    {"slug": "executiveusa/archonx-os", "role": "source-of-truth"},
+    {"slug": "executiveusa/dashboard-agent-swarm", "role": "control-tower"},
+    {"slug": "executiveusa/paulisworld-openclaw-3d", "role": "world-ui"},
+    {"slug": "executiveusa/clawdbot-Whatsapp-agent", "role": "gateway-agent"},
+    {"slug": "executiveusa/devika-agent", "role": "agent"},
+    {"slug": "executiveusa/agent-zero", "role": "agent"}
+  ],
+  "required_env": [
+    "ARCHONX_KERNEL_URL",
+    "ARCHONX_YAPP_URL",
+    "ARCHONX_TOOLBOX_URL",
+    "ARCHONX_WORK_ITEM_ID",
+    "ARCHONX_AGENT_ID",
+    "ARCHONX_REPO_SLUG"
+  ],
+  "sync_policy": {
+    "cadence_seconds": 60,
+    "restricted_mode_on_contract_hash_mismatch": true,
+    "restricted_mode_allows": ["heartbeat", "grant_request_intent"]
+  }
+}

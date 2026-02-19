@@ -1,0 +1,12 @@
+{
+  "name": "access_grant_orchestrator",
+  "version": "1.0.0",
+  "description": "Request/approve/revoke grants with mandatory work item linkage",
+  "inputs": ["work_item_id", "action", "resource", "justification"],
+  "outputs": ["grant_id", "decision", "expires_at"],
+  "security": {
+    "requires_grant": false,
+    "requires_work_item": true,
+    "audit_required": true
+  }
+}
