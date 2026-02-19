@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archonx.local/contracts/github-webhook-contract.json",
+  "title": "GitHub Webhook Normalized Event",
+  "type": "object",
+  "required": ["event_source", "delivery_id", "event", "repository", "received_at"],
+  "properties": {
+    "event_source": {"const": "github"},
+    "delivery_id": {"type": "string"},
+    "event": {"type": "string"},
+    "repository": {"type": "string"},
+    "ref": {"type": "string"},
+    "after": {"type": "string"},
+    "before": {"type": "string"},
+    "received_at": {"type": "string", "format": "date-time"}
+  }
+}

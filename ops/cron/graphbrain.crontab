@@ -1,0 +1,4 @@
+15 06 * * * ARCHONX_WORK_ITEM_ID=cron-morning  archonx-ops graphbrain --mode incremental
+15 14 * * * ARCHONX_WORK_ITEM_ID=cron-midday   archonx-ops graphbrain --mode incremental
+15 22 * * * ARCHONX_WORK_ITEM_ID=cron-evening  archonx-ops graphbrain --mode incremental
+30 02 * * * ARCHONX_WORK_ITEM_ID=cron-nightly  archonx-ops graphbrain --mode full
