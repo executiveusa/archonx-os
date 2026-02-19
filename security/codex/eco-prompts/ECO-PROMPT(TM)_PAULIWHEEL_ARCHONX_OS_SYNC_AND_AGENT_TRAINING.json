@@ -1,0 +1,20 @@
+{
+  "eco_prompt_name": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
+  "mode": "archonx_os_autonomous_ops_and_multi_repo_patch",
+  "output": "json_only",
+  "primary_goal": "Make PAULIWHEEL the default coding behavior across the entire ecosystem by (1) installing it as a universal Toolbox Skill in ArchonX OS, (2) auto-attaching it to new coding agents (via ArchonX agent registry and enrollment flow), (3) running scheduled sync meetings + updates 3x/day via OS scheduler, (4) enforcing beads + Ralphy loop + Agent Lightning first across repos, and (5) running build/test to verify compliance.",
+  "non_negotiables": [
+    "PAULIWHEEL must be the default coding behavior for all coding agents.",
+    "PAULIWHEEL must be a Toolbox Skill discoverable and callable by any agent.",
+    "Any repo touched by any agent must install Agent Lightning first in that repo.",
+    "All coding work must use beads and the Ralphy loop; no early stops.",
+    "Three scheduled sync runs per day minimum.",
+    "New agents must be auto-enrolled via ArchonX enrollment flow (event-driven if possible; otherwise polling).",
+    "Every scheduled run must run build/test verification and produce a machine-readable report."
+  ],
+  "mandatory_loop": {
+    "name": "RALPHY_LOOP",
+    "max_iterations": 30,
+    "stages": ["PLAN", "IMPLEMENT", "TEST", "EVALUATE", "PATCH", "REPEAT"]
+  }
+}

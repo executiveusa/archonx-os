@@ -1,5 +1,4 @@
 {
-  "toolbox_url_env": "ARCHONX_TOOLBOX_URL",
-  "contract": "toolbox-v1",
-  "access_mode": "git-pull"
+  "source": "toolbox/toolbox.json",
+  "default_skill": "pauliwheel_coding_protocol"
 }
