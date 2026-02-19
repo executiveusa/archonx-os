@@ -14,11 +14,12 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, AsyncGenerator
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -41,6 +42,14 @@ _dashboard: MetricsDashboard | None = None
 _paulis_view: PaulisPlaceView | None = None
 _leaderboard: Leaderboard | None = None
 _ws_clients: set[WebSocket] = set()
+
+
+def _parse_allowed_origins() -> list[str]:
+    raw = os.getenv(
+        "ARCHONX_ALLOWED_ORIGINS",
+        "http://localhost:8080,http://localhost:5173,http://localhost:3000",
+    )
+    return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
 
 @asynccontextmanager
@@ -75,10 +84,20 @@ def create_app() -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=_parse_allowed_origins(),
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    @app.middleware("http")
+    async def require_api_token(request: Request, call_next):  # type: ignore[no-redef]
+        token = os.getenv("ARCHONX_API_TOKEN", "").strip()
+        if token and request.url.path.startswith("/api/") and request.method in {"POST", "PUT", "PATCH", "DELETE"}:
+            auth_header = request.headers.get("authorization", "")
+            expected = f"Bearer {token}"
+            if auth_header != expected:
+                return JSONResponse({"error": "unauthorized"}, status_code=401)
+        return await call_next(request)
 
     # ----- REST endpoints -----
 

@@ -26,6 +26,7 @@ from archonx.tools.deploy import DeploymentTool
 from archonx.tools.analytics import AnalyticsTool
 from archonx.tools.computer_use import ComputerUseTool
 from archonx.tools.remotion import RemotionTool
+from archonx.tools.grep_mcp import GrepMCPTool
 from archonx.skills.registry import SkillRegistry
 from archonx.core.chess_reasoning import CollaborativeMatch
 from archonx.core.flywheel import FlywheelEngine
@@ -102,6 +103,7 @@ class ArchonXKernel:
         self.tools.register(AnalyticsTool())
         self.tools.register(ComputerUseTool())
         self.tools.register(RemotionTool())
+        self.tools.register(GrepMCPTool())
 
         # Skill registry — auto-discover all BaseSkill subclasses
         self.skill_registry = SkillRegistry()
