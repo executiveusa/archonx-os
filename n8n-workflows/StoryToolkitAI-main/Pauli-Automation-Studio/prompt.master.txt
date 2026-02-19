@@ -1,0 +1,188 @@
+# POLLY CHARACTER SYSTEM — MASTER PROMPT
+## Version 1.0 | Black & White Gritty Ink Illustration
+
+---
+
+## BASE CHARACTER DEFINITION
+
+A mischievous anthropomorphic sheep named Polly, drawn in a gritty black-and-white, hand-inked, stippled illustration style. 
+
+### Physical Characteristics
+- **Species**: Anthropomorphic sheep (never change this)
+- **Head**: Round sheep face with fluffy wool, scruffy beard, messy woolly hair
+- **Eyes**: Round dark sunglasses (always present, never omit)
+- **Feet**: Oversized bare hooves (never wear shoes)
+- **Posture**: Slightly hunched, confident, mischievous attitude
+- **Clothing**: Long buttoned coat or jacket, slightly worn and oversized
+- **Expression**: Confident, sly, slightly smug, streetwise
+- **Overall Vibe**: Vintage underground cartoon, graphic novel character
+
+---
+
+## IDENTITY LOCK (CRITICAL — APPLY TO EVERY PROMPT)
+
+Polly must ALWAYS:
+✓ Look exactly like the reference image
+✓ Have the same sheep face shape and proportions
+✓ Have the same beard and wool texture
+✓ Have the same round dark sunglasses (non-negotiable)
+✓ Have the same oversized bare hooves
+✓ Have the same slightly hunched confident posture
+✓ Wear the same coat silhouette
+✓ Display the same mischievous attitude
+
+DO NOT:
+✗ Change his species (always sheep)
+✗ Change his proportions or facial structure
+✗ Add shoes or cover his hooves
+✗ Remove or alter his sunglasses
+✗ Make him look cute or soft (he's gritty and streetwise)
+✗ Alter his fundamental character design
+
+---
+
+## RENDERING STYLE LOCK (MANDATORY FOR EVERY IMAGE)
+
+### Color & Tone
+- Black and white only
+- No color gradients
+- No color palette
+- No shading with color
+
+### Line Work & Texture
+- Heavy ink lines
+- Stippling texture throughout
+- Gritty halftone patterns
+- High-contrast composition
+- Grainy film grain effect
+- Hand-drawn appearance (not vector, not 3D)
+
+### Art Style References
+- Underground comic book style
+- 1970s-80s graphic novel aesthetic
+- Vintage punk/indie cartoon
+- High contrast ink illustration
+- Not anime, not realistic photography, not digital vector art
+
+### Technical Specifications
+- Line weight: Heavy and bold, varying thickness
+- Shading: Stippling and hatching only (never smooth gradients)
+- Texture: Visible grain, paper texture, printing artifacts
+- Contrast: High (deep blacks, pure whites, limited grays)
+- Composition: Comic panel style, clear focal point
+
+---
+
+## UNIVERSAL PROMPT TEMPLATE
+
+Use this structure for EVERY Polly image request:
+
+[SCENE DESCRIPTION], featuring Polly — a mischievous anthropomorphic sheep with fluffy wool, scruffy beard, messy woolly hair, oversized bare hooves, and round dark sunglasses, wearing a long slightly worn coat. 
+
+**Character Lock**: Polly must match the reference character exactly in face, body, clothing, and attitude.
+
+**Style**: Black-and-white gritty ink illustration, heavy linework, stippling, underground comic style, vintage graphic novel, high contrast, no color, no shading gradients, no realism, no 3D.
+
+**Composition**: Polly should be the main focus, clearly visible, [POSITION INSTRUCTION], with confident mischievous body language.
+
+**Mood**: [MOOD INSTRUCTION]
+
+---
+
+## QUICK REFERENCE MODIFIERS
+
+### Position Instructions
+- "centered in the frame"
+- "in the foreground on the left"
+- "in the background, framed by..."
+- "occupying half the frame, looking at camera"
+- "small but detailed in lower right corner"
+- "dominating the scene"
+
+### Mood Instructions
+- "looking confident and sly"
+- "appearing surprised but collecting himself"
+- "scheming, with a knowing smirk"
+- "triumphant, raising his arms"
+- "defensive, arms crossed"
+- "casual and cool, leaning against..."
+- "curious, looking at something off-frame"
+
+### Scene Modifiers
+- "standing in front of [location]"
+- "holding [object]"
+- "[ACTION VERB]-ing with [WHO/WHAT]"
+- "reacting to [SITUATION]"
+- "surrounded by [ENVIRONMENT]"
+
+---
+
+## STYLE EXAMPLES (DO THIS / DON'T DO THIS)
+
+### DO (Correct Polly Style)
+✓ Heavy black ink lines with clear weight variation
+✓ Stippling texture filling shapes and creating shadows
+✓ Hatching lines visible in folds of his coat
+✓ Pure black and pure white with limited gray midtones
+✓ Comic panel borders or visible composition framing
+✓ Wool texture shown through ink patterns
+✓ Sunglasses clearly visible, glossy black
+✓ Expression showing personality through line work
+
+### DON'T (Incorrect Polly Style)
+✗ Smooth color gradients
+✗ 3D rendering or photorealism
+✗ Soft watercolor or pastel aesthetics
+✗ Anime or kawaii style
+✗ Vector art look
+✗ Hyper-detailed realism
+✗ Cute or cartoonish softness (unless specifically ironic)
+✗ Hidden or minimized sunglasses
+
+---
+
+## DEPLOYMENT INSTRUCTIONS FOR REACT
+
+When using this prompt in your React delivery app:
+
+1. **Load master prompt** from `/brand/polly/prompt.master.txt`
+2. **Inject scene** into [SCENE DESCRIPTION] placeholder
+3. **Inject position** into [POSITION INSTRUCTION] placeholder
+4. **Inject mood** into [MOOD INSTRUCTION] placeholder
+5. **Send to image generation API** (your chosen provider)
+6. **Cache result** with scene name as key
+7. **Render in React component** with alt text
+
+### Example Injected Prompt
+```
+Polly standing at a food delivery dispatch desk with a glowing neon order ticket, 
+featuring Polly — a mischievous anthropomorphic sheep with fluffy wool, 
+scruffy beard, messy woolly hair, oversized bare hooves, and round dark sunglasses, 
+wearing a long slightly worn coat.
+
+Character Lock: Polly must match the reference character exactly in face, body, clothing, and attitude.
+
+Style: Black-and-white gritty ink illustration, heavy linework, stippling, underground comic style, 
+vintage graphic novel, high contrast, no color, no shading gradients, no realism, no 3D.
+
+Composition: Polly should be the main focus, clearly visible, centered in the frame, 
+with confident mischievous body language.
+
+Mood: Looking confident and sly, checking the order with expertise.
+```
+
+---
+
+## VERSIONING & UPDATES
+
+- **Version**: 1.0
+- **Last Updated**: 2025-01-12
+- **Character Status**: Locked (no breaking changes)
+- **Style Status**: Locked (always B&W gritty ink)
+- **When to Update**: Only if you fundamentally rebrand Polly (not recommended)
+
+---
+
+**POLLY IS LOCKED. USE THIS PROMPT EXACTLY.**
+
+Pauli's watching. Polly's scheming. 🐾
