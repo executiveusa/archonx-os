@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archonx.local/contracts/graphbrain-bead.schema.json",
+  "title": "GraphBrain Bead",
+  "type": "object",
+  "required": ["bead_id", "status", "scope", "action", "assigned_to", "evidence"],
+  "properties": {
+    "bead_id": {"type": "string", "pattern": "^[a-z0-9._:-]+$"},
+    "status": {"enum": ["Draft", "Proposed", "Approved", "In Progress", "Verified", "Closed"]},
+    "scope": {
+      "type": "object",
+      "required": ["repos"],
+      "properties": {
+        "repos": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      }
+    },
+    "action": {"enum": ["merge", "extract_shared_library", "delete_duplication", "standardize_toolchain"]},
+    "assigned_to": {"type": "string"},
+    "evidence": {
+      "type": "object",
+      "required": ["artifact", "sha256"],
+      "properties": {
+        "artifact": {"type": "string"},
+        "sha256": {"type": "string"}
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "eco_prompt_id": "THE_INITIATION.graphbrain_and_studio.v1",
+  "name": "The Initiation: GraphBrain + Mini Studio",
+  "scope": {
+    "primary_source_of_truth_repo": "executiveusa/archonx-os",
+    "repos_to_index": [
+      "executiveusa/paulisworld-openclaw-3d",
+      "executiveusa/phone-call-assistant",
+      "executiveusa/VisionClaw",
+      "executiveusa/clawdbot-Whatsapp-agent",
+      "executiveusa/dashboard-agent-swarm",
+      "executiveusa/agent-zero-Fork",
+      "executiveusa/archonx-os",
+      "executiveusa/Darya-designs",
+      "executiveusa/cult-directory-template",
+      "executiveusa/pauli-comic-funnel",
+      "executiveusa/Pauli-claw-work",
+      "executiveusa/amentislibrary",
+      "executiveusa/agent_flywheel_clawdbot_skills_and_integrations",
+      "executiveusa/goat-alliance-scaffold",
+      "executiveusa/vallarta-voyage-explorer"
+    ]
+  },
+  "hard_requirements": {
+    "explore_codebase_before_editing": true,
+    "read_all_subfolders": true,
+    "produce_machine_readable_reports": true,
+    "daily_runs": {"runs_per_day": 3, "nightly_full_scan": true},
+    "audit_logging": {"enabled": true, "format": "jsonl", "include_webhook_delivery_id": true}
+  },
+  "implementation_spec": {
+    "graph_model": {
+      "cooccurrence_window_default": 4,
+      "edge_weighting": "inverse_distance",
+      "bridge_metric": "betweenness_centrality_weighted",
+      "community_detection": {"algorithm": "leiden", "resolution": 1.0, "iterations": 3, "seed": 1337}
+    },
+    "similarity_model": {
+      "confidence_weights": {
+        "cosine_tfidf": 0.45,
+        "jaccard_dependencies": 0.2,
+        "api_overlap": 0.15,
+        "cluster_overlap": 0.1,
+        "bridge_term_alignment": 0.1
+      }
+    }
+  },
+  "cron_install": {
+    "host_cron_entries": [
+      "15 06 * * * ARCHONX_WORK_ITEM_ID=cron-morning  archonx-ops graphbrain --mode incremental",
+      "15 14 * * * ARCHONX_WORK_ITEM_ID=cron-midday   archonx-ops graphbrain --mode incremental",
+      "15 22 * * * ARCHONX_WORK_ITEM_ID=cron-evening  archonx-ops graphbrain --mode incremental",
+      "30 02 * * * ARCHONX_WORK_ITEM_ID=cron-nightly  archonx-ops graphbrain --mode full"
+    ]
+  }
+}
