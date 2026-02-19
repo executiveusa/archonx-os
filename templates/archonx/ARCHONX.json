@@ -1,0 +1,9 @@
+{
+  "repo": "__REPO__",
+  "guardian_subagent": "Devika",
+  "reports_to": "executiveusa/archonx-os",
+  "openclaw": {
+    "enabled": true,
+    "skills": ["OpenClaw", "VisionClaw"]
+  }
+}

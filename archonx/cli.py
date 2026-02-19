@@ -23,6 +23,7 @@ import asyncio
 import json
 import logging
 import sys
+from pathlib import Path
 
 logging.basicConfig(
     level=logging.INFO,
@@ -196,6 +197,40 @@ def _theater(_args: argparse.Namespace) -> None:
         print(f"  {k:25s}: {v}")
 
 
+def _graphbrain_run(args: argparse.Namespace) -> None:
+    """Run GraphBrain runtime in full or light mode."""
+    from services.graphbrain import GraphBrainRuntime, Reporter
+
+    root = Path(__file__).resolve().parents[1]
+    runtime = GraphBrainRuntime(root)
+    payload = runtime.run(mode=args.mode)
+    Reporter(root).write_all(payload)
+    print(json.dumps({"mode": args.mode, "work_orders": len(payload["work_orders"])}, indent=2))
+
+
+def _graphbrain_init_repo(args: argparse.Namespace) -> None:
+    """Initialize .archonx template in a repo path."""
+    from services.graphbrain import Propagator
+
+    root = Path(__file__).resolve().parents[1]
+    repo_path = Path(args.path) if args.path else root
+    propagator = Propagator(root, root / "templates" / "archonx")
+    propagator.init_repo(args.repo, repo_path)
+    print(json.dumps({"repo": args.repo, "path": str(repo_path)}, indent=2))
+
+
+def _graphbrain_propagate(args: argparse.Namespace) -> None:
+    """Propagate .archonx standards to ecosystem repos."""
+    from services.graphbrain import Propagator
+    from services.graphbrain.repo_indexer import load_target_repos
+
+    root = Path(__file__).resolve().parents[1]
+    repos = load_target_repos(root)
+    propagator = Propagator(root, root / "templates" / "archonx")
+    results = propagator.propagate_all(repos if args.all else ["executiveusa/archonx-os"])
+    print(json.dumps([r.__dict__ for r in results], indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="archonx",
@@ -239,6 +274,20 @@ def main() -> None:
     # theater
     sub.add_parser("theater", help="Show agent theater stats")
 
+    # graphbrain
+    p_graphbrain = sub.add_parser("graphbrain", help="GraphBrain runtime commands")
+    gb_sub = p_graphbrain.add_subparsers(dest="graphbrain_command")
+
+    p_graphbrain_run = gb_sub.add_parser("run", help="Run graphbrain")
+    p_graphbrain_run.add_argument("--mode", choices=["full", "light"], default="full")
+
+    p_graphbrain_init = gb_sub.add_parser("init-repo", help="Init .archonx in target repo")
+    p_graphbrain_init.add_argument("repo", help="Repository slug")
+    p_graphbrain_init.add_argument("--path", help="Local path override")
+
+    p_graphbrain_propagate = gb_sub.add_parser("propagate", help="Propagate standards")
+    p_graphbrain_propagate.add_argument("--all", action="store_true", help="Propagate to all repos")
+
     args = parser.parse_args()
 
     handlers = {
@@ -253,6 +302,19 @@ def main() -> None:
         "scout": _scout,
         "theater": _theater,
     }
+
+    if args.command == "graphbrain":
+        graphbrain_handlers = {
+            "run": _graphbrain_run,
+            "init-repo": _graphbrain_init_repo,
+            "propagate": _graphbrain_propagate,
+        }
+        handler = graphbrain_handlers.get(args.graphbrain_command)
+        if handler:
+            handler(args)
+            return
+        p_graphbrain.print_help()
+        return
 
     handler = handlers.get(args.command)
     if handler:

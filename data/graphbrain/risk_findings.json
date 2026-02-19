@@ -1,0 +1,13 @@
+[
+  {
+    "repo": "executiveusa/archonx-os",
+    "severity": "medium",
+    "risk": "insecure_http_reference"
+  },
+  {
+    "repo": "executiveusa/archonx-os",
+    "severity": "low",
+    "risk": "endpoint_not_allowlisted",
+    "endpoint": "https://placeholder.com/polly/\u0001xz"
+  }
+]
