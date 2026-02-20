@@ -302,7 +302,19 @@ def _doctor(_args: argparse.Namespace) -> None:
     try:
         config_path = Path(__file__).resolve().parent / "config" / "archonx-config.json"
         data = json.loads(config_path.read_text(encoding="utf-8"))
-        report["checks"]["config"] = {"status": "ok", "version": data.get("system", {}).get("version", "?")}
+        root_config_path = Path(__file__).resolve().parents[1] / "archonx-config.json"
+        config_check: dict[str, Any] = {
+            "status": "ok",
+            "version": data.get("system", {}).get("version", "?"),
+            "path": str(config_path),
+        }
+        if root_config_path.exists():
+            root_data = json.loads(root_config_path.read_text(encoding="utf-8"))
+            config_check["duplicate_root_config"] = str(root_config_path)
+            config_check["root_matches_canonical"] = root_data == data
+            if root_data != data:
+                config_check["status"] = "warn"
+        report["checks"]["config"] = config_check
     except Exception as exc:
         report["checks"]["config"] = {"status": "error", "error": str(exc)}
         report["overall"] = "unhealthy"
