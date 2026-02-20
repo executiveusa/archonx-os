@@ -31,9 +31,9 @@ class TestByteRoverClient:
     
     def test_memory_layer_enum(self):
         """Test MemoryLayer enum values."""
-        assert MemoryLayer.PROJECT.value == "project"
-        assert MemoryLayer.TEAM.value == "team"
-        assert MemoryLayer.GLOBAL.value == "global"
+        assert MemoryLayer.PROJECT.value == "project_local"
+        assert MemoryLayer.TEAM.value == "team_shared"
+        assert MemoryLayer.GLOBAL.value == "global_patterns"
     
     def test_memory_entry_creation(self):
         """Test MemoryEntry dataclass."""
@@ -45,7 +45,7 @@ class TestByteRoverClient:
         assert entry.key == "test_key"
         assert entry.value == {"data": "test"}
         assert entry.layer == MemoryLayer.PROJECT
-        assert entry.version == 1
+        assert entry.confidence == 1.0
     
     @pytest.mark.asyncio
     async def test_byterover_client_save_and_get(self):

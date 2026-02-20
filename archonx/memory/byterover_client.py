@@ -40,7 +40,7 @@ class MemoryEntry:
     key: str
     value: dict[str, Any]
     layer: MemoryLayer
-    timestamp: str = field(default_factory=lambda: datetime.now(timezone.UTC).isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     tags: list[str] = field(default_factory=list)
     confidence: float = 1.0
     access_count: int = 0
@@ -64,7 +64,7 @@ class MemoryEntry:
             key=data["key"],
             value=data["value"],
             layer=MemoryLayer(data["layer"]),
-            timestamp=data.get("timestamp", datetime.now(timezone.UTC).isoformat()),
+            timestamp=data.get("timestamp", datetime.now(timezone.utc).isoformat()),
             tags=data.get("tags", []),
             confidence=data.get("confidence", 1.0),
             access_count=data.get("access_count", 0)

@@ -6,7 +6,6 @@ Podcast use case: "manage your calendar — schedule meetings around your prefer
 """
 
 from __future__ import annotations
-from typing import Any
 from archonx.skills.base import BaseSkill, SkillCategory, SkillContext, SkillResult
 
 
@@ -14,12 +13,19 @@ class CalendarManagementSkill(BaseSkill):
     name = "calendar_management"
     description = "Schedule, reschedule, and manage calendar events"
     category = SkillCategory.PERSONAL
+    _ACTIONS = {"list", "create", "update", "cancel"}
 
     async def execute(self, context: SkillContext) -> SkillResult:
-        action = context.params.get("action", "list")  # list | create | update | cancel
+        action = str(context.params.get("action", "list")).lower()
+        if action not in self._ACTIONS:
+            return SkillResult(skill=self.name, status="error", error=f"Unsupported action '{action}'")
+
+        events = context.params.get("events", [])
+        timezone = context.params.get("timezone", "UTC")
         return SkillResult(
             skill=self.name,
             status="success",
-            data={"action": action, "events": []},
+            data={"action": action, "events": events, "timezone": timezone},
+            metadata={"event_count": len(events)},
             improvements_found=[],
         )

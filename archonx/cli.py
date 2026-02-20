@@ -245,7 +245,7 @@ def _doctor(_args: argparse.Namespace) -> None:
 
     report: dict[str, Any] = {
         "command": "doctor",
-        "timestamp": datetime.now(timezone.UTC).isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "checks": {},
         "overall": "healthy",
     }
@@ -269,7 +269,12 @@ def _doctor(_args: argparse.Namespace) -> None:
         sr = SkillRegistry()
         sr.auto_discover()
         skills = sr.list_skills()
-        report["checks"]["skills"] = {"status": "ok", "count": len(skills), "names": skills}
+        report["checks"]["skills"] = {
+            "status": "ok",
+            "count": len(skills),
+            "names": [s.name for s in skills],
+            "categories": sorted({s.category.value for s in skills}),
+        }
     except Exception as exc:
         report["checks"]["skills"] = {"status": "error", "error": str(exc)}
         report["overall"] = "unhealthy"
@@ -316,7 +321,7 @@ def _doctor(_args: argparse.Namespace) -> None:
     # Write report
     reports_dir = Path(__file__).resolve().parents[1] / "ops" / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now(timezone.UTC).strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     report_path = reports_dir / f"doctor_{ts}.json"
     report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
 
