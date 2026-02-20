@@ -36,6 +36,18 @@ from archonx.core.brenner_protocol import BrennerProtocol
 from archonx.visualization.agent_theater import AgentTheater
 from archonx.billing.token_meter import TokenMeter
 
+# --- New modules (BEAD-009) ---
+from archonx.auth.oauth_server import OAuthServer
+from archonx.auth.session_manager import SessionManager
+from archonx.auth.rbac import RBACManager
+from archonx.mail.server import AgentMailServer
+from archonx.beads.viewer import TaskManager, RobotTriage
+from archonx.orchestration.orchestrator import Orchestrator
+from archonx.kpis.dashboard import KPIDashboard
+from archonx.automation.self_improvement import DailySelfImprovement
+from archonx.revenue.engine import RevenueEngine
+from archonx.memory.memory_manager import MemoryManager
+
 logger = logging.getLogger("archonx.kernel")
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config" / "archonx-config.json"
@@ -137,6 +149,42 @@ class ArchonXKernel:
         # Token billing
         self.billing = TokenMeter()
 
+        # --- New subsystems (BEAD-009) ---
+        # Authentication & SSO
+        self.oauth_server = OAuthServer()
+        self.session_manager = SessionManager()
+        self.rbac = RBACManager()
+
+        # Agent Mail WebSocket server (port 8765)
+        self.mail_server = AgentMailServer(port=8765)
+
+        # Task management
+        self.task_manager = TaskManager()
+        self.triage = RobotTriage(self.task_manager)
+
+        # Orchestrator (wired to registry + task manager + mail)
+        self.orchestrator = Orchestrator(
+            registry=self.registry,
+            task_manager=self.task_manager,
+            mail_server=self.mail_server,
+        )
+
+        # KPI dashboard
+        self.kpi_dashboard = KPIDashboard(registry=self.registry)
+
+        # Revenue engine
+        self.revenue_engine = RevenueEngine(kpi_dashboard=self.kpi_dashboard)
+
+        # Memory manager
+        self.memory_manager = MemoryManager()
+
+        # Daily self-improvement (3 AM tasks + PAULIWHEEL sync 3x/day)
+        self.self_improvement = DailySelfImprovement(
+            registry=self.registry,
+            kpi_dashboard=self.kpi_dashboard,
+            orchestrator=self.orchestrator,
+        )
+
         self._booted = False
 
     # ------------------------------------------------------------------
@@ -149,15 +197,58 @@ class ArchonXKernel:
         await self.white_crew.initialize()
         await self.black_crew.initialize()
         self.paulis_place.schedule_daily_meetings()
+
+        # Initialize orchestrator (activates all 64 agents)
+        await self.orchestrator.initialize()
+
+        # Initialize KPI metrics for all agents
+        for agent in self.registry.all():
+            self.kpi_dashboard.initialize_agent(
+                agent_id=agent.agent_id,
+                agent_name=agent.name,
+                crew=agent.crew.value,
+                role=agent.role.value,
+            )
+
+        # Start Agent Mail WebSocket server
+        try:
+            await self.mail_server.start()
+            logger.info("Agent Mail server started on port 8765")
+        except Exception as exc:
+            logger.warning("Agent Mail server failed to start: %s", exc)
+
+        # Start daily self-improvement scheduler
+        try:
+            await self.self_improvement.start()
+            logger.info("Self-improvement scheduler started")
+        except Exception as exc:
+            logger.warning("Self-improvement scheduler failed to start: %s", exc)
+
         self._booted = True
         logger.info("Kernel boot complete — 64 agents online.")
 
     async def shutdown(self) -> None:
         """Graceful shutdown."""
         logger.info("Shutting down ArchonX Kernel…")
+
+        # Stop new subsystems
+        try:
+            await self.self_improvement.stop()
+        except Exception:
+            pass
+        try:
+            await self.mail_server.stop()
+        except Exception:
+            pass
+
         await self.white_crew.shutdown()
         await self.black_crew.shutdown()
         self.paulis_place.cancel_all()
+
+        # Cleanup auth
+        self.oauth_server.cleanup_expired()
+        self.session_manager.cleanup_expired()
+
         self._booted = False
         logger.info("Kernel shutdown complete.")
 

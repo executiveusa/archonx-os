@@ -229,6 +229,101 @@ def _onboard(args: argparse.Namespace) -> None:
     print(json.dumps(asyncio.run(_run()), indent=2))
 
 
+def _doctor(_args: argparse.Namespace) -> None:
+    """Run system health check (archonx-ops doctor).
+
+    Checks:
+    - All 64 agents registered
+    - All skills loadable
+    - All tools loadable
+    - Config file valid
+    - Memory layer reachable
+
+    Emits a JSON report to ops/reports/.
+    """
+    from datetime import datetime, timezone
+
+    report: dict[str, Any] = {
+        "command": "doctor",
+        "timestamp": datetime.now(timezone.UTC).isoformat(),
+        "checks": {},
+        "overall": "healthy",
+    }
+
+    # 1. Agent registry
+    try:
+        from archonx.core.agents import AgentRegistry, build_all_agents
+
+        reg = AgentRegistry()
+        build_all_agents(reg)
+        count = len(reg)
+        report["checks"]["agents"] = {"status": "ok" if count == 64 else "warn", "count": count}
+    except Exception as exc:
+        report["checks"]["agents"] = {"status": "error", "error": str(exc)}
+        report["overall"] = "unhealthy"
+
+    # 2. Skills
+    try:
+        from archonx.skills.registry import SkillRegistry
+
+        sr = SkillRegistry()
+        sr.auto_discover()
+        skills = sr.list_skills()
+        report["checks"]["skills"] = {"status": "ok", "count": len(skills), "names": skills}
+    except Exception as exc:
+        report["checks"]["skills"] = {"status": "error", "error": str(exc)}
+        report["overall"] = "unhealthy"
+
+    # 3. Tools
+    try:
+        from archonx.tools.base import ToolRegistry
+        from archonx.tools.fixer import FixerAgentTool
+        from archonx.tools.browser_test import BrowserTestTool
+        from archonx.tools.deploy import DeploymentTool
+        from archonx.tools.analytics import AnalyticsTool
+        from archonx.tools.computer_use import ComputerUseTool
+        from archonx.tools.remotion import RemotionTool
+        from archonx.tools.grep_mcp import GrepMCPTool
+
+        tr = ToolRegistry()
+        for tool_cls in [FixerAgentTool, BrowserTestTool, DeploymentTool, AnalyticsTool, ComputerUseTool, RemotionTool, GrepMCPTool]:
+            tr.register(tool_cls())
+        report["checks"]["tools"] = {"status": "ok", "count": len(tr._tools)}
+    except Exception as exc:
+        report["checks"]["tools"] = {"status": "error", "error": str(exc)}
+        report["overall"] = "unhealthy"
+
+    # 4. Config
+    try:
+        config_path = Path(__file__).resolve().parent / "config" / "archonx-config.json"
+        data = json.loads(config_path.read_text(encoding="utf-8"))
+        report["checks"]["config"] = {"status": "ok", "version": data.get("system", {}).get("version", "?")}
+    except Exception as exc:
+        report["checks"]["config"] = {"status": "error", "error": str(exc)}
+        report["overall"] = "unhealthy"
+
+    # 5. New modules importable
+    module_checks = []
+    for mod_name in ["archonx.auth", "archonx.mail", "archonx.beads", "archonx.kpis", "archonx.revenue", "archonx.automation", "archonx.memory"]:
+        try:
+            __import__(mod_name)
+            module_checks.append({"module": mod_name, "status": "ok"})
+        except Exception as exc:
+            module_checks.append({"module": mod_name, "status": "error", "error": str(exc)})
+            report["overall"] = "unhealthy"
+    report["checks"]["modules"] = module_checks
+
+    # Write report
+    reports_dir = Path(__file__).resolve().parents[1] / "ops" / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(timezone.UTC).strftime("%Y%m%d_%H%M%S")
+    report_path = reports_dir / f"doctor_{ts}.json"
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+    print(json.dumps(report, indent=2))
+    print(f"\nReport saved to {report_path}")
+
+
 def _graphbrain_run(args: argparse.Namespace) -> None:
     """Run GraphBrain runtime in full or light mode."""
     from services.graphbrain import GraphBrainRuntime, Reporter
@@ -306,6 +401,9 @@ def main() -> None:
     # theater
     sub.add_parser("theater", help="Show agent theater stats")
 
+    # doctor
+    sub.add_parser("doctor", help="Run system health check (archonx-ops doctor)")
+
     # onboard
     p_onboard = sub.add_parser("onboard", help="Run onboarding voice flow")
     p_onboard.add_argument("--org", default="default-org", help="Organization identifier")
@@ -341,6 +439,7 @@ def main() -> None:
         "scout": _scout,
         "theater": _theater,
         "onboard": _onboard,
+        "doctor": _doctor,
     }
 
     if args.command == "graphbrain":
