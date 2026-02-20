@@ -22,7 +22,7 @@ from archonx.mail.server import AgentMailServer, AgentMessage, MessageType
 from archonx.beads.viewer import BeadsViewer, TaskManager, Task, TaskStatus, TaskPriority
 from archonx.orchestration.orchestrator import Orchestrator, OrchestratorCommand, TaskType
 from archonx.kpis.dashboard import KPIDashboard, AgentMetrics, RevenueGoal, RevenueTracker
-from archonx.automation.self_improvement import DailySelfImprovement, PAULIWHEELSync
+from archonx.automation.self_improvement import DailySelfImprovement, PAULIWHEELSync, TaskFrequency
 from archonx.revenue.engine import RevenueEngine, LeadGenerator, Lead, LeadSource, LeadStatus
 
 
@@ -452,7 +452,7 @@ class TestDailySelfImprovement:
             task_id="custom_task",
             name="Custom Task",
             description="A custom automated task",
-            frequency="daily",
+            frequency=TaskFrequency.DAILY,
             handler=lambda: {"status": "ok"}
         )
         
