@@ -7,7 +7,9 @@
     "toolbox/skills/pauliwheel_coding_protocol.skill.json",
     "toolbox/skills/agent_lightning_bootstrap.skill.json",
     "toolbox/skills/beads_manager.skill.json",
-    "toolbox/skills/ralphy_loop_enforcer.skill.json"
+    "toolbox/skills/ralphy_loop_enforcer.skill.json",
+    ".archonx/toolbox/skills/bmad-auto-method/SKILL.md",
+    ".archonx/toolbox/skills/universal-skills-manager/SKILL.md"
   ],
   "tools": [
     "toolbox/tools/request_grant.py",
