@@ -1,0 +1,202 @@
+{
+  "registry_version": "2.0",
+  "updated": "2026-02-21T10:30:00Z",
+  "domain": "archonx.ai",
+  "agents": {
+    "WHITE_CREW": {
+      "description": "Strategic agents for planning and coordination",
+      "agents": [
+        {
+          "id": "synthia-001",
+          "name": "SYNTHIA",
+          "role": "Queen",
+          "type": "strategic",
+          "email": "synthia@archonx.ai",
+          "capabilities": ["tactical_execution", "code_generation", "ui_ux_design", "project_management"],
+          "primary_model": "claude-sonnet-4",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "aria-001",
+          "name": "ARIA",
+          "role": "Architect",
+          "type": "strategic",
+          "email": "aria@archonx.ai",
+          "capabilities": ["system_design", "bff_architecture", "database_schema", "api_design"],
+          "primary_model": "claude-sonnet-4",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "nexus-001",
+          "name": "NEXUS",
+          "role": "Coordinator",
+          "type": "strategic",
+          "email": "nexus@archonx.ai",
+          "capabilities": ["multi_agent_orchestration", "task_delegation", "workflow_management", "resource_allocation"],
+          "primary_model": "gpt-4-turbo",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "oracle-001",
+          "name": "ORACLE",
+          "role": "Analyst",
+          "type": "strategic",
+          "email": "oracle@archonx.ai",
+          "capabilities": ["signal_analysis", "metrics_tracking", "performance_optimization", "reporting"],
+          "primary_model": "claude-sonnet-4",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        }
+      ]
+    },
+    "BLACK_CREW": {
+      "description": "Tactical agents for execution and operations",
+      "agents": [
+        {
+          "id": "phantom-001",
+          "name": "PHANTOM",
+          "role": "Stealth",
+          "type": "tactical",
+          "email": "phantom@archonx.ai",
+          "capabilities": ["lead_scraping", "data_extraction", "web_scraping", "competitive_intelligence"],
+          "primary_model": "gpt-4-turbo",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "cipher-001",
+          "name": "CIPHER",
+          "role": "Security",
+          "type": "tactical",
+          "email": "cipher@archonx.ai",
+          "capabilities": ["credential_management", "security_auditing", "access_control", "encryption"],
+          "primary_model": "claude-sonnet-4",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "vector-001",
+          "name": "VECTOR",
+          "role": "Deployment",
+          "type": "tactical",
+          "email": "vector@archonx.ai",
+          "capabilities": ["vercel_deployment", "coolify_management", "ci_cd_pipelines", "infrastructure"],
+          "primary_model": "gpt-4-turbo",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "prism-001",
+          "name": "PRISM",
+          "role": "Content",
+          "type": "tactical",
+          "email": "prism@archonx.ai",
+          "capabilities": ["content_generation", "seo_optimization", "multi_language_translation", "social_media_management"],
+          "primary_model": "claude-sonnet-4",
+          "status": "active",
+          "created": "2026-02-21T09:52:00Z"
+        }
+      ]
+    },
+    "SPECIALIZED_AGENTS": {
+      "description": "Specialized agents for specific tasks",
+      "agents": [
+        {
+          "id": "darya-001",
+          "name": "DARYA",
+          "role": "Computer-Use Orchestrator & OpenClaw Commander",
+          "type": "specialized",
+          "tier": "supreme_commander",
+          "codename": "Crypto Cutie",
+          "email": "darya@archonx.ai",
+          "rainbow_color": "🌊",
+          "capabilities": [
+            "orgo_control",
+            "desktop_orchestration",
+            "openclaw_orchestration",
+            "bmad_method_execution",
+            "system_monitoring",
+            "agent_coordination",
+            "autonomous_building",
+            "crypto_operations",
+            "dashboard_integration",
+            "3d_visualization",
+            "github_pr_observability"
+          ],
+          "primary_model": "claude-sonnet-4",
+          "status": "promoted",
+          "created": "2026-02-21T10:25:00Z",
+          "promoted": "2026-02-22T00:00:00Z",
+          "connections": {
+            "orgo": {
+              "api_token_env": "ORGO_API_TOKEN",
+              "endpoint": "https://api.orgo.ai/v1"
+            },
+            "openclaw": {
+              "long_term_memory": true,
+              "sub_agents": ["bmad_architect", "bmad_scrum_master", "bmad_developer", "bmad_reviewer"]
+            },
+            "dashboard": "git@github.com:executiveusa/dashboard-agent-swarm.git",
+            "darya_designs": "git@github.com:executiveusa/Darya-designs.git"
+          },
+          "viewing_room": {
+            "enabled": true,
+            "3d_space": true,
+            "camera_access": true
+          }
+        },
+        {
+          "id": "echo-001",
+          "name": "ECHO",
+          "role": "Voice",
+          "type": "specialized",
+          "email": "echo@archonx.ai",
+          "capabilities": ["voice_synthesis", "phone_calls", "transcription", "conversation_handling"],
+          "primary_model": "claude-sonnet-4",
+          "status": "pending",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "atlas-001",
+          "name": "ATLAS",
+          "role": "Maps",
+          "type": "specialized",
+          "email": "atlas@archonx.ai",
+          "capabilities": ["geolocation", "maps_integration", "local_seo", "directory_listings"],
+          "primary_model": "gpt-4-turbo",
+          "status": "pending",
+          "created": "2026-02-21T09:52:00Z"
+        },
+        {
+          "id": "nova-001",
+          "name": "NOVA",
+          "role": "Creative",
+          "type": "specialized",
+          "email": "nova@archonx.ai",
+          "capabilities": ["image_generation", "video_creation", "brand_design", "marketing_materials"],
+          "primary_model": "claude-sonnet-4",
+          "status": "pending",
+          "created": "2026-02-21T09:52:00Z"
+        }
+      ]
+    }
+  },
+  "communication": {
+    "channels": ["agent-mail", "dashboard", "webhook", "viewing-room"],
+    "broadcast_enabled": true,
+    "observation_mode": true
+  },
+  "viewing_room": {
+    "enabled": true,
+    "3d_space": true,
+    "real_time_tracking": true,
+    "component_path": "viewing-room/components/ViewingRoom.tsx"
+  },
+  "dashboard": {
+    "repo": "git@github.com:executiveusa/dashboard-agent-swarm.git",
+    "features": ["agent_control", "monitoring", "viewing_room", "command_interface"]
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "command": "doctor",
+  "timestamp": "2026-02-20T14:00:27.827490+00:00",
+  "checks": {
+    "agents": {
+      "status": "ok",
+      "count": 64
+    },
+    "skills": {
+      "status": "ok",
+      "count": 28,
+      "names": [
+        "api_integration",
+        "calendar_management",
+        "code_generation",
+        "competitor_analysis",
+        "content_writing",
+        "customer_support",
+        "data_analysis",
+        "deployment_pipeline",
+        "document_generation",
+        "email_management",
+        "file_organization",
+        "financial_tracking",
+        "form_filling",
+        "grep_assist",
+        "invoice_management",
+        "lead_generation",
+        "meeting_notes",
+        "polly_character",
+        "price_monitoring",
+        "research_deep_dive",
+        "security_audit",
+        "seo_optimization",
+        "social_media",
+        "story_toolkit",
+        "travel_booking",
+        "upwork_scout",
+        "web_scraping",
+        "workflow_automation"
+      ],
+      "categories": [
+        "automation",
+        "communication",
+        "creative",
+        "deployment",
+        "financial",
+        "personal",
+        "research",
+        "security"
+      ]
+    },
+    "tools": {
+      "status": "ok",
+      "count": 7
+    },
+    "config": {
+      "status": "ok",
+      "version": "0.1.0"
+    },
+    "modules": [
+      {
+        "module": "archonx.auth",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.mail",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.beads",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.kpis",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.revenue",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.automation",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.memory",
+        "status": "ok"
+      }
+    ]
+  },
+  "overall": "healthy"
+}
