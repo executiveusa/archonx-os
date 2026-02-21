@@ -80,3 +80,10 @@ Darya-designs-main/
 agents-official-brand-guidelines-master/
 n8n-workflows/StoryToolkitAI-main/StoryToolkitAI-main/FFmpeg-master/
 scripts/secrets.py
+
+# Additional secret files (never commit)
+kilo-code-secrets.json
+*.secrets.json
+master.env.txt
+orgo-agent/SANDBOX_CONFIG/credentials/
+credentials/

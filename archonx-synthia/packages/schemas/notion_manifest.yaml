@@ -1,0 +1,185 @@
+# ────────────────────────────────────────────────────────────
+# ARCHONX:SYNTHIA — Notion Database Schema Manifest
+# ────────────────────────────────────────────────────────────
+# This file defines the exact Notion DB properties required
+# for Synthia's "brain" layer. Use this to manually create
+# the databases in Notion or to auto-provision via API.
+# ────────────────────────────────────────────────────────────
+
+databases:
+  # ── A) Profiles ────────────────────────────────────────
+  profiles:
+    env_var: NOTION_PROFILES_DB_ID
+    properties:
+      profile_id:
+        type: rich_text
+        description: Unique identifier
+      display_name:
+        type: title
+        description: Human-readable name
+      role:
+        type: select
+        options: [operator, admin, viewer]
+      goals_week:
+        type: rich_text
+        description: Weekly goals (multi-line)
+      allowed_tools:
+        type: multi_select
+        options: [notion, orgo, code_runner, voice, web_browse, email, calendar]
+      approval_policy:
+        type: multi_select
+        options: [comms_require_approval, calendar_require_approval, payments_always_manual]
+      work_hours:
+        type: rich_text
+        description: "e.g. 09:00-18:00 PST"
+      interrupt_policy:
+        type: select
+        options: [brief, confirm-first]
+      voice_persona:
+        type: select
+        options: [proactive, confirm-first]
+      created_at:
+        type: date
+
+  # ── B) Tasks ───────────────────────────────────────────
+  tasks:
+    env_var: NOTION_TASKS_DB_ID
+    properties:
+      task_id:
+        type: rich_text
+        description: Unique identifier (UUID)
+      title:
+        type: title
+      status:
+        type: select
+        options: [backlog, today, doing, blocked, done]
+      priority:
+        type: select
+        options: [low, med, high, urgent]
+      owner_agent:
+        type: rich_text
+        description: Agent ID assigned to this task
+      requires_approval:
+        type: checkbox
+      approval_id:
+        type: rich_text
+      context:
+        type: rich_text
+        description: Task context and instructions
+      due_date:
+        type: date
+      tags:
+        type: multi_select
+        options: [research, code, design, communication, automation, review]
+      created_at:
+        type: date
+      updated_at:
+        type: date
+
+  # ── C) Runs ────────────────────────────────────────────
+  runs:
+    env_var: NOTION_RUNS_DB_ID
+    properties:
+      run_id:
+        type: rich_text
+      task:
+        type: relation
+        target_db: tasks
+      agent_name:
+        type: rich_text
+      computer_id:
+        type: rich_text
+        description: Orgo computer ID
+      status:
+        type: select
+        options: [running, waiting_approval, failed, done]
+      started_at:
+        type: date
+      ended_at:
+        type: date
+      summary:
+        type: rich_text
+      last_log:
+        type: rich_text
+
+  # ── D) Artifacts ───────────────────────────────────────
+  artifacts:
+    env_var: NOTION_ARTIFACTS_DB_ID
+    properties:
+      artifact_id:
+        type: rich_text
+      run:
+        type: relation
+        target_db: runs
+      type:
+        type: select
+        options: [file, link, screenshot, note]
+      uri:
+        type: url
+      description:
+        type: rich_text
+      created_at:
+        type: date
+
+  # ── E) Approvals ───────────────────────────────────────
+  approvals:
+    env_var: NOTION_APPROVALS_DB_ID
+    properties:
+      approval_id:
+        type: rich_text
+      run:
+        type: relation
+        target_db: runs
+      action:
+        type: rich_text
+        description: The action requiring approval
+      context:
+        type: rich_text
+      status:
+        type: select
+        options: [pending, approved, denied]
+      decided_by:
+        type: rich_text
+      decided_at:
+        type: date
+
+  # ── F) Agents ──────────────────────────────────────────
+  agents:
+    env_var: NOTION_AGENTS_DB_ID
+    properties:
+      agent_id:
+        type: rich_text
+      name:
+        type: title
+      role:
+        type: select
+        options: [supervisor, executor, researcher, coder]
+      status:
+        type: select
+        options: [idle, running, waiting_approval, paused, killed, done, failed]
+      last_seen:
+        type: date
+      current_run_id:
+        type: rich_text
+
+  # ── G) SOPs ────────────────────────────────────────────
+  sops:
+    env_var: NOTION_SOPS_DB_ID
+    properties:
+      sop_id:
+        type: rich_text
+      title:
+        type: title
+      category:
+        type: select
+        options: [research, code, deployment, communication, review]
+      steps:
+        type: rich_text
+        description: Step-by-step procedure (rich text)
+      tools_required:
+        type: multi_select
+        options: [notion, orgo, code_runner, voice]
+      created_at:
+        type: date
+      updated_at:
+        type: date

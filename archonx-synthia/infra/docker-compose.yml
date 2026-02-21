@@ -1,0 +1,69 @@
+# ────────────────────────────────────────────────────────────
+# ARCHONX:SYNTHIA — Local Development Stack
+# Usage: docker-compose up --build
+# ────────────────────────────────────────────────────────────
+
+services:
+  # ── Orchestrator API ────────────────────────────────────
+  server:
+    build:
+      context: ./apps/server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - LOG_LEVEL=debug
+    depends_on:
+      - code-runner
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # ── Control Tower UI ────────────────────────────────────
+  control-tower:
+    build:
+      context: ./apps/control-tower
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://server:8000
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  # ── Sandboxed Code Runner ───────────────────────────────
+  code-runner:
+    build:
+      context: ./infra/code-runner
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      - RUNNER_PORT=9000
+      - RUNNER_MAX_RUNTIME_SECONDS=300
+    # Security hardening
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    volumes:
+      - runner-work:/work
+    mem_limit: 512m
+    cpus: 1.0
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:9000/healthz')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  runner-work:
+    driver: local
