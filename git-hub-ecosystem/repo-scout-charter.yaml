@@ -1,0 +1,54 @@
+version: 1
+mission: "12-hour ecosystem scouting for security, prompt safety, and monetizable product upgrades"
+
+scouts:
+  white:
+    agent_id: synthia_queen_white
+    codename: "White Scout Synthia"
+    focus:
+      - design quality
+      - product strategy
+      - copywriting and conversion
+      - viral feature opportunities
+      - ux clarity (Dont Make Me Think principles)
+    deliverables:
+      - feature_briefs
+      - conversion_upgrades
+      - launch_copy_angles
+
+  black:
+    agent_id: shadow_queen_black
+    codename: "Black Scout Shadow"
+    focus:
+      - prompt injection detection
+      - auth and secrets exposure risk
+      - dependency and supply-chain risk
+      - abuse paths and data exfiltration vectors
+      - hardening recommendations
+    deliverables:
+      - security_findings
+      - exploit_paths
+      - mitigation_priority_matrix
+
+coordination:
+  commander: agent_zero
+  transport: openclaw
+  cadence_hours: 12
+  required_before_assignment:
+    - openclaw_capability_enabled
+    - toolbox_contract_access
+    - universal_skills_manager_registered
+
+external_signal_sources:
+  - reddit
+  - product_hunt
+  - x_twitter
+  - github_trending
+
+report_format:
+  sections:
+    - new_repos
+    - security_risks
+    - money_making_upgrades
+    - product_pain_points
+    - priority_actions_24h
