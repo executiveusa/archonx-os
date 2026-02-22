@@ -48,6 +48,21 @@ from archonx.automation.self_improvement import DailySelfImprovement
 from archonx.revenue.engine import RevenueEngine
 from archonx.memory.memory_manager import MemoryManager
 
+# --- Security modules (Sprint 1-3) ---
+from archonx.security.safety_layer import SafetyLayer
+from archonx.security.leak_detector import LeakDetector
+from archonx.security.cost_guard import CostGuard, CostBudget
+from archonx.security.tool_gating import ToolGatekeeper
+from archonx.security.command_guard import CommandGuard
+from archonx.security.workspace_scope import WorkspaceScope
+from archonx.security.sandbox_policy import SandboxEnforcer
+from archonx.security.network_guard import NetworkGuard
+from archonx.security.env_scrubber import EnvScrubber
+
+# --- Sprint 4 modules ---
+from archonx.core.memory_sqlite import SQLiteMemory
+from archonx.core.agent_identity import AgentIdentityManager
+
 logger = logging.getLogger("archonx.kernel")
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config" / "archonx-config.json"
@@ -67,17 +82,49 @@ class KernelConfig:
     # OpenClaw
     gateway_port: int = 18789
 
+    # Feature flags
+    enable_theater: bool = True
+    enable_revenue_engine: bool = True
+    enable_mail_server: bool = True
+    enable_self_improvement: bool = True
+    enable_memory_sqlite: bool = True
+    enable_agent_identity: bool = True
+
+    # Security
+    security_enabled: bool = True
+    cost_guard_enabled: bool = True
+    command_guard_allowlist_mode: bool = False
+
+    # Memory
+    memory_backend: str = "sqlite"
+    sqlite_path: str = "data/archonx_memory.db"
+
     @classmethod
     def from_file(cls, path: Path = CONFIG_PATH) -> "KernelConfig":
         data = json.loads(path.read_text(encoding="utf-8"))
         proto = data.get("protocol", {})
-        oc = data.get("openclaw", {})
+        oc = data.get("integration", {}).get("openclaw", {})
+        features = data.get("features", {})
+        security = data.get("security", {})
+        cost = data.get("cost_guard", {})
+        memory = data.get("memory", {})
         return cls(
             raw=data,
             protocol_min_depth=proto.get("min_depth", 5),
             protocol_preferred_depth=proto.get("preferred_depth", 10),
             confidence_threshold=proto.get("confidence_threshold", 0.7),
             gateway_port=oc.get("gateway_port", 18789),
+            enable_theater=features.get("enable_theater", True),
+            enable_revenue_engine=features.get("enable_revenue_engine", True),
+            enable_mail_server=features.get("enable_mail_server", True),
+            enable_self_improvement=features.get("enable_self_improvement", True),
+            enable_memory_sqlite=features.get("enable_memory_sqlite", True),
+            enable_agent_identity=features.get("enable_agent_identity", True),
+            security_enabled=bool(security),
+            cost_guard_enabled=cost.get("enabled", True),
+            command_guard_allowlist_mode=security.get("command_guard", {}).get("allowlist_mode", False),
+            memory_backend=memory.get("backend", "sqlite"),
+            sqlite_path=memory.get("sqlite_path", "data/archonx_memory.db"),
         )
 
 
@@ -178,6 +225,47 @@ class ArchonXKernel:
         # Memory manager
         self.memory_manager = MemoryManager()
 
+        # --- Security subsystems (Sprint 1-3) ---
+        if self.config.security_enabled:
+            self.safety_layer = SafetyLayer()
+            self.leak_detector = LeakDetector()
+            self.command_guard = CommandGuard(
+                allowlist_mode=self.config.command_guard_allowlist_mode,
+            )
+            self.workspace_scope: WorkspaceScope | None = None  # set per-session
+            self.sandbox_enforcer = SandboxEnforcer()
+            self.network_guard = NetworkGuard()
+            self.env_scrubber = EnvScrubber()
+            self.tool_gatekeeper = ToolGatekeeper()
+            logger.info("Security subsystems initialized")
+        else:
+            self.safety_layer = None  # type: ignore[assignment]
+            self.leak_detector = None  # type: ignore[assignment]
+            self.command_guard = None  # type: ignore[assignment]
+            self.workspace_scope = None
+            self.sandbox_enforcer = None  # type: ignore[assignment]
+            self.network_guard = None  # type: ignore[assignment]
+            self.env_scrubber = None  # type: ignore[assignment]
+            self.tool_gatekeeper = None  # type: ignore[assignment]
+
+        if self.config.cost_guard_enabled:
+            self.cost_guard = CostGuard()
+        else:
+            self.cost_guard = None  # type: ignore[assignment]
+
+        # --- Feature-flagged subsystems (Sprint 4) ---
+        if self.config.enable_memory_sqlite:
+            self.sqlite_memory = SQLiteMemory(db_path=self.config.sqlite_path)
+            logger.info("SQLite memory backend enabled (%s)", self.config.sqlite_path)
+        else:
+            self.sqlite_memory = None  # type: ignore[assignment]
+
+        if self.config.enable_agent_identity:
+            self.agent_identity = AgentIdentityManager()
+            logger.info("Agent identity manager enabled")
+        else:
+            self.agent_identity = None  # type: ignore[assignment]
+
         # Daily self-improvement (3 AM tasks + PAULIWHEEL sync 3x/day)
         self.self_improvement = DailySelfImprovement(
             registry=self.registry,
@@ -211,18 +299,28 @@ class ArchonXKernel:
             )
 
         # Start Agent Mail WebSocket server
-        try:
-            await self.mail_server.start()
-            logger.info("Agent Mail server started on port 8765")
-        except Exception as exc:
-            logger.warning("Agent Mail server failed to start: %s", exc)
+        if self.config.enable_mail_server:
+            try:
+                await self.mail_server.start()
+                logger.info("Agent Mail server started on port 8765")
+            except Exception as exc:
+                logger.warning("Agent Mail server failed to start: %s", exc)
 
         # Start daily self-improvement scheduler
-        try:
-            await self.self_improvement.start()
-            logger.info("Self-improvement scheduler started")
-        except Exception as exc:
-            logger.warning("Self-improvement scheduler failed to start: %s", exc)
+        if self.config.enable_self_improvement:
+            try:
+                await self.self_improvement.start()
+                logger.info("Self-improvement scheduler started")
+            except Exception as exc:
+                logger.warning("Self-improvement scheduler failed to start: %s", exc)
+
+        # Initialize SQLite memory
+        if self.sqlite_memory is not None:
+            try:
+                self.sqlite_memory.initialize()
+                logger.info("SQLite memory initialized")
+            except Exception as exc:
+                logger.warning("SQLite memory failed to initialize: %s", exc)
 
         self._booted = True
         logger.info("Kernel boot complete — 64 agents online.")
@@ -248,6 +346,10 @@ class ArchonXKernel:
         # Cleanup auth
         self.oauth_server.cleanup_expired()
         self.session_manager.cleanup_expired()
+
+        # Close SQLite memory
+        if self.sqlite_memory is not None:
+            self.sqlite_memory.close()
 
         self._booted = False
         logger.info("Kernel shutdown complete.")

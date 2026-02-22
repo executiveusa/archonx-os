@@ -32,13 +32,55 @@
   "integration": {
     "openclaw": {
       "enabled": true,
-      "backend_url": "http://localhost:8080"
+      "backend_url": "http://localhost:8080",
+      "gateway_port": 18789,
+      "auth_required": true,
+      "bind_host": "127.0.0.1"
     },
     "visualization": {
       "enabled": true,
       "ui_type": "game",
       "port": 3000
     }
+  },
+  "security": {
+    "safety_layer": true,
+    "leak_detector": true,
+    "prompt_injection_guard": true,
+    "command_guard": {
+      "enabled": true,
+      "allowlist_mode": false
+    },
+    "workspace_scope": true,
+    "sandbox_default_level": "workspace_write",
+    "network_guard": {
+      "enabled": true,
+      "allow_private": false
+    },
+    "env_scrubber": true,
+    "tool_gating": {
+      "enabled": true,
+      "default_min_trust": "verified"
+    }
+  },
+  "cost_guard": {
+    "enabled": true,
+    "max_cost_per_day_cents": 5000,
+    "max_actions_per_hour": 200,
+    "max_tool_iterations": 25,
+    "alert_threshold_percent": 80
+  },
+  "features": {
+    "enable_theater": true,
+    "enable_revenue_engine": true,
+    "enable_mail_server": true,
+    "enable_self_improvement": true,
+    "enable_memory_sqlite": true,
+    "enable_agent_identity": true
+  },
+  "memory": {
+    "backend": "sqlite",
+    "sqlite_path": "data/archonx_memory.db"
   },
   "deployment": {
     "mode": "development",
