@@ -1,0 +1,26 @@
+﻿{
+    "checks":  {
+                   "openclawScript":  true,
+                   "archonxScript":  true,
+                   "node":  true,
+                   "checkerScript":  true,
+                   "powershell":  true
+               },
+    "eventCount":  21,
+    "repoCounts":  {
+                       "openclaw":  12,
+                       "archonx-os":  9
+                   },
+    "actionsTaken":  [
+
+                     ],
+    "openJobs":  [
+
+                 ],
+    "generatedAt":  "2026-02-22T22:11:32.3349918Z",
+    "ok":  true,
+    "channel":  "C:\\archonx-os-main\\data\\meeting-link\\meeting.jsonl",
+    "recommendations":  [
+
+                        ]
+}
