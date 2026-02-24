@@ -1,0 +1,19 @@
+{
+  "id": "benevolencia",
+  "type": "social_purpose_company",
+  "trademark": "BENEVOLENCIA™",
+  "owner": "THE PAULI EFFECT",
+  "operator_agent": "glitch_knight",
+  "crew": "black",
+  "piece": "knight",
+  "department": "Gratitude",
+  "lemonis_pillar": 4,
+  "tagline": "Business with soul.",
+  "visual": {
+    "color": "gold",
+    "hex": "#F5A623",
+    "glow": "warm",
+    "particle": "dove_heart"
+  },
+  "king_mode_alignment": "$100M with social impact embedded in every transaction"
+}

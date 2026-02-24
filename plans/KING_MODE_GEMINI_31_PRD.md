@@ -99,23 +99,23 @@ The 4 knight pieces (2 white: Blitz, Patch / 2 black: Dash, Stitch) must be visu
 |--------|--------|----------------|
 | BLITZ (white) | People | Cyan glow, human-form silhouette, heartbeat pulse animation |
 | PATCH (white) | Process | Blue glow, gear/cog accent geometry, steady rotation |
-| DASH (black) | Product | Orange glow, diamond/gem accent, sharp angular geometry |
-| STITCH (black) | Gratitude — BENEVOLENCIA | Gold/warm glow, dove/heart accent particle, soft pulse |
+| FLASH (black) | Product | Orange glow, diamond/gem accent, sharp angular geometry |
+| GLITCH (black) | Gratitude — BENEVOLENCIA | Gold/warm glow, dove/heart accent particle, soft pulse |
 
 When a knight piece is clicked, the HUD panel must show:
 - Department name (People / Process / Product / Gratitude)
 - Marcus Lemonis pillar description (one sentence)
 - Current tasks assigned
-- BENEVOLENCIA for Stitch Knight: current social impact metric
+- BENEVOLENCIA for Glitch Knight: current social impact metric
 
 ### KM-BUILD-002: BENEVOLENCIA Integration
 
 BENEVOLENCIA is the 4th department — social purpose, owned by THE PAULI EFFECT.
 - Name: BENEVOLENCIA™
-- Operator: STITCH KNIGHT
+- Operator: GLITCH KNIGHT
 - Visual: gold glowing piece on the black side of the board
-- HUD panel for Stitch Knight must show: "BENEVOLENCIA — Gratitude Department. Business with soul."
-- Add a small "B" emblem texture or particle to Stitch Knight
+- HUD panel for Glitch Knight must show: "BENEVOLENCIA — Gratitude Department. Business with soul."
+- Add a small "B" emblem texture or particle to Glitch Knight
 
 ### KM-BUILD-003: PopeBot Pawn Training Arc
 
@@ -229,8 +229,8 @@ Current XR/VR mode is scaffolded. Complete it:
 |--------|------|-----------|------|
 | Blitz Knight | White | Knight | People |
 | Patch Knight | White | Knight | Process |
-| Dash Knight | Black | Knight | Product |
-| Stitch Knight | Black | Knight | Gratitude / BENEVOLENCIA |
+| Flash Knight | Black | Knight | Product |
+| Glitch Knight | Black | Knight | Gratitude / BENEVOLENCIA |
 
 > Note: VisionClaw and Agent Zero (white knights) are operational knights.
 > Blitz and Patch are the Lemonis-assigned knights.
@@ -279,7 +279,7 @@ When Gemini 3.1 declares King Mode done, the following must ALL be true:
 
 - [ ] All 32 agents visible on 3D board with correct piece types
 - [ ] 4 Knights visually distinct with pillar identities (People/Process/Product/Gratitude)
-- [ ] BENEVOLENCIA (Stitch Knight) has gold glow + "B" emblem + soul HUD
+- [ ] BENEVOLENCIA (Glitch Knight) has gold glow + "B" emblem + soul HUD
 - [ ] PopeBot has training beams to all 32 pawns + training progress bar
 - [ ] Saleor commerce panel slides in from right, shows live channel data
 - [ ] $100M HUD shows animated progress + countdown + agent velocity

@@ -55,6 +55,7 @@
 | Mark | Type |
 |------|------|
 | **The Pauli Effect™** | Parent Organization |
+| **BENEVOLENCIA™** | Social Purpose Company — Gratitude Department, owned by The Pauli Effect |
 | **Kupuri Media™** | Media Division |
 | **Macs Digital Media™** | Digital Services |
 | **The Akash Engine™** | Compute/AI Infrastructure |
@@ -74,7 +75,8 @@
 | Mark | Description |
 |------|-------------|
 | **Universal Skills Manager (USM)™** | Skill marketplace scanner + installer |
-| **VisionClaw™** | Visual analysis skill |
+| **VisionClaw™** | Visual analysis skill — Meta Ray-Ban glasses, Gemini Live |
+| **Franken-Claw™** | Proprietary AI tool gateway — OpenClaw fork + IronClaw security layer |
 | **ArchonX Toolbox™** | Agent skill/tool registry |
 
 ---

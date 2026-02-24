@@ -207,6 +207,11 @@ def _white_back_rank() -> list[Agent]:
             position="B1",
             specialty="Rapid deployment",
             reports_to="synthia_queen_white",
+            metadata={
+                "lemonis_department": "People",
+                "lemonis_pillar": 1,
+                "department_mission": "Ensure right agents are aligned, accountable, and coachable. Run agent ACK cycles. Enforce crew culture and King Mode alignment.",
+            },
         ),
         Agent(
             agent_id="oracle_bishop_white_c",
@@ -251,6 +256,11 @@ def _white_back_rank() -> list[Agent]:
             position="G1",
             specialty="Hotfix repair",
             reports_to="synthia_queen_white",
+            metadata={
+                "lemonis_department": "Process",
+                "lemonis_pillar": 2,
+                "department_mission": "Own workflow documentation, PAULIWHEEL enforcement, ops reporting, loop management. Ensure nothing ships without verified process.",
+            },
         ),
         Agent(
             agent_id="sentinel_rook_white_h",
@@ -401,6 +411,11 @@ def _black_back_rank() -> list[Agent]:
             position="B8",
             specialty="Rapid deployment",
             reports_to="shadow_queen_black",
+            metadata={
+                "lemonis_department": "Product",
+                "lemonis_pillar": 3,
+                "department_mission": "Evaluate product quality, SKU logic, margin analysis, and feature gate decisions. Ensure what's built is differentiated and market-worthy.",
+            },
         ),
         Agent(
             agent_id="seer_bishop_black_c",
@@ -445,6 +460,13 @@ def _black_back_rank() -> list[Agent]:
             position="G8",
             specialty="Hotfix repair",
             reports_to="shadow_queen_black",
+            metadata={
+                "lemonis_department": "Gratitude",
+                "lemonis_pillar": 4,
+                "department_mission": "Operate BENEVOLENCIA™ social purpose initiatives. Embed gratitude and social impact into every transaction. Business with soul.",
+                "brand": "BENEVOLENCIA™",
+                "visual": {"color": "gold", "hex": "#F5A623", "glow": "warm", "particle": "dove_heart"},
+            },
         ),
         Agent(
             agent_id="warden_rook_black_h",
