@@ -1,0 +1,49 @@
+# Multi-App Deployment - Quick Reference
+
+## One-Time Setup
+```powershell
+.\scripts\coolify-multi-app-manager.ps1 -Action setup
+# Edit config/secrets.json with your API keys
+.\scripts\coolify-multi-app-manager.ps1 -Action create-all
+.\scripts\coolify-multi-app-manager.ps1 -Action sync-secrets
+```
+
+## Daily Workflow
+```
+Push to GitHub main branch
+         ↓
+Coolify webhook auto-triggers
+         ↓
+App deploys (2-5 minutes)
+         ↓
+Live at https://[app-name].srv1099662.hstgr.cloud
+```
+
+## Essential Commands
+| Action | Command |
+|--------|---------|
+| Setup | `.\scripts\coolify-multi-app-manager.ps1 -Action setup` |
+| Find apps | `.\scripts\coolify-multi-app-manager.ps1 -Action scan` |
+| Deploy all | `.\scripts\coolify-multi-app-manager.ps1 -Action create-all` |
+| Update secrets | `.\scripts\coolify-multi-app-manager.ps1 -Action sync-secrets` |
+| Check status | `.\scripts\coolify-multi-app-manager.ps1 -Action status` |
+
+## Key Files
+- `config/secrets.json` - All API keys (in .gitignore)
+- `config/app-inventory.json` - Deployed apps
+- `.github/workflows/coolify-deploy.yml` - Auto-deployment on push
+
+## Dashboard Access
+- **Coolify:** https://srv1099662.hstgr.cloud
+- **Apps:** https://[app-name].srv1099662.hstgr.cloud
+
+## Secrets Update (Change Any API Key)
+1. Edit `config/secrets.json`
+2. Run: `.\scripts\coolify-multi-app-manager.ps1 -Action sync-secrets`
+3. All 95+ apps get new secret instantly (no redeployment needed)
+
+## Infrastructure
+- **Host:** Hostinger VPS (31.220.58.212)
+- **Platform:** Coolify (self-hosted, open-source)
+- **Apps:** 95+ deployed
+- **Cost:** Single VPS (~$5-10/month) instead of per-app hosting

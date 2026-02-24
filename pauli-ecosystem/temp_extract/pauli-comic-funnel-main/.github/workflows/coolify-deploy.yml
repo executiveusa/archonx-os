@@ -1,0 +1,31 @@
+name: Auto-Deploy to Coolify
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Get repository name
+        id: repo
+        run: echo "name=$(echo ${{ github.repository }} | cut -d'/' -f2)" >> $GITHUB_OUTPUT
+      
+      - name: Notify Coolify webhook
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            "https://srv1099662.hstgr.cloud/api/v1/services/${{ secrets.COOLIFY_SERVICE_ID }}/deploy"
+      
+      - name: Deployment status
+        run: echo "✅ Deployment triggered for ${{ steps.repo.outputs.name }}"

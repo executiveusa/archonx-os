@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-02-23T21:20:05.896497+00:00",
+  "currentState": "Control-plane hardening in progress",
+  "realPriority": "Execute tier1 backlog to stable shipping pipeline",
+  "everythingElse": "Deferred items in parking_lot and tier2+",
+  "metrics": {
+    "tier1Count": 3,
+    "tier2Count": 2,
+    "tier3Count": 0,
+    "tier4Count": 0,
+    "parkingLotCount": 2
+  },
+  "directive": [
+    "Complete active tier1 items before starting new scope",
+    "Run loop tests and build validation",
+    "Update decisions and session state after each milestone"
+  ]
+}

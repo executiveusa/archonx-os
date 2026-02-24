@@ -1,0 +1,36 @@
+# JARVIS Universal Agent - Python Dependencies
+# © 2025 The Pauli Effect
+
+# Core AI & LLM
+anthropic>=0.18.0
+openai>=1.12.0
+requests>=2.31.0
+
+# Voice Input/Output
+faster-whisper>=0.10.0
+pyttsx3>=2.90
+SpeechRecognition>=3.10.0
+pyaudio>=0.2.14
+
+# Browser & System Automation
+playwright>=1.41.0
+pyautogui>=0.9.54
+psutil>=5.9.8
+
+# Utilities
+pyperclip>=1.8.2
+plyer>=2.1.0
+
+# Memory & Vector Database
+chromadb>=0.4.22
+
+# Optional but Recommended
+# elevenlabs>=0.2.26  # Premium TTS
+# opencv-python>=4.9.0  # Computer vision
+# pandas>=2.2.0  # Data processing
+# numpy>=1.26.0  # Numerical computing
+
+# Development Tools (optional)
+# pytest>=8.0.0
+# black>=24.0.0
+# mypy>=1.8.0

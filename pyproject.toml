@@ -35,6 +35,9 @@ black = ">=24.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.scripts]
+archonx = "archonx.cli:main"
+
 [tool.ruff]
 target-version = "py311"
 line-length = 100
