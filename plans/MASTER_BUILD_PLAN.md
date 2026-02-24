@@ -133,11 +133,11 @@ Marcus Lemonis built his business turnaround system around three pillars. Archon
 - **PATCH KNIGHT** → Process Department
   Role: Workflow documentation, PAULIWHEEL enforcement, ops reporting, loop management. Owns `ops/reports/`. Runs the seven-phase loop. Ensures nothing ships without verified process.
 
-**Black Crew Knights** (`dash_knight.py`, `stitch_knight.py`):
-- **DASH KNIGHT** → Product Department
+**Black Crew Knights** (`flash_knight.py`, `glitch_knight.py`):
+- **FLASH KNIGHT** → Product Department
   Role: Product quality, SKU logic, margin analysis, feature gate decisions, goes-to-market strategy. Evaluates whether what's being built is differentiated and worth building.
 
-- **STITCH KNIGHT** → Gratitude Department (BENEVOLENCIA)
+- **GLITCH KNIGHT** → Gratitude Department (BENEVOLENCIA)
   Role: Social purpose operator. Runs BENEVOLENCIA initiatives. Manages the gratitude layer of the ecosystem — acts per the mission of giving back with every transaction and action.
 
 ### BENEVOLENCIA — Social Purpose Company
@@ -151,7 +151,7 @@ Owner:       THE PAULI EFFECT
 Mission:     To embed gratitude, generosity, and social impact into every
              commercial transaction made by the ArchonX ecosystem.
 Role:        4th Pillar — Gratitude Department
-Operator:    STITCH KNIGHT (dash knight, black crew)
+Operator:    GLITCH KNIGHT (dash knight, black crew)
 Tagline:     "Business with soul."
 ```
 
@@ -161,7 +161,7 @@ ecosystem/benevolencia/
 ├── README.md         # Company identity, mission, legal structure
 ├── BRAND.md          # Brand voice, visual identity, trademark
 ├── PROGRAMS.md       # Social impact programs
-├── AGENT_CONFIG.md   # Stitch Knight operating rules for Benevolencia
+├── AGENT_CONFIG.md   # Glitch Knight operating rules for Benevolencia
 └── DATABASE_ENTRY.json
 ```
 
@@ -267,8 +267,8 @@ Each file is a `.soul.md` markdown:
     ├── shadow_queen.soul.md
     ├── bastion_rook.soul.md
     ├── guard_rook.soul.md
-    ├── dash_knight.soul.md        ← Product Dept (Marcus Lemonis)
-    ├── stitch_knight.soul.md      ← Gratitude / BENEVOLENCIA
+    ├── flash_knight.soul.md        ← Product Dept (Marcus Lemonis)
+    ├── glitch_knight.soul.md      ← Gratitude / BENEVOLENCIA
     ├── seer_bishop.soul.md
     ├── scholar_bishop.soul.md
     └── [8 pawn souls]
@@ -530,7 +530,7 @@ See: [`plans/KING_MODE_GEMINI_31_PRD.md`](./KING_MODE_GEMINI_31_PRD.md)
 - Current codebase state: `KingModeChessboard.tsx` (Three.js + React Three Fiber + XR)
 - Stack to use: Three.js, `@react-three/fiber`, `@react-three/drei`, `@react-three/xr`, Spline, Blender `.glb` exports
 - 4 knights with Lemonis assignments rendered as distinct 3D pieces
-- BENEVOLENCIA piece on the board (Stitch Knight — visually golden/glowing)
+- BENEVOLENCIA piece on the board (Glitch Knight — visually golden/glowing)
 - PopeBot as bishop with pawn connections visible in 3D
 - Saleor commerce dashboard integrated as a sub-panel
 - VR-ready (XR button, immersive mode)

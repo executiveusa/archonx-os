@@ -1,0 +1,16 @@
+{
+  "stack": "saleor",
+  "role": "default_ecommerce_platform",
+  "version": "latest",
+  "docs": "https://docs.saleor.io",
+  "graphql_endpoint": "${SALEOR_API_URL}",
+  "assigned_agents": {
+    "blitz_knight": "People Department",
+    "patch_knight": "Process Department",
+    "dash_knight": "Product Department",
+    "stitch_knight": "Gratitude / BENEVOLENCIA"
+  },
+  "agentic_commerce": true,
+  "headless": true,
+  "api_first": true
+}
