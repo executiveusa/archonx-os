@@ -1,0 +1,131 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jarvis-agent"
+version = "2.0.0"
+description = "JARVIS Universal Agent - Autonomous Agent with Voice, Vision, and Browser Control"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "The Pauli Effect", email = "jarvis@paulieffect.com"}
+]
+license = {text = "MIT"}
+keywords = [
+    "agent",
+    "llm",
+    "autonomous",
+    "voice",
+    "vision",
+    "browser-automation",
+    "mcp",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+    # Core AI & LLM
+    "anthropic>=0.18.0",
+    "openai>=1.12.0",
+    "requests>=2.31.0",
+    
+    # Voice Input/Output
+    "faster-whisper>=0.10.0",
+    "pyttsx3>=2.90",
+    "SpeechRecognition>=3.10.0",
+    "pyaudio>=0.2.14",
+    
+    # Browser & System Automation
+    "playwright>=1.41.0",
+    "pyautogui>=0.9.54",
+    "psutil>=5.9.8",
+    
+    # Utilities
+    "pyperclip>=1.8.2",
+    "plyer>=2.1.0",
+    
+    # Memory & Vector Database
+    "chromadb>=0.4.22",
+    
+    # MCP Support
+    "mcp>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+    "mypy>=1.8.0",
+]
+premium = [
+    "elevenlabs>=0.2.26",  # Premium TTS
+    "opencv-python>=4.9.0",  # Computer vision
+]
+extras = [
+    "pandas>=2.2.0",  # Data processing
+    "numpy>=1.26.0",  # Numerical computing
+]
+
+[project.urls]
+Homepage = "https://github.com/executiveusa/pauli-comic-funnel"
+Repository = "https://github.com/executiveusa/pauli-comic-funnel.git"
+Documentation = "https://docs.paulieffect.com"
+"Bug Tracker" = "https://github.com/executiveusa/pauli-comic-funnel/issues"
+
+[project.scripts]
+jarvis = "jarvis_agent:main"
+jarvis-config = "jarvis_config:interactive_setup"
+
+[tool.uv]
+# Monorepo member config - inherits workspace settings
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.0.0",
+    "ruff>=0.3.0",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+extend-exclude = """
+/(
+    \\.git
+    | \\.venv
+    | venv
+    | build
+    | dist
+    | __pycache__
+)/
+"""
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "B", "A"]
+ignore = ["E501"]  # Line too long (handled by formatter)
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+asyncio_mode = "auto"

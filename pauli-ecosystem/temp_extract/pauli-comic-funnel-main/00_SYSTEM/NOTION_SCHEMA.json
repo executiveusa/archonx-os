@@ -1,0 +1,404 @@
+{
+  "workspace_name": "PAULI_MASTER_KB",
+  "workspace_description": "Bambu's complete knowledge base for autonomous AI agency",
+  "databases": {
+    "Projects": {
+      "id_var": "NOTION_PROJECTS_DB_ID",
+      "description": "100 curated projects across all categories",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "required": true
+        },
+        "Project_ID": {
+          "type": "number",
+          "description": "Sequential project number (1-100)"
+        },
+        "Category": {
+          "type": "select",
+          "options": [
+            "Core Mission (NWK)",
+            "Revenue Operations (Kupuri)",
+            "Creative IP (Pauli Effect)",
+            "AI Infrastructure",
+            "Training/Education",
+            "Client Work",
+            "Archive",
+            "Noise"
+          ]
+        },
+        "Rating": {
+          "type": "number",
+          "description": "Viability score 0-10"
+        },
+        "Status": {
+          "type": "select",
+          "options": [
+            "Active",
+            "Planning",
+            "In Progress",
+            "Blocked",
+            "Complete",
+            "Archived",
+            "Cancelled"
+          ]
+        },
+        "Next_Actions": {
+          "type": "rich_text",
+          "description": "What needs to happen next"
+        },
+        "Owner": {
+          "type": "person",
+          "description": "Person responsible"
+        },
+        "Due_Date": {
+          "type": "date"
+        },
+        "GitHub_Link": {
+          "type": "url",
+          "description": "Link to GitHub source"
+        },
+        "Related_Tasks": {
+          "type": "relation",
+          "database_id": "Tasks"
+        },
+        "Related_Agents": {
+          "type": "relation",
+          "database_id": "Agents"
+        },
+        "Related_Skills": {
+          "type": "relation",
+          "database_id": "Skills"
+        },
+        "Notes": {
+          "type": "rich_text"
+        }
+      }
+    },
+    "Tasks": {
+      "id_var": "NOTION_TASKS_DB_ID",
+      "description": "Active work items",
+      "properties": {
+        "Title": {
+          "type": "title"
+        },
+        "Task_ID": {
+          "type": "number"
+        },
+        "Status": {
+          "type": "select",
+          "options": [
+            "Not Started",
+            "In Progress",
+            "Blocked",
+            "In Review",
+            "Complete"
+          ]
+        },
+        "Related_Project": {
+          "type": "relation",
+          "database_id": "Projects"
+        },
+        "Assigned_Agent": {
+          "type": "relation",
+          "database_id": "Agents"
+        },
+        "Priority": {
+          "type": "select",
+          "options": ["Critical", "High", "Medium", "Low"]
+        },
+        "Due_Date": {
+          "type": "date"
+        },
+        "Completion_Date": {
+          "type": "date"
+        },
+        "Description": {
+          "type": "rich_text"
+        },
+        "Acceptance_Criteria": {
+          "type": "rich_text"
+        }
+      }
+    },
+    "Agents": {
+      "id_var": "NOTION_AGENTS_DB_ID",
+      "description": "19 AI agents in the system",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Agent name (e.g., PAULI_PRIME, Claude Code, Validator)"
+        },
+        "Agent_ID": {
+          "type": "text"
+        },
+        "Role": {
+          "type": "select",
+          "options": [
+            "Orchestrator",
+            "Builder",
+            "Validator",
+            "Monitor",
+            "Voice Interface",
+            "Skill Executor"
+          ]
+        },
+        "Status": {
+          "type": "select",
+          "options": ["Deployed", "Testing", "Development", "Offline"]
+        },
+        "Capabilities": {
+          "type": "multi_select",
+          "options": [
+            "Code Generation",
+            "Decision Making",
+            "Monitoring",
+            "Voice Processing",
+            "Learning",
+            "Orchestration"
+          ]
+        },
+        "Performance_Score": {
+          "type": "number",
+          "description": "Lightning agent performance rating (0-100)"
+        },
+        "Tasks_Completed": {
+          "type": "number"
+        },
+        "Success_Rate": {
+          "type": "number",
+          "description": "Percentage of successful executions"
+        },
+        "Average_Response_Time": {
+          "type": "number",
+          "description": "Milliseconds"
+        },
+        "Last_Activity": {
+          "type": "date"
+        },
+        "Description": {
+          "type": "rich_text"
+        },
+        "Configuration": {
+          "type": "code",
+          "language": "json"
+        }
+      }
+    },
+    "Skills": {
+      "id_var": "NOTION_SKILLS_DB_ID",
+      "description": "18 Cloud Skills for autonomous operations",
+      "properties": {
+        "Title": {
+          "type": "title"
+        },
+        "Skill_ID": {
+          "type": "text",
+          "example": "deployment_devops_pauli_tower"
+        },
+        "Category": {
+          "type": "select",
+          "options": [
+            "Operations",
+            "Design",
+            "Content",
+            "Technical",
+            "Specialized"
+          ]
+        },
+        "Status": {
+          "type": "select",
+          "options": ["Ready", "Testing", "Development", "Archived"]
+        },
+        "Orchestrator_Agent": {
+          "type": "relation",
+          "database_id": "Agents"
+        },
+        "Related_Projects": {
+          "type": "relation",
+          "database_id": "Projects"
+        },
+        "Capabilities": {
+          "type": "rich_text",
+          "description": "What this skill can do"
+        },
+        "Input_Schema": {
+          "type": "code",
+          "language": "json"
+        },
+        "Output_Schema": {
+          "type": "code",
+          "language": "json"
+        },
+        "Tools_Used": {
+          "type": "multi_select",
+          "options": [
+            "Vercel CLI",
+            "Railway CLI",
+            "Coolify API",
+            "GitHub API",
+            "Notion API",
+            "Google Drive API",
+            "VAPI",
+            "Docker",
+            "npm",
+            "Python"
+          ]
+        },
+        "Execution_Count": {
+          "type": "number"
+        },
+        "Success_Rate": {
+          "type": "number"
+        },
+        "Documentation_Link": {
+          "type": "url"
+        }
+      }
+    },
+    "Decisions": {
+      "id_var": "NOTION_DECISIONS_DB_ID",
+      "description": "Decision log archive for 'Ask PAULI' system",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Decision title"
+        },
+        "Decision_ID": {
+          "type": "text"
+        },
+        "Date_Made": {
+          "type": "date"
+        },
+        "Category": {
+          "type": "select",
+          "options": [
+            "Infrastructure",
+            "Business Model",
+            "Technology Stack",
+            "Team/Hiring",
+            "Product",
+            "Strategic"
+          ]
+        },
+        "Problem_Statement": {
+          "type": "rich_text",
+          "description": "What was the challenge?"
+        },
+        "Options_Considered": {
+          "type": "rich_text",
+          "description": "Alternative approaches"
+        },
+        "Decision": {
+          "type": "rich_text",
+          "description": "What was decided"
+        },
+        "Rationale": {
+          "type": "rich_text",
+          "description": "Why this decision was made"
+        },
+        "Trade_offs": {
+          "type": "rich_text",
+          "description": "What was sacrificed"
+        },
+        "Outcomes": {
+          "type": "rich_text",
+          "description": "How did it turn out?"
+        },
+        "Impact_Level": {
+          "type": "select",
+          "options": ["Critical", "High", "Medium", "Low"]
+        },
+        "Related_Projects": {
+          "type": "relation",
+          "database_id": "Projects"
+        },
+        "Searchable_Keywords": {
+          "type": "multi_select"
+        }
+      }
+    },
+    "Metrics": {
+      "id_var": "NOTION_METRICS_DB_ID",
+      "description": "System performance metrics for Agent Lightning monitoring",
+      "properties": {
+        "Title": {
+          "type": "title"
+        },
+        "Metric_Type": {
+          "type": "select",
+          "options": [
+            "Agent Performance",
+            "System Health",
+            "Sync Status",
+            "Cost",
+            "Learning"
+          ]
+        },
+        "Agent_Name": {
+          "type": "relation",
+          "database_id": "Agents"
+        },
+        "Value": {
+          "type": "number"
+        },
+        "Unit": {
+          "type": "text"
+        },
+        "Timestamp": {
+          "type": "date"
+        },
+        "Trend": {
+          "type": "select",
+          "options": ["Improving", "Stable", "Declining"]
+        },
+        "Notes": {
+          "type": "rich_text"
+        }
+      }
+    },
+    "Voice_Commands": {
+      "id_var": "NOTION_VOICE_COMMANDS_DB_ID",
+      "description": "Logged voice commands and JARVIS interactions",
+      "properties": {
+        "Title": {
+          "type": "title",
+          "description": "Command text"
+        },
+        "Timestamp": {
+          "type": "date"
+        },
+        "User": {
+          "type": "text"
+        },
+        "Intent": {
+          "type": "select"
+        },
+        "Agent_Executed": {
+          "type": "relation",
+          "database_id": "Agents"
+        },
+        "Status": {
+          "type": "select",
+          "options": ["Success", "Failed", "Partial", "In Progress"]
+        },
+        "Result": {
+          "type": "rich_text"
+        },
+        "Execution_Time": {
+          "type": "number",
+          "description": "Milliseconds"
+        }
+      }
+    }
+  },
+  "setup_instructions": {
+    "step_1": "Create workspace 'PAULI_MASTER_KB'",
+    "step_2": "Create databases using above schema",
+    "step_3": "Set environment variables: NOTION_API_KEY, database IDs",
+    "step_4": "Configure ByteRover to sync GitHub → Notion",
+    "step_5": "Test first sync: Create test project in Notion, verify GitHub commit",
+    "step_6": "Activate Lightning monitoring dashboard",
+    "step_7": "Enable voice command logging (Voice_Commands table)"
+  }
+}

@@ -64,6 +64,9 @@ archonx status
 
 # View today's meeting schedule
 archonx meetings
+
+# Run GraphBrain in 7-phase loop mode (Ralphy-inspired)
+python -m archonx.cli graphbrain run --mode light --loop --max-iterations 3
 ```
 
 ## 🖥️ Working Front End (Mission Console)
@@ -203,6 +206,18 @@ archonx deploy --client ClientName --config client-config.json
 docker build -t archonx:latest .
 docker run -p 18789:18789 -p 8080:8080 archonx:latest
 ```
+
+### Vercel Fleet Inventory Sync
+
+```bash
+# Required: VERCEL_TOKEN
+python scripts/vercel_fleet_sync.py
+```
+
+Outputs:
+
+- `data/vercel/projects.json`
+- `data/vercel/repo_map.json`
 
 ### Kubernetes (Production)
 

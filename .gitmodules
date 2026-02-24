@@ -10,3 +10,9 @@
 [submodule "agent-frameworks/agent-lightning"]
 	path = agent-frameworks/agent-lightning
 	url = https://github.com/microsoft/agent-lightning.git
+[submodule "paulis-pope-bot"]
+	path = paulis-pope-bot
+	url = https://github.com/executiveusa/paulis-pope-bot.git
+[submodule "VisionClaw"]
+	path = VisionClaw
+	url = https://github.com/executiveusa/VisionClaw.git

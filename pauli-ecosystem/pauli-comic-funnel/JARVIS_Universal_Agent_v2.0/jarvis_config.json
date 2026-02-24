@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JARVIS Universal Agent Configuration",
+  "description": "Configuration file for JARVIS voice-controlled autonomous agent",
+  "version": "2.0.0",
+  
+  "agent": {
+    "name": "JARVIS",
+    "personality": "professional_butler",
+    "voice_enabled": true,
+    "mode": "supervised"
+  },
+  
+  "user": {
+    "name": "Bambu",
+    "organization": "New World Kids / The Pauli Effect",
+    "timezone": "America/Los_Angeles",
+    "preferences": {
+      "default_project_dir": "~/Work/Projects",
+      "preferred_editor": "code",
+      "preferred_browser": "chromium"
+    }
+  },
+  
+  "llm": {
+    "provider": "openrouter",
+    "api_key_env": "OPENROUTER_API_KEY",
+    "fallback_to_local": true,
+    "models": {
+      "high_resource": "anthropic/claude-sonnet-4-20250514",
+      "medium_resource": "anthropic/claude-3-haiku",
+      "low_resource": "ollama/llama3.2:3b",
+      "offline": "ollama/phi-3-mini"
+    },
+    "openrouter_settings": {
+      "site_url": "https://archon.ai",
+      "app_name": "JARVIS Agent"
+    }
+  },
+  
+  "voice": {
+    "wake_words": ["hey jarvis", "hey claude", "computer"],
+    "input": {
+      "engine": "faster-whisper",
+      "model_size": "base",
+      "language": "en",
+      "vad_enabled": true,
+      "continuous_listening": true
+    },
+    "output": {
+      "primary_engine": "pyttsx3",
+      "premium_engine": "elevenlabs",
+      "rate": 175,
+      "volume": 0.9,
+      "voice_gender": "male"
+    }
+  },
+  
+  "tools": {
+    "filesystem": {
+      "enabled": true,
+      "allowed_paths": [
+        "~/Documents",
+        "~/Projects",
+        "~/Work",
+        "~/Desktop",
+        "~/Downloads"
+      ],
+      "watch_directories": [
+        "~/Projects"
+      ]
+    },
+    "browser": {
+      "enabled": true,
+      "default_browser": "chromium",
+      "headless": false,
+      "user_data_dir": "~/.jarvis/browser_profile"
+    },
+    "system_control": {
+      "enabled": true,
+      "failsafe": true,
+      "screenshot_dir": "~/Desktop"
+    },
+    "code_execution": {
+      "enabled": true,
+      "allowed_interpreters": ["python3", "node", "bash"],
+      "timeout_seconds": 300
+    },
+    "github": {
+      "enabled": true,
+      "token_env": "GITHUB_TOKEN"
+    },
+    "google_workspace": {
+      "enabled": true,
+      "services": ["gmail", "drive", "calendar"]
+    }
+  },
+  
+  "safety": {
+    "require_approval_for": [
+      "delete_files",
+      "system_shutdown",
+      "install_software",
+      "send_emails",
+      "make_purchases",
+      "modify_system_files"
+    ],
+    "log_all_actions": true,
+    "audit_trail": true,
+    "max_retries": 3
+  },
+  
+  "resource_management": {
+    "max_memory_mb": 2048,
+    "max_cpu_percent": 40,
+    "battery_aware": true,
+    "low_battery_threshold": 20,
+    "network_aware": true,
+    "prefer_local_on_slow_connection": true
+  },
+  
+  "memory": {
+    "short_term_max_tokens": 8000,
+    "long_term_enabled": true,
+    "vector_db": "chromadb",
+    "embedding_model": "ollama/nomic-embed-text",
+    "conversation_history_limit": 50
+  },
+  
+  "integrations": {
+    "archon_platform": {
+      "enabled": true,
+      "report_status": true,
+      "sync_memory": false
+    },
+    "pass_framework": {
+      "enabled": true,
+      "auto_activate_for": ["copy", "proposal", "landing page", "marketing"]
+    },
+    "rockabye_baby": {
+      "enabled": true,
+      "activation_threshold": "complex_tasks"
+    }
+  },
+  
+  "startup": {
+    "auto_start_ollama": true,
+    "verify_dependencies": true,
+    "greeting_message": "JARVIS online and ready. How can I assist you today?",
+    "show_system_status": true
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "log_dir": "~/.jarvis/logs",
+    "rotate_daily": true,
+    "retention_days": 30,
+    "audit_retention_days": 0
+  },
+  
+  "device_optimization": {
+    "device_type": "surface_tablet",
+    "ram_gb": 8,
+    "has_gpu": false,
+    "optimize_for_battery": true,
+    "preferred_model_size": "small"
+  },
+  
+  "api_keys": {
+    "note": "Store actual API keys in environment variables or .env file",
+    "required": [],
+    "optional": [
+      "OPENROUTER_API_KEY",
+      "ANTHROPIC_API_KEY",
+      "ELEVENLABS_API_KEY",
+      "GITHUB_TOKEN"
+    ]
+  }
+}

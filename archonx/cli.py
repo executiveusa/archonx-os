@@ -347,9 +347,28 @@ def _graphbrain_run(args: argparse.Namespace) -> None:
 
     root = Path(__file__).resolve().parents[1]
     runtime = GraphBrainRuntime(root)
-    payload = runtime.run(mode=args.mode)
+    if args.loop:
+        payload = runtime.run_loop(
+            mode=args.mode,
+            max_iterations=args.max_iterations,
+            max_retries=args.max_retries,
+            retry_delay=args.retry_delay,
+            fail_on_high_risk=args.fail_on_high_risk,
+        )
+    else:
+        payload = runtime.run(mode=args.mode)
     Reporter(root).write_all(payload)
-    print(json.dumps({"mode": args.mode, "work_orders": len(payload["work_orders"])}, indent=2))
+    print(
+        json.dumps(
+            {
+                "mode": args.mode,
+                "loop": bool(args.loop),
+                "work_orders": len(payload["work_orders"]),
+                "status": payload.get("loop", {}).get("status", "ok"),
+            },
+            indent=2,
+        )
+    )
 
 
 def _graphbrain_init_repo(args: argparse.Namespace) -> None:
@@ -434,6 +453,15 @@ def main() -> None:
 
     p_graphbrain_run = gb_sub.add_parser("run", help="Run graphbrain")
     p_graphbrain_run.add_argument("--mode", choices=["full", "light"], default="full")
+    p_graphbrain_run.add_argument("--loop", action="store_true", help="Enable 7-phase loop mode")
+    p_graphbrain_run.add_argument("--max-iterations", type=int, default=3, help="Loop iteration cap")
+    p_graphbrain_run.add_argument("--max-retries", type=int, default=2, help="Retries per iteration")
+    p_graphbrain_run.add_argument("--retry-delay", type=int, default=2, help="Seconds between retries")
+    p_graphbrain_run.add_argument(
+        "--fail-on-high-risk",
+        action="store_true",
+        help="Mark loop status failed when high-severity risks are found",
+    )
 
     p_graphbrain_init = gb_sub.add_parser("init-repo", help="Init .archonx in target repo")
     p_graphbrain_init.add_argument("repo", help="Repository slug")
