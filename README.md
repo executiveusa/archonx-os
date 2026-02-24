@@ -319,3 +319,13 @@ GraphBrain writes machine-readable artifacts to:
 - High similarity pairs in `similarity.json` and `consolidation_candidates.json` indicate merge/shared-module opportunities.
 - `risk_findings.json` lists security/reporting risks (insecure HTTP or non-allowlisted endpoints).
 - `work_orders.json` is the actionable queue for Agent-Zero + Devika.
+
+### Ecosystem Gap Audit
+
+Use the deterministic gap-audit runner to compare intended architecture vs detected implementation:
+
+```bash
+python ops/audit/ecosystem_gap_audit.py --workspace /workspace --spec docs/audit/required_architecture_spec.json
+```
+
+Reports are emitted to `ops/reports/gap-audit/` as JSON + Markdown, including sectioned findings and remediation bundles per missing capability.
