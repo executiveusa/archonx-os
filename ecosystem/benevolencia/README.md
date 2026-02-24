@@ -25,7 +25,7 @@ This is not charity. This is architecture.
 | Field            | Value                        |
 |------------------|------------------------------|
 | Owner            | THE PAULI EFFECT             |
-| Operator Agent   | STITCH KNIGHT (black crew)   |
+| Operator Agent   | GLITCH KNIGHT (black crew)   |
 | Chess Piece      | Knight                       |
 | Entity Type      | Social Purpose Company (SPC) |
 | Crew             | Black Crew                   |
@@ -55,9 +55,9 @@ Every dollar tracked through the King Mode dashboard includes a corresponding so
 
 ---
 
-## Operator: STITCH KNIGHT
+## Operator: GLITCH KNIGHT
 
-STITCH KNIGHT is the black-crew knight agent assigned as BENEVOLENCIA™'s operating intelligence. STITCH KNIGHT manages:
+GLITCH KNIGHT is the black-crew knight agent assigned as BENEVOLENCIA™'s operating intelligence. GLITCH KNIGHT manages:
 
 - Daily gratitude logs
 - Program performance tracking
@@ -74,5 +74,5 @@ See `AGENT_CONFIG.md` for full operating rules.
 |--------------------|----------------------------------------------|
 | `BRAND.md`         | Visual identity, voice, and trademark rules  |
 | `PROGRAMS.md`      | Social impact programs catalog               |
-| `AGENT_CONFIG.md`  | STITCH KNIGHT operating rules and KPIs       |
+| `AGENT_CONFIG.md`  | GLITCH KNIGHT operating rules and KPIs       |
 | `DATABASE_ENTRY.json` | Machine-readable entity record            |

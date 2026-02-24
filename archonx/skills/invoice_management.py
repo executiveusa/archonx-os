@@ -424,8 +424,14 @@ class InvoiceManagementSkill(BaseSkill):
         # Check for Stripe refund capability
         if hasattr(context, "tools") and "stripe" in context.tools:
             try:
-                # In production, call Stripe refund API
-                pass
+                stripe_result = await context.tools["stripe"](
+                    action="create_refund",
+                    invoice_id=invoice_id,
+                    reason="customer_request",
+                )
+                # Use Stripe-issued refund ID if available
+                if stripe_result and stripe_result.get("refund_id"):
+                    refund_id = stripe_result["refund_id"]
             except Exception as e:
                 logger.warning("Could not process Stripe refund: %s", e)
 

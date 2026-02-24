@@ -1,6 +1,6 @@
 # BENEVOLENCIA™ — Social Impact Programs
 
-All programs are operated under the BENEVOLENCIA™ Social Purpose Company, owned by THE PAULI EFFECT, and administered by STITCH KNIGHT (black crew knight agent).
+All programs are operated under the BENEVOLENCIA™ Social Purpose Company, owned by THE PAULI EFFECT, and administered by GLITCH KNIGHT (black crew knight agent).
 
 ---
 
@@ -13,7 +13,7 @@ All programs are operated under the BENEVOLENCIA™ Social Purpose Company, owne
 
 1% of every transaction processed through the ArchonX ecosystem is automatically routed to a designated social cause. The routing is not optional — it is structural. The Gratitude Tithe is embedded at the transaction layer before revenue is recognized.
 
-The cause bucket is determined quarterly by STITCH KNIGHT in consultation with Pauli King, based on:
+The cause bucket is determined quarterly by GLITCH KNIGHT in consultation with Pauli King, based on:
 - Community votes from ecosystem participants
 - Alignment with current King Mode mission priorities
 - Geographic relevance to active community commerce partners
@@ -22,12 +22,12 @@ The cause bucket is determined quarterly by STITCH KNIGHT in consultation with P
 
 - Tithe rate: 1% of gross transaction value
 - Routing: automatic, pre-revenue recognition
-- Cause selection: quarterly review, STITCH KNIGHT + Pauli King
+- Cause selection: quarterly review, GLITCH KNIGHT + Pauli King
 - Reporting: included in daily gratitude log and King Mode dashboard
 
 ### Operator / Agent
 
-**STITCH KNIGHT** — tracks, logs, and reports all tithe activity. Escalates to Pauli King if routing fails or cause allocation is disputed.
+**GLITCH KNIGHT** — tracks, logs, and reports all tithe activity. Escalates to Pauli King if routing fails or cause allocation is disputed.
 
 ---
 
@@ -59,7 +59,7 @@ Over time, the Agent Giving Protocol creates an auditable record of the ecosyste
 
 ### Operator / Agent
 
-**STITCH KNIGHT** — enforces the protocol across all agents, reviews daily log completeness, flags missing entries.
+**GLITCH KNIGHT** — enforces the protocol across all agents, reviews daily log completeness, flags missing entries.
 
 ---
 
@@ -76,7 +76,7 @@ Community Commerce is a priority onboarding program for mission-driven small bus
 - Reduced platform fees (50% discount for first 6 months)
 - BENEVOLENCIA™ badge on their storefront
 - Priority placement in the ecosystem marketplace
-- Dedicated STITCH KNIGHT support for first 30 days
+- Dedicated GLITCH KNIGHT support for first 30 days
 
 ### Qualifying Criteria
 
@@ -90,7 +90,7 @@ A business qualifies for Community Commerce if it meets at least two of the foll
 
 ### Operator / Agent
 
-**STITCH KNIGHT** — manages the application queue, verifies qualifying criteria, issues BENEVOLENCIA™ badges, and tracks active Community Commerce partners on the King Mode dashboard.
+**GLITCH KNIGHT** — manages the application queue, verifies qualifying criteria, issues BENEVOLENCIA™ badges, and tracks active Community Commerce partners on the King Mode dashboard.
 
 ---
 
@@ -126,7 +126,7 @@ BENEVOLENCIA™ operates this program in partnership with:
 
 ### Operator / Agent
 
-**STITCH KNIGHT** — coordinates with external partners, tracks impact metrics, reports to Pauli King quarterly, and allocates Gratitude Tithe funds when the cause bucket is directed to education.
+**GLITCH KNIGHT** — coordinates with external partners, tracks impact metrics, reports to Pauli King quarterly, and allocates Gratitude Tithe funds when the cause bucket is directed to education.
 
 ---
 
@@ -134,7 +134,7 @@ BENEVOLENCIA™ operates this program in partnership with:
 
 | Program                  | Tagline                                    | Operator       | KPI Tracked By             |
 |--------------------------|--------------------------------------------|----------------|----------------------------|
-| Gratitude Tithe          | "Every transaction gives back."            | STITCH KNIGHT  | Daily gratitude log        |
-| Agent Giving Protocol    | "Every action is an act of gratitude."     | STITCH KNIGHT  | Daily log completeness     |
-| Community Commerce       | "Mission-driven businesses get in first."  | STITCH KNIGHT  | Onboarding queue + badges  |
-| Youth Tech Initiative    | "Code is the new literacy. We teach it."   | STITCH KNIGHT  | Quarterly impact report    |
+| Gratitude Tithe          | "Every transaction gives back."            | GLITCH KNIGHT  | Daily gratitude log        |
+| Agent Giving Protocol    | "Every action is an act of gratitude."     | GLITCH KNIGHT  | Daily log completeness     |
+| Community Commerce       | "Mission-driven businesses get in first."  | GLITCH KNIGHT  | Onboarding queue + badges  |
+| Youth Tech Initiative    | "Code is the new literacy. We teach it."   | GLITCH KNIGHT  | Quarterly impact report    |
