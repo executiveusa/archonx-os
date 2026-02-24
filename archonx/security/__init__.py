@@ -6,6 +6,7 @@ from archonx.security.cost_guard import CostGuard, CostBudget
 from archonx.security.tool_gating import ToolGatekeeper, TrustLevel, AgentToolPolicy
 from archonx.security.env_scrubber import EnvScrubber
 from archonx.security.command_guard import CommandGuard
+from archonx.security.devika_pi_policy import DevikaPIGovernance, DevikaPolicyDecision
 from archonx.security.workspace_scope import WorkspaceScope, WorkspaceScopeError
 from archonx.security.sandbox_policy import SandboxEnforcer, SandboxLevel, SandboxConfig
 from archonx.security.network_guard import NetworkGuard, NetworkGuardError
@@ -23,6 +24,8 @@ __all__ = [
     "AgentToolPolicy",
     "EnvScrubber",
     "CommandGuard",
+    "DevikaPIGovernance",
+    "DevikaPolicyDecision",
     "WorkspaceScope",
     "WorkspaceScopeError",
     "SandboxEnforcer",

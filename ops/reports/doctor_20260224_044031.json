@@ -1,0 +1,96 @@
+{
+  "command": "doctor",
+  "timestamp": "2026-02-24T04:40:28.196171+00:00",
+  "checks": {
+    "agents": {
+      "status": "ok",
+      "count": 64
+    },
+    "skills": {
+      "status": "ok",
+      "count": 28,
+      "names": [
+        "api_integration",
+        "calendar_management",
+        "code_generation",
+        "competitor_analysis",
+        "content_writing",
+        "customer_support",
+        "data_analysis",
+        "deployment_pipeline",
+        "document_generation",
+        "email_management",
+        "file_organization",
+        "financial_tracking",
+        "form_filling",
+        "grep_assist",
+        "invoice_management",
+        "lead_generation",
+        "meeting_notes",
+        "polly_character",
+        "price_monitoring",
+        "research_deep_dive",
+        "security_audit",
+        "seo_optimization",
+        "social_media",
+        "story_toolkit",
+        "travel_booking",
+        "upwork_scout",
+        "web_scraping",
+        "workflow_automation"
+      ],
+      "categories": [
+        "automation",
+        "communication",
+        "creative",
+        "deployment",
+        "financial",
+        "personal",
+        "research",
+        "security"
+      ]
+    },
+    "tools": {
+      "status": "ok",
+      "count": 7
+    },
+    "config": {
+      "status": "warn",
+      "version": "0.1.0",
+      "path": "C:\\archonx-os-main\\archonx\\config\\archonx-config.json",
+      "duplicate_root_config": "C:\\archonx-os-main\\archonx-config.json",
+      "root_matches_canonical": false
+    },
+    "modules": [
+      {
+        "module": "archonx.auth",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.mail",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.beads",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.kpis",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.revenue",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.automation",
+        "status": "ok"
+      },
+      {
+        "module": "archonx.memory",
+        "status": "ok"
+      }
+    ]
+  },
+  "overall": "healthy"
+}

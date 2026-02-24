@@ -1,0 +1,117 @@
+{
+  "version": "1.0",
+  "project": "ARCHONX",
+  "description": "ARCHONX OS - Autonomous Agency Orchestration Platform",
+  "repos": [
+    {
+      "path": ".",
+      "name": "archonx-os",
+      "type": "mono",
+      "language": "mixed",
+      "build_commands": [
+        "npm run lint",
+        "npm run build"
+      ],
+      "test_commands": [
+        "npm run test -- --coverage"
+      ],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": true
+    },
+    {
+      "path": "../dashboard-agent-swarm",
+      "name": "dashboard-agent-swarm",
+      "type": "node",
+      "language": "typescript",
+      "build_commands": [
+        "npm run lint --workspace=dashboard-agent-swarm",
+        "npm run build --workspace=dashboard-agent-swarm"
+      ],
+      "test_commands": [
+        "npm run test --workspace=dashboard-agent-swarm -- --coverage"
+      ],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": true
+    },
+    {
+      "path": "../paulisworld-openclaw-3d",
+      "name": "paulisworld-openclaw-3d",
+      "type": "node",
+      "language": "typescript",
+      "build_commands": [
+        "npm run lint",
+        "npm run build"
+      ],
+      "test_commands": [
+        "npm run test -- --coverage"
+      ],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": false,
+      "description": "3D world venue - Pauli's Place"
+    }
+  ],
+  "orchestration": {
+    "parallel_limit": 4,
+    "fail_fast": false,
+    "report_format": "json",
+    "report_sink": "ops/reports/ralphy_report.json",
+    "retry_on_failure": 1,
+    "stream_output": true,
+    "consolidate_coverage": true
+  },
+  "gates": {
+    "min_coverage": 80,
+    "fail_on_lint": true,
+    "fail_on_security": true,
+    "require_approval": true,
+    "log_all_output": true,
+    "emit_telemetry": true
+  },
+  "reporting": {
+    "format": "json",
+    "destination": "ops/reports",
+    "include_timings": true,
+    "include_logs": true,
+    "include_coverage": true,
+    "include_lint_results": true,
+    "include_test_results": true,
+    "dashboard_webhook": "http://localhost:8080/api/ralphy-report"
+  },
+  "failure_handling": {
+    "rollback_on_failure": true,
+    "notify_agent": true,
+    "notify_dashboard": true,
+    "notify_slack": true,
+    "auto_retry_count": 1
+  },
+  "phases": {
+    "phase_1": {
+      "name": "Documentation Normalization",
+      "repos": ["archonx-os"],
+      "critical": true
+    },
+    "phase_2": {
+      "name": "Governance & Contracts",
+      "repos": ["archonx-os"],
+      "critical": true
+    },
+    "phase_3": {
+      "name": "Dashboard Control Plane",
+      "repos": ["archonx-os", "dashboard-agent-swarm"],
+      "critical": true
+    },
+    "phase_4": {
+      "name": "Agent Bootstrap & Automation",
+      "repos": ["archonx-os"],
+      "critical": true
+    },
+    "phase_5": {
+      "name": "Validation & Handoff",
+      "repos": ["archonx-os"],
+      "critical": true
+    }
+  }
+}
