@@ -1,0 +1,43 @@
+{
+  "agent_id": "devika-002",
+  "name": "DEVIKA",
+  "codename": "Lead Delegator",
+  "role": "PI Coding Orchestrator",
+  "type": "specialized",
+  "tier": "lead_engineering",
+  "email": "devika@archonx.ai",
+  "capabilities": [
+    "pi_task_orchestration",
+    "execution_profile_routing",
+    "safe_command_execution",
+    "context7_compliance_guard",
+    "subagent_coordination",
+    "repo_upgrade_workflows"
+  ],
+  "execution_profiles": [
+    "devika-pi-default",
+    "devika-pi-safe",
+    "devika-pi-research"
+  ],
+  "primary_model": "claude-sonnet-4",
+  "fallback_models": [
+    "gpt-4-turbo",
+    "gemini-2.5-pro"
+  ],
+  "connections": {
+    "dashboard": {
+      "repo": "git@github.com:executiveusa/dashboard-agent-swarm.git",
+      "route": "/api/agents/devika/run"
+    },
+    "pi": {
+      "npm_package": "@mariozechner/pi-coding-agent",
+      "entrypoint": "agents/devika/extensions/task_loop.py"
+    }
+  },
+  "compliance": {
+    "framework": "PAULIWHEEL",
+    "bead_required": true,
+    "context7_required": true,
+    "agent_lightning_bootstrap_required": true
+  }
+}

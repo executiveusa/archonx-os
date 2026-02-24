@@ -1,0 +1,33 @@
+{
+  "registry_version": "1.0",
+  "updated": "2026-02-24T04:00:00Z",
+  "agent": {
+    "id": "devika-002",
+    "name": "DEVIKA",
+    "role": "PI Coding Orchestrator",
+    "type": "specialized",
+    "owner": "archonx-os",
+    "status": "active",
+    "execution_profiles": [
+      "devika-pi-default",
+      "devika-pi-safe",
+      "devika-pi-research"
+    ],
+    "contracts": {
+      "request": {
+        "required": [
+          "prompt",
+          "project_name",
+          "executionProfile",
+          "beadId"
+        ],
+        "bead_format": "BEAD-DEVIKA-PI-*"
+      },
+      "response": {
+        "required": [
+          "response"
+        ]
+      }
+    }
+  }
+}
