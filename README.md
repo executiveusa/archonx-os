@@ -147,6 +147,7 @@ pytest --cov=archonx --cov-report=html
 - [API Reference](docs/API.md) - Endpoints and schemas
 - [Deployment Guide](docs/DEPLOYMENT.md) - Production setup
 - [Security Best Practices](docs/SECURITY.md) - Hardening guide
+- [ARCHONX Prime Directive v1.0](ARCHONX_PRIME_DIRECTIVE_v1.0.md) - Constitutional operating mandate for all agents
 
 ## 🤖 AI Integration (ChatGPT App Store Ready)
 
