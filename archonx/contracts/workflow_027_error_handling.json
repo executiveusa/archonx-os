@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-027",
+  "name": "Error Handling",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Handles errors raised during agent execution and routes to retry or escalation.",
+  "trigger": {
+    "event": "execution_error_detected",
+    "condition": "agent_raised_exception",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "error_type", "error_message", "stage"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "error_type": { "type": "string" },
+      "error_message": { "type": "string" },
+      "stage": { "type": "string" },
+      "traceback": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "error_handled",
+    "fields": ["bead_id", "error_type", "stage", "action_taken", "timestamp"]
+  },
+  "evidence_path": "ops/reports/error_handling/",
+  "success_criteria": [
+    "error captured with full context",
+    "routing decision made (retry vs escalate)",
+    "error record persisted to ops/reports/"
+  ],
+  "timeout_seconds": 900
+}

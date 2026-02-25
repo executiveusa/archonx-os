@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-004",
+  "name": "Bead Status Report",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Emits a structured status report for an in-flight or completed bead execution.",
+  "trigger": {
+    "event": "bead_status_report_requested",
+    "condition": "bead_id_exists",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "current_stage", "status"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "current_stage": { "type": "string" },
+      "status": { "type": "string" },
+      "stage_results": { "type": "object" },
+      "elapsed_seconds": { "type": "number" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "bead_status_reported",
+    "fields": ["bead_id", "current_stage", "status", "timestamp"]
+  },
+  "evidence_path": "ops/reports/bead_status/",
+  "success_criteria": [
+    "status report contains bead_id",
+    "current stage is a valid PAULIWHEEL stage",
+    "report written to ops/reports/"
+  ],
+  "timeout_seconds": 900
+}

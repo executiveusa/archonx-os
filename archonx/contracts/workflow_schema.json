@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArchonX Workflow Contract",
+  "description": "Schema for all ArchonX PAULIWHEEL workflow contract definitions.",
+  "type": "object",
+  "required": [
+    "workflow_id",
+    "name",
+    "category",
+    "version",
+    "trigger",
+    "payload_schema",
+    "policy_gates",
+    "telemetry",
+    "evidence_path",
+    "success_criteria"
+  ],
+  "properties": {
+    "workflow_id": {
+      "type": "string",
+      "pattern": "^WF-[0-9]{3}$",
+      "description": "Unique workflow identifier in format WF-NNN."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Human-readable workflow name."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["control_plane", "devika_pi", "orchestration", "dashboard", "system_ops"],
+      "description": "Workflow category grouping."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version string."
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["event", "condition", "actor"],
+      "properties": {
+        "event": { "type": "string" },
+        "condition": { "type": "string" },
+        "actor": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "payload_schema": {
+      "type": "object",
+      "description": "JSON Schema fragment describing the workflow's expected payload."
+    },
+    "policy_gates": {
+      "type": "object",
+      "required": ["required_role", "compliance_level", "approval_required"],
+      "properties": {
+        "required_role": { "type": "string" },
+        "compliance_level": {
+          "type": "string",
+          "enum": [
+            "PAULIWHEEL_CRITICAL",
+            "PAULIWHEEL_HIGH",
+            "PAULIWHEEL_MEDIUM",
+            "PAULIWHEEL_LOW"
+          ]
+        },
+        "approval_required": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "telemetry": {
+      "type": "object",
+      "required": ["event_name", "fields"],
+      "properties": {
+        "event_name": { "type": "string" },
+        "fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence_path": {
+      "type": "string",
+      "pattern": "^ops/reports/",
+      "description": "Path under ops/reports/ where evidence artifacts are stored."
+    },
+    "success_criteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "List of conditions that must be true for the workflow to be considered successful."
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Maximum allowed execution time in seconds."
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional extended description of the workflow's purpose."
+    }
+  },
+  "additionalProperties": false
+}

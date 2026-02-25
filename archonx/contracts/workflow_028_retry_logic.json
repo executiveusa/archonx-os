@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-028",
+  "name": "Retry Logic",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Retries a failed subagent task with exponential back-off up to the configured maximum attempts.",
+  "trigger": {
+    "event": "retry_requested",
+    "condition": "task_failed AND retry_count_below_max",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "task_id", "attempt_number", "max_attempts"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "task_id": { "type": "string" },
+      "attempt_number": { "type": "integer", "minimum": 1 },
+      "max_attempts": { "type": "integer", "minimum": 1 },
+      "backoff_seconds": { "type": "number" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "task_retried",
+    "fields": ["bead_id", "task_id", "attempt_number", "max_attempts", "timestamp"]
+  },
+  "evidence_path": "ops/reports/retries/",
+  "success_criteria": [
+    "retry triggered within backoff window",
+    "attempt number incremented correctly",
+    "max_attempts limit enforced"
+  ],
+  "timeout_seconds": 900
+}

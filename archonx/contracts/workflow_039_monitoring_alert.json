@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-039",
+  "name": "Monitoring Alert",
+  "category": "system_ops",
+  "version": "1.0.0",
+  "description": "Processes and dispatches a monitoring alert triggered by system metric thresholds.",
+  "trigger": {
+    "event": "monitoring_threshold_exceeded",
+    "condition": "metric_value_outside_bounds",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["metric_name", "metric_value", "threshold", "direction"],
+    "properties": {
+      "metric_name": { "type": "string" },
+      "metric_value": { "type": "number" },
+      "threshold": { "type": "number" },
+      "direction": { "type": "string", "enum": ["above", "below"] },
+      "service": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_LOW",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "monitoring_alert_processed",
+    "fields": ["metric_name", "metric_value", "threshold", "direction", "service", "timestamp"]
+  },
+  "evidence_path": "ops/reports/monitoring_alerts/",
+  "success_criteria": [
+    "alert dispatched to notification channel",
+    "metric snapshot recorded",
+    "alert acknowledgement timeout configured"
+  ],
+  "timeout_seconds": 300
+}

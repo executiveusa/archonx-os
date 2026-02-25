@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-035",
+  "name": "Config Change",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Applies a runtime configuration change to an agent or workflow, with audit trail.",
+  "trigger": {
+    "event": "config_change_submitted",
+    "condition": "operator_authenticated AND config_target_valid",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["config_target", "changes", "submitted_by"],
+    "properties": {
+      "config_target": { "type": "string" },
+      "changes": { "type": "object" },
+      "submitted_by": { "type": "string" },
+      "rollback_on_failure": { "type": "boolean" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "config_changed",
+    "fields": ["config_target", "submitted_by", "change_keys", "timestamp"]
+  },
+  "evidence_path": "ops/reports/config_changes/",
+  "success_criteria": [
+    "configuration change applied without errors",
+    "change recorded in audit log",
+    "rollback available if rollback_on_failure is true"
+  ],
+  "timeout_seconds": 900
+}

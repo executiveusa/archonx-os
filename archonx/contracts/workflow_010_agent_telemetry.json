@@ -1,0 +1,45 @@
+{
+  "workflow_id": "WF-010",
+  "name": "Agent Telemetry",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Collects and forwards structured telemetry from all active agents to the dashboard.",
+  "trigger": {
+    "event": "agent_telemetry_tick",
+    "condition": "agent_running",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["agent_id", "metrics"],
+    "properties": {
+      "agent_id": { "type": "string" },
+      "metrics": {
+        "type": "object",
+        "properties": {
+          "cpu_pct": { "type": "number" },
+          "memory_mb": { "type": "number" },
+          "tasks_completed": { "type": "integer" },
+          "tasks_failed": { "type": "integer" }
+        }
+      },
+      "timestamp": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "agent_telemetry_collected",
+    "fields": ["agent_id", "cpu_pct", "memory_mb", "tasks_completed", "tasks_failed", "timestamp"]
+  },
+  "evidence_path": "ops/reports/telemetry/",
+  "success_criteria": [
+    "telemetry payload contains agent_id",
+    "metrics are numeric",
+    "data forwarded to dashboard within 2 seconds"
+  ],
+  "timeout_seconds": 900
+}

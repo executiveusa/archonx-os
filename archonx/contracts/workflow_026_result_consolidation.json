@@ -1,0 +1,48 @@
+{
+  "workflow_id": "WF-026",
+  "name": "Result Consolidation",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Consolidates results from parallel or sequential subagent executions into a single output.",
+  "trigger": {
+    "event": "result_consolidation_requested",
+    "condition": "all_subtasks_complete",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "subtask_results"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "subtask_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["task_id", "status", "output"],
+          "properties": {
+            "task_id": { "type": "string" },
+            "status": { "type": "string" },
+            "output": {}
+          }
+        }
+      },
+      "consolidation_strategy": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "results_consolidated",
+    "fields": ["bead_id", "subtask_count", "consolidated_status", "timestamp"]
+  },
+  "evidence_path": "ops/reports/result_consolidation/",
+  "success_criteria": [
+    "all subtask results present",
+    "consolidated output is valid JSON",
+    "overall status is derived from individual statuses"
+  ],
+  "timeout_seconds": 900
+}

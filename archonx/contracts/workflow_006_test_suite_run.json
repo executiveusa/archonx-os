@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-006",
+  "name": "Test Suite Run",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Executes the full pytest test suite and records pass/fail counts with coverage.",
+  "trigger": {
+    "event": "test_suite_run_requested",
+    "condition": "implement_stage_complete",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "test_paths", "min_coverage_pct"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "test_paths": { "type": "array", "items": { "type": "string" } },
+      "min_coverage_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+      "extra_args": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "test_suite_completed",
+    "fields": ["bead_id", "passed", "failed", "errors", "coverage_pct", "timestamp"]
+  },
+  "evidence_path": "ops/reports/test_runs/",
+  "success_criteria": [
+    "all tests pass (failed=0, errors=0)",
+    "coverage meets or exceeds min_coverage_pct",
+    "junit XML report emitted to ops/reports/"
+  ],
+  "timeout_seconds": 1800
+}

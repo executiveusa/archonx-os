@@ -1,0 +1,36 @@
+{
+  "workflow_id": "WF-022",
+  "name": "Subagent Status",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Polls the status of all active subagents for a given bead execution context.",
+  "trigger": {
+    "event": "subagent_status_poll",
+    "condition": "subagents_active",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "agent_ids": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "subagent_status_collected",
+    "fields": ["bead_id", "active_count", "idle_count", "failed_count", "timestamp"]
+  },
+  "evidence_path": "ops/reports/subagent_status/",
+  "success_criteria": [
+    "status for all registered subagents returned",
+    "no subagent in error state",
+    "status snapshot recorded"
+  ],
+  "timeout_seconds": 900
+}

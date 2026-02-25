@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-001",
+  "name": "Phase Gate Approval",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Human approver reviews and approves advancement to the next PAULIWHEEL phase.",
+  "trigger": {
+    "event": "phase_gate_approval_requested",
+    "condition": "phase_gate_ready AND approver_available",
+    "actor": "approver"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["phase_id", "bead_ids", "requested_by"],
+    "properties": {
+      "phase_id": { "type": "string" },
+      "bead_ids": { "type": "array", "items": { "type": "string" } },
+      "requested_by": { "type": "string" },
+      "notes": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "approver",
+    "compliance_level": "PAULIWHEEL_CRITICAL",
+    "approval_required": true
+  },
+  "telemetry": {
+    "event_name": "phase_gate_approved",
+    "fields": ["phase_id", "approved_by", "timestamp", "bead_ids"]
+  },
+  "evidence_path": "ops/reports/phase_gate_approvals/",
+  "success_criteria": [
+    "approver role confirmed",
+    "phase gate checklist items all marked complete",
+    "approval record written to ops/reports/"
+  ],
+  "timeout_seconds": 3600
+}

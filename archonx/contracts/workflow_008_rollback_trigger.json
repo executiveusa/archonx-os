@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-008",
+  "name": "Rollback Trigger",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Triggers a rollback to the last known-good build checkpoint when a critical failure is detected.",
+  "trigger": {
+    "event": "rollback_requested",
+    "condition": "critical_failure_detected OR approver_initiated",
+    "actor": "approver"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["target_checkpoint", "reason", "requested_by"],
+    "properties": {
+      "target_checkpoint": { "type": "string" },
+      "reason": { "type": "string" },
+      "requested_by": { "type": "string" },
+      "affected_beads": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "approver",
+    "compliance_level": "PAULIWHEEL_CRITICAL",
+    "approval_required": true
+  },
+  "telemetry": {
+    "event_name": "rollback_triggered",
+    "fields": ["target_checkpoint", "reason", "requested_by", "timestamp"]
+  },
+  "evidence_path": "ops/reports/rollbacks/",
+  "success_criteria": [
+    "target checkpoint exists",
+    "rollback reason documented",
+    "system restored to checkpoint state",
+    "post-rollback health check passes"
+  ],
+  "timeout_seconds": 3600
+}

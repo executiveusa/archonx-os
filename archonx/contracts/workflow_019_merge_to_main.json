@@ -1,0 +1,40 @@
+{
+  "workflow_id": "WF-019",
+  "name": "Merge to Main",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Merges a fully validated bead branch into the main branch after human approval.",
+  "trigger": {
+    "event": "merge_to_main_requested",
+    "condition": "approval_gate_passed AND human_approval_confirmed",
+    "actor": "approver"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "branch_name", "approved_by", "approval_token"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "branch_name": { "type": "string" },
+      "approved_by": { "type": "string" },
+      "approval_token": { "type": "string" },
+      "squash": { "type": "boolean" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "approver",
+    "compliance_level": "PAULIWHEEL_CRITICAL",
+    "approval_required": true
+  },
+  "telemetry": {
+    "event_name": "merge_to_main_complete",
+    "fields": ["bead_id", "branch_name", "approved_by", "merge_commit", "timestamp"]
+  },
+  "evidence_path": "ops/reports/merges/",
+  "success_criteria": [
+    "human approval token validated",
+    "all tests pass on merge branch",
+    "merge commit hash recorded",
+    "main branch CI passes post-merge"
+  ],
+  "timeout_seconds": 3600
+}

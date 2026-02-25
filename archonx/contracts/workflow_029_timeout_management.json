@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-029",
+  "name": "Timeout Management",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Manages task timeouts, cancels overdue executions, and triggers escalation procedures.",
+  "trigger": {
+    "event": "task_timeout_detected",
+    "condition": "elapsed_time_exceeds_limit",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "task_id", "timeout_seconds", "elapsed_seconds"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "task_id": { "type": "string" },
+      "timeout_seconds": { "type": "integer" },
+      "elapsed_seconds": { "type": "number" },
+      "action": { "type": "string", "enum": ["cancel", "escalate", "extend"] }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "task_timeout_managed",
+    "fields": ["bead_id", "task_id", "timeout_seconds", "elapsed_seconds", "action", "timestamp"]
+  },
+  "evidence_path": "ops/reports/timeout_management/",
+  "success_criteria": [
+    "timed-out task cancelled within 5 seconds of detection",
+    "cancellation recorded in audit log",
+    "escalation dispatched if action is escalate"
+  ],
+  "timeout_seconds": 900
+}
