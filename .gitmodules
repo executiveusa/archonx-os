@@ -16,3 +16,6 @@
 [submodule "VisionClaw"]
 	path = VisionClaw
 	url = https://github.com/executiveusa/VisionClaw.git
+[submodule "archon-x"]
+	path = archon-x
+	url = https://github.com/nazirlouis/ada_v2.git
