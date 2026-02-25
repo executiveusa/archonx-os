@@ -1,0 +1,45 @@
+personas:
+  AX-SYNTHIA-001:
+    name: SYNTHIA
+    codename: AX-SYNTHIA-001
+    principal: "Ivette Milo / Kupuri Media"
+    company: "Kupuri Media"
+    location: "Mexico City, CDMX"
+    languages: [es-MX, en-US]
+    primary_language: es-MX
+    elevenlabs_voice_id: ax-synthia-mx
+    elevenlabs_model: eleven_multilingual_v2
+    twilio_number_env: TWILIO_MX_NUMBER
+    livekit_room_prefix: synthia-
+    repos: [tanda_cdmx, darya-design-throne, kupuri-media-website, synthia, amentislibrary, macs-agent-portal]
+    domains: [mexico_city_law, sat_cfdi, cnbv_fintech, ai_agency_sales, entrepreneurship, project_management]
+    proactive_brief_hour: 8
+    proactive_brief_lang: es-MX
+    phone_greeting_es: "Buenas tardes, le habla SYNTHIA de Kupuri Media. ¿Con quién tengo el gusto?"
+    phone_greeting_en: "Good afternoon, this is SYNTHIA from Kupuri Media. How may I help you?"
+    approval_threshold_mxn: 5000
+    soul_file: dashboard-agent-swarm/.agent-souls/ax-synthia.soul.md
+
+  AX-PAULI-BRAIN-002:
+    name: PAULI BRAIN
+    codename: AX-PAULI-BRAIN-002
+    principal: "Bambu"
+    company: "The Pauli Effect"
+    languages: [en-US, es-MX, sr-RS]
+    primary_language: en-US
+    elevenlabs_voice_ids:
+      en-US: ax-pauli-en
+      sr-RS: ax-pauli-sr
+    elevenlabs_model: eleven_turbo_v2_5
+    twilio_number_env: TWILIO_PAULI_NUMBER
+    livekit_room_prefix: pauli-
+    local_folders:
+      - 'E:\ACTIVE PROJECTS-PIPELINE\ACTIVE PROJECTS-PIPELINE\THE PAULI EFFECT'
+      - 'E:\THE PAULI FILES'
+    guardian_fleet: true
+    repo_ecosystem_size: 313
+    repos_all_executiveusa: true
+    proactive_brief_hour: 7
+    proactive_brief_lang: en-US
+    approval_threshold_usd: 500
+    soul_file: dashboard-agent-swarm/.agent-souls/ax-pauli-brain.soul.md

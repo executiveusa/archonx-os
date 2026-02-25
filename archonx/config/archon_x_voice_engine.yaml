@@ -1,0 +1,57 @@
+engine:
+  primary_provider: elevenlabs
+  api_key_env: ELEVEN_LABS_API
+  model_streaming: eleven_flash_v2_5
+  model_quality: eleven_multilingual_v2
+  output_format: pcm_22050
+  latency_mode: balanced
+
+gemini_native_audio:
+  enabled: true
+  model: gemini-2.5-flash-preview-native-audio-dialog
+  api_key_env: GOOGLE_API_KEY
+  sample_rate: 16000
+  voice_activity_detection: true
+
+livekit:
+  enabled: true
+  url_env: LIVEKIT_URL
+  api_key_env: LIVEKIT_API_KEY
+  api_secret_env: LIVEKIT_API_SECRET
+  default_room: archon-x-main
+
+twilio:
+  account_sid_env: TWILIO_ACCOUNT_SID
+  auth_token_env: TWILIO_SECRET
+  inbound_webhook_path: /api/voice/twilio/inbound
+  outbound_status_path: /api/voice/twilio/status
+  record_calls: true
+  transcription: true
+
+realtime_pipeline:
+  vad_model: silero
+  stt: gemini_streaming
+  llm: claude-sonnet-4-6
+  tts: elevenlabs
+  pipeline_timeout_ms: 500
+
+voices:
+  ax-synthia-mx:
+    language: es-MX
+    persona: AX-SYNTHIA-001
+    stability: 0.75
+    similarity_boost: 0.85
+    style: 0.4
+    use_speaker_boost: true
+  ax-pauli-en:
+    language: en-US
+    persona: AX-PAULI-BRAIN-002
+    stability: 0.80
+    similarity_boost: 0.90
+    style: 0.30
+  ax-pauli-sr:
+    language: sr-RS
+    persona: AX-PAULI-BRAIN-002
+    stability: 0.80
+    similarity_boost: 0.85
+    style: 0.35

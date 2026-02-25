@@ -22,6 +22,11 @@ apscheduler = ">=3.10"
 redis = ">=5.0"
 nicegui = ">=1.4"
 stripe = ">=8.0"
+google-generativeai = ">=0.8"
+livekit-agents = ">=0.10"
+twilio = ">=9.0"
+"python-socketio[asyncio]" = ">=5.10"
+zeroconf = ">=0.131"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.0"
