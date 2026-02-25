@@ -51,6 +51,22 @@
       "retry_on_failure": 1,
       "critical": false,
       "description": "3D world venue - Pauli's Place"
+    },
+    {
+      "path": "archon-x",
+      "name": "archon-x",
+      "type": "python",
+      "language": "python",
+      "build_commands": [
+        "pip install -r requirements.txt"
+      ],
+      "test_commands": [
+        "py -m pytest tests/ -v --tb=short"
+      ],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": true,
+      "description": "Archon-X voice agent (renamed from ADA v2) — Ivette + Bambu personas"
     }
   ],
   "orchestration": {
@@ -111,6 +127,46 @@
     "phase_5": {
       "name": "Validation & Handoff",
       "repos": ["archonx-os"],
+      "critical": true
+    },
+    "phase_ax_voice_1": {
+      "name": "Archon-X Submodule + Rename",
+      "repos": ["archon-x"],
+      "critical": true
+    },
+    "phase_ax_voice_2": {
+      "name": "Archon-X Voice Engine (ElevenLabs + Twilio)",
+      "repos": ["archon-x"],
+      "critical": true
+    },
+    "phase_ax_voice_3": {
+      "name": "Archon-X Personas (Ivette + Bambu)",
+      "repos": ["archon-x"],
+      "critical": true
+    },
+    "phase_ax_voice_4": {
+      "name": "Archon-X Guardian Fleet (100 repos)",
+      "repos": ["archon-x", "archonx-os"],
+      "critical": true
+    },
+    "phase_ax_voice_5": {
+      "name": "Archon-X Proactive Engine",
+      "repos": ["archon-x"],
+      "critical": true
+    },
+    "phase_ax_voice_6": {
+      "name": "Archon-X Orgo Computer Use",
+      "repos": ["archon-x", "archonx-os"],
+      "critical": false
+    },
+    "phase_ax_voice_7": {
+      "name": "Archon-X Agent Lightning Monitor",
+      "repos": ["archon-x", "archonx-os"],
+      "critical": false
+    },
+    "phase_ax_voice_8": {
+      "name": "Archon-X Tests + Deploy",
+      "repos": ["archon-x"],
       "critical": true
     }
   }
