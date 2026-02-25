@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-003",
+  "name": "Bead Execution Start",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Records the start of a bead execution cycle with PAULIWHEEL stage tracking.",
+  "trigger": {
+    "event": "bead_execution_start",
+    "condition": "bead_id_valid AND profile_approved",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "profile", "phase", "stage"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "profile": { "type": "string" },
+      "phase": { "type": "string" },
+      "stage": { "type": "string" },
+      "triggered_by": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "bead_execution_started",
+    "fields": ["bead_id", "profile", "phase", "stage", "timestamp"]
+  },
+  "evidence_path": "ops/reports/bead_executions/",
+  "success_criteria": [
+    "bead_id passes prefix validation",
+    "execution profile is in allowed set",
+    "start timestamp recorded"
+  ],
+  "timeout_seconds": 1800
+}

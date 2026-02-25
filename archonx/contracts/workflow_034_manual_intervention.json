@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-034",
+  "name": "Manual Intervention",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Allows a human operator to inject a manual command or override into a running bead execution.",
+  "trigger": {
+    "event": "manual_intervention_submitted",
+    "condition": "operator_authenticated AND bead_paused",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "intervention_type", "operator_id"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "intervention_type": { "type": "string" },
+      "operator_id": { "type": "string" },
+      "payload": { "type": "object" },
+      "reason": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "manual_intervention_applied",
+    "fields": ["bead_id", "intervention_type", "operator_id", "timestamp"]
+  },
+  "evidence_path": "ops/reports/manual_interventions/",
+  "success_criteria": [
+    "intervention applied to bead execution context",
+    "operator identity recorded",
+    "intervention reason documented"
+  ],
+  "timeout_seconds": 900
+}

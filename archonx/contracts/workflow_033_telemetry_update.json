@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-033",
+  "name": "Telemetry Update",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Pushes a live telemetry data update to the dashboard telemetry panel.",
+  "trigger": {
+    "event": "telemetry_data_received",
+    "condition": "dashboard_session_active",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["session_id", "metrics"],
+    "properties": {
+      "session_id": { "type": "string" },
+      "metrics": { "type": "object" },
+      "agent_id": { "type": "string" },
+      "panel": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "telemetry_panel_updated",
+    "fields": ["session_id", "agent_id", "panel", "timestamp"]
+  },
+  "evidence_path": "ops/reports/telemetry_updates/",
+  "success_criteria": [
+    "telemetry panel updated within 1 second",
+    "metrics values are numeric",
+    "panel identifier matches a known dashboard panel"
+  ],
+  "timeout_seconds": 900
+}

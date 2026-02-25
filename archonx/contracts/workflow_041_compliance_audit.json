@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-041",
+  "name": "Compliance Audit",
+  "category": "system_ops",
+  "version": "1.0.0",
+  "description": "Performs a full PAULIWHEEL compliance audit across all active beads and workflow executions.",
+  "trigger": {
+    "event": "compliance_audit_requested",
+    "condition": "scheduled_audit_cycle OR manual_trigger",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["audit_scope", "from_date", "to_date"],
+    "properties": {
+      "audit_scope": { "type": "string", "enum": ["full", "beads", "workflows", "credentials"] },
+      "from_date": { "type": "string" },
+      "to_date": { "type": "string" },
+      "auditor_id": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "compliance_audit_complete",
+    "fields": ["audit_scope", "from_date", "to_date", "compliant_count", "violation_count", "timestamp"]
+  },
+  "evidence_path": "ops/reports/compliance_audits/",
+  "success_criteria": [
+    "all beads and workflows audited in scope",
+    "violations list is comprehensive",
+    "audit report written to ops/reports/compliance_audits/"
+  ],
+  "timeout_seconds": 1800
+}

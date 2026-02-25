@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-020",
+  "name": "Execution Report",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Generates and emits the final Devika PI execution report for a completed bead cycle.",
+  "trigger": {
+    "event": "execution_report_requested",
+    "condition": "all_pauliwheel_stages_complete",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "run_id", "stage_results", "final_status"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "run_id": { "type": "string" },
+      "stage_results": { "type": "object" },
+      "final_status": { "type": "string" },
+      "elapsed_seconds": { "type": "number" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "execution_report_emitted",
+    "fields": ["bead_id", "run_id", "final_status", "elapsed_seconds", "timestamp"]
+  },
+  "evidence_path": "ops/reports/execution_reports/",
+  "success_criteria": [
+    "all 5 PAULIWHEEL stages present in stage_results",
+    "final_status is 'complete' or 'failed'",
+    "report written to ops/reports/execution_reports/"
+  ],
+  "timeout_seconds": 900
+}

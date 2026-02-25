@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-018",
+  "name": "Approval Gate Check",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Checks whether the current bead execution state satisfies the approval gate criteria before merge.",
+  "trigger": {
+    "event": "approval_gate_check_requested",
+    "condition": "evaluate_stage_complete",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "evaluation_result", "profile"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "evaluation_result": { "type": "string" },
+      "profile": { "type": "string" },
+      "reviewer": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "approval_gate_checked",
+    "fields": ["bead_id", "gate_passed", "evaluation_result", "timestamp"]
+  },
+  "evidence_path": "ops/reports/approval_gate_checks/",
+  "success_criteria": [
+    "evaluation result starts with PASS",
+    "reviewer agent assigned",
+    "gate outcome recorded in ops/reports/"
+  ],
+  "timeout_seconds": 1800
+}

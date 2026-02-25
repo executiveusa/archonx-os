@@ -1,0 +1,40 @@
+{
+  "workflow_id": "WF-030",
+  "name": "Agent Communication",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Routes structured messages between agents within a bead execution session.",
+  "trigger": {
+    "event": "agent_message_sent",
+    "condition": "target_agent_active",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "sender_id", "recipient_id", "message_type", "body"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "sender_id": { "type": "string" },
+      "recipient_id": { "type": "string" },
+      "message_type": { "type": "string" },
+      "body": { "type": "object" },
+      "correlation_id": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "agent_message_routed",
+    "fields": ["bead_id", "sender_id", "recipient_id", "message_type", "timestamp"]
+  },
+  "evidence_path": "ops/reports/agent_communication/",
+  "success_criteria": [
+    "message delivered to recipient_id",
+    "delivery acknowledged",
+    "message body conforms to message_type schema"
+  ],
+  "timeout_seconds": 900
+}

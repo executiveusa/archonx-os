@@ -1,0 +1,40 @@
+{
+  "workflow_id": "WF-017",
+  "name": "Build Validation",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Validates the full build after code generation and tests to confirm production readiness.",
+  "trigger": {
+    "event": "build_validation_requested",
+    "condition": "test_stage_complete AND tests_passed",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "profile", "build_artifacts"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "profile": { "type": "string" },
+      "build_artifacts": { "type": "array", "items": { "type": "string" } },
+      "lint_errors": { "type": "integer" },
+      "type_errors": { "type": "integer" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "build_validation_complete",
+    "fields": ["bead_id", "profile", "build_valid", "lint_errors", "type_errors", "timestamp"]
+  },
+  "evidence_path": "ops/reports/build_validations/",
+  "success_criteria": [
+    "zero lint errors",
+    "zero type errors",
+    "all build artifacts present",
+    "production readiness check passes"
+  ],
+  "timeout_seconds": 1800
+}

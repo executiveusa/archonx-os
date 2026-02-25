@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-012",
+  "name": "Alert Dispatch",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Dispatches a structured alert to the configured notification channels.",
+  "trigger": {
+    "event": "alert_condition_met",
+    "condition": "threshold_exceeded OR anomaly_detected",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["alert_id", "severity", "message", "source"],
+    "properties": {
+      "alert_id": { "type": "string" },
+      "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] },
+      "message": { "type": "string" },
+      "source": { "type": "string" },
+      "channels": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "alert_dispatched",
+    "fields": ["alert_id", "severity", "source", "channels", "timestamp"]
+  },
+  "evidence_path": "ops/reports/alerts/",
+  "success_criteria": [
+    "alert delivered to at least one channel",
+    "alert_id is unique",
+    "delivery acknowledgement recorded"
+  ],
+  "timeout_seconds": 900
+}

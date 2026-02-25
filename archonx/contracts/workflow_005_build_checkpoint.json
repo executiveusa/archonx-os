@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-005",
+  "name": "Build Checkpoint",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Captures a build checkpoint snapshot after a successful IMPLEMENT stage to enable rollback.",
+  "trigger": {
+    "event": "build_checkpoint_requested",
+    "condition": "implement_stage_complete AND build_passing",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "build_hash", "checkpoint_label"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "build_hash": { "type": "string" },
+      "checkpoint_label": { "type": "string" },
+      "artifacts": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "build_checkpoint_created",
+    "fields": ["bead_id", "build_hash", "checkpoint_label", "timestamp"]
+  },
+  "evidence_path": "ops/reports/build_checkpoints/",
+  "success_criteria": [
+    "build hash recorded",
+    "checkpoint label is unique",
+    "artifact list is non-empty"
+  ],
+  "timeout_seconds": 1800
+}

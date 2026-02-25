@@ -1,0 +1,36 @@
+{
+  "workflow_id": "WF-032",
+  "name": "Dashboard Refresh",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Forces a full state refresh of the ArchonX dashboard, reloading all agent and bead data.",
+  "trigger": {
+    "event": "dashboard_refresh_requested",
+    "condition": "user_initiated OR scheduled_refresh_tick",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["session_id"],
+    "properties": {
+      "session_id": { "type": "string" },
+      "scope": { "type": "string", "enum": ["full", "agents", "beads", "telemetry"] }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "dashboard_refreshed",
+    "fields": ["session_id", "scope", "data_age_seconds", "timestamp"]
+  },
+  "evidence_path": "ops/reports/dashboard_refreshes/",
+  "success_criteria": [
+    "all dashboard panels updated",
+    "stale data cleared",
+    "refresh completed within 2 seconds"
+  ],
+  "timeout_seconds": 900
+}

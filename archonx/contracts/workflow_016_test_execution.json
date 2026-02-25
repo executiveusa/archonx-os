@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-016",
+  "name": "Test Execution",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Executes the test verification step within the Devika PI TEST stage.",
+  "trigger": {
+    "event": "test_execution_requested",
+    "condition": "implement_stage_complete",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "profile", "implementation_output"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "profile": { "type": "string" },
+      "implementation_output": { "type": "string" },
+      "test_runner": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "test_execution_complete",
+    "fields": ["bead_id", "profile", "test_passed", "test_detail", "timestamp"]
+  },
+  "evidence_path": "ops/reports/test_executions/",
+  "success_criteria": [
+    "test stage returns TEST_PASS prefix",
+    "syntax validation passed",
+    "archonx package importable"
+  ],
+  "timeout_seconds": 1800
+}

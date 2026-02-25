@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-015",
+  "name": "Code Generation",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Runs the Devika PI code generation step within the IMPLEMENT stage using the assigned implementer agent.",
+  "trigger": {
+    "event": "code_generation_requested",
+    "condition": "plan_stage_complete AND context7_resolved",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "profile", "plan", "implementer"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "profile": { "type": "string" },
+      "plan": { "type": "object" },
+      "implementer": { "type": "string" },
+      "target_files": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_HIGH",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "code_generation_complete",
+    "fields": ["bead_id", "profile", "implementer", "files_generated", "timestamp"]
+  },
+  "evidence_path": "ops/reports/code_generation/",
+  "success_criteria": [
+    "generated code passes syntax validation",
+    "all target files created or modified",
+    "safe command gate passed for all executed commands"
+  ],
+  "timeout_seconds": 1800
+}

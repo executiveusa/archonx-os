@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-042",
+  "name": "Archive Cleanup",
+  "category": "system_ops",
+  "version": "1.0.0",
+  "description": "Archives and prunes old ops/reports entries and bead execution data beyond the retention window.",
+  "trigger": {
+    "event": "archive_cleanup_cycle",
+    "condition": "retention_window_exceeded OR storage_threshold_met",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["retention_days", "targets"],
+    "properties": {
+      "retention_days": { "type": "integer", "minimum": 1 },
+      "targets": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+      "dry_run": { "type": "boolean" },
+      "archive_destination": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_LOW",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "archive_cleanup_complete",
+    "fields": ["retention_days", "archived_count", "deleted_count", "dry_run", "timestamp"]
+  },
+  "evidence_path": "ops/reports/archive_cleanups/",
+  "success_criteria": [
+    "all files older than retention_days archived or deleted",
+    "no files from the current retention window deleted",
+    "cleanup manifest written to ops/reports/"
+  ],
+  "timeout_seconds": 300
+}

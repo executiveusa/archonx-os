@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-011",
+  "name": "Dashboard Update",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Pushes a real-time state update to the ArchonX dashboard UI.",
+  "trigger": {
+    "event": "dashboard_update_requested",
+    "condition": "state_change_detected",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["update_type", "payload"],
+    "properties": {
+      "update_type": { "type": "string" },
+      "payload": { "type": "object" },
+      "source_agent": { "type": "string" },
+      "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "dashboard_updated",
+    "fields": ["update_type", "source_agent", "priority", "timestamp"]
+  },
+  "evidence_path": "ops/reports/dashboard_updates/",
+  "success_criteria": [
+    "update delivered to dashboard WebSocket within 500ms",
+    "payload serialises to valid JSON",
+    "update_type is a recognised event type"
+  ],
+  "timeout_seconds": 900
+}

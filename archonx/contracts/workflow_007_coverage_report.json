@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-007",
+  "name": "Coverage Report",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Generates and emits a test coverage report after a test suite run.",
+  "trigger": {
+    "event": "coverage_report_requested",
+    "condition": "test_suite_run_complete",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "run_id", "coverage_pct"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "run_id": { "type": "string" },
+      "coverage_pct": { "type": "number" },
+      "uncovered_lines": { "type": "object" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "coverage_report_emitted",
+    "fields": ["bead_id", "run_id", "coverage_pct", "timestamp"]
+  },
+  "evidence_path": "ops/reports/coverage/",
+  "success_criteria": [
+    "coverage_pct is numeric",
+    "report written to ops/reports/coverage/",
+    "uncovered module list is provided"
+  ],
+  "timeout_seconds": 900
+}

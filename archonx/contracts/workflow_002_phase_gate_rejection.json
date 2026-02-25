@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-002",
+  "name": "Phase Gate Rejection",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Human approver rejects a phase gate, blocking advancement until defects are resolved.",
+  "trigger": {
+    "event": "phase_gate_rejection_requested",
+    "condition": "phase_gate_ready AND defects_identified",
+    "actor": "approver"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["phase_id", "bead_ids", "rejected_by", "rejection_reason"],
+    "properties": {
+      "phase_id": { "type": "string" },
+      "bead_ids": { "type": "array", "items": { "type": "string" } },
+      "rejected_by": { "type": "string" },
+      "rejection_reason": { "type": "string" },
+      "defects": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "policy_gates": {
+    "required_role": "approver",
+    "compliance_level": "PAULIWHEEL_CRITICAL",
+    "approval_required": true
+  },
+  "telemetry": {
+    "event_name": "phase_gate_rejected",
+    "fields": ["phase_id", "rejected_by", "rejection_reason", "timestamp"]
+  },
+  "evidence_path": "ops/reports/phase_gate_rejections/",
+  "success_criteria": [
+    "rejection reason recorded",
+    "affected beads marked blocked",
+    "escalation notification dispatched"
+  ],
+  "timeout_seconds": 3600
+}

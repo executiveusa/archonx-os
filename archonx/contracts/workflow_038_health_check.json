@@ -1,0 +1,36 @@
+{
+  "workflow_id": "WF-038",
+  "name": "Health Check",
+  "category": "system_ops",
+  "version": "1.0.0",
+  "description": "Performs a comprehensive health check across all ArchonX services and agents.",
+  "trigger": {
+    "event": "health_check_requested",
+    "condition": "scheduled_or_manual",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["check_scope"],
+    "properties": {
+      "check_scope": { "type": "string", "enum": ["all", "agents", "services", "storage"] },
+      "timeout_per_check": { "type": "integer" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_LOW",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "health_check_complete",
+    "fields": ["check_scope", "healthy_count", "unhealthy_count", "timestamp"]
+  },
+  "evidence_path": "ops/reports/health_checks/",
+  "success_criteria": [
+    "all checked components return healthy status",
+    "health report written to ops/reports/",
+    "check completed within timeout_per_check for each component"
+  ],
+  "timeout_seconds": 300
+}

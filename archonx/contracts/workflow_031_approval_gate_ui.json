@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-031",
+  "name": "Approval Gate UI",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Renders the approval gate review panel in the dashboard for a pending phase gate decision.",
+  "trigger": {
+    "event": "approval_gate_ui_requested",
+    "condition": "phase_gate_pending",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["phase_id", "bead_ids", "gate_checklist"],
+    "properties": {
+      "phase_id": { "type": "string" },
+      "bead_ids": { "type": "array", "items": { "type": "string" } },
+      "gate_checklist": { "type": "array", "items": { "type": "object" } },
+      "session_token": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "approval_gate_ui_rendered",
+    "fields": ["phase_id", "bead_count", "checklist_items", "timestamp"]
+  },
+  "evidence_path": "ops/reports/dashboard_ui/",
+  "success_criteria": [
+    "approval gate panel rendered without errors",
+    "all checklist items displayed",
+    "approver able to submit approve/reject decision"
+  ],
+  "timeout_seconds": 900
+}
