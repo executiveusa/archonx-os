@@ -1,0 +1,101 @@
+{
+  "generated_at": "2026-02-25T16:57:08.433608",
+  "org": "executiveusa",
+  "total_checked": 10,
+  "healthy": 10,
+  "failing": 0,
+  "unknown": 0,
+  "top_issues": [],
+  "repos": [
+    {
+      "repo": "archonx-os",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433493",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "voice-agents-fork",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433520",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "synthia",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433528",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "tanda-cdmx",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433535",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "macs-agent-portal",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433541",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "kupuri-media-website",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433548",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "darya-design-throne",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433554",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "amentislibrary",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433561",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "dashboard-agent-swarm",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433567",
+      "coverage": 85.0,
+      "mock": true
+    },
+    {
+      "repo": "phone-call-assistant",
+      "build_status": "passing",
+      "test_status": "passing",
+      "open_issues": 0,
+      "last_commit": "2026-02-25T16:57:08.433574",
+      "coverage": 85.0,
+      "mock": true
+    }
+  ]
+}

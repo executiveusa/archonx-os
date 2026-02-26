@@ -1,5 +1,5 @@
 """
-BEAD: AX-MERGE-006
+BEAD: AX-MERGE-006 / BEAD-PROD-001
 Voice API Router
 =================
 FastAPI APIRouter for /api/voice/* endpoints.
@@ -148,6 +148,30 @@ async def twilio_inbound(request: Request) -> Response:
     return Response(content=twiml, media_type="text/xml")
 
 
+@router.post("/twilio/gather")
+async def twilio_gather(request: Request) -> Response:
+    """Handle Twilio Gather callback - process caller speech input."""
+    form = await request.form()
+    call_sid = str(form.get("CallSid", "unknown"))
+    speech_result = str(form.get("SpeechResult", ""))
+    persona_id = str(form.get("persona_id", os.environ.get("AX_ACTIVE_PERSONA", "AX-SYNTHIA-001")))
+
+    ax_router = _get_router()
+    persona_id_resolved, persona = ax_router.route(speech_result or "hello", "gather-" + call_sid[:8])
+    response_text = persona.get_system_prompt(persona.detect_language(speech_result))[:200] if speech_result else "No entendí. ¿Puede repetir?"
+
+    voice = "Polly.Lupe-Neural" if persona_id_resolved == "AX-SYNTHIA-001" else "Polly.Giorgio"
+    twiml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="{voice}">{response_text[:500]}</Say>
+  <Gather input="speech" timeout="5" action="/api/voice/twilio/gather">
+    <Say voice="{voice}">¿Algo más en que le pueda ayudar?</Say>
+  </Gather>
+  <Hangup/>
+</Response>'''
+    return Response(content=twiml, media_type="text/xml")
+
+
 @router.post("/twilio/status")
 async def twilio_status_callback(request: Request) -> dict[str, str]:
     """
@@ -167,13 +191,27 @@ async def list_personas() -> dict[str, Any]:
     """
     List all available personas.
 
+    Reads dynamically from archonx/config/archon_x_personas.yaml.
+    Falls back to hardcoded list if config is unavailable.
+
     Returns:
         JSON with list of persona IDs and their display names.
     """
-    personas = [
-        {"id": "AX-SYNTHIA-001", "name": "SYNTHIA", "lang": "es-MX"},
-        {"id": "AX-PAULI-BRAIN-002", "name": "PAULI BRAIN", "lang": "en-US"},
-    ]
+    import yaml
+    import pathlib
+    config_path = pathlib.Path(__file__).parent.parent / "config" / "archon_x_personas.yaml"
+    try:
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+        personas = [
+            {"id": k, "name": v.get("name"), "lang": v.get("primary_language"), "org": v.get("company")}
+            for k, v in config.get("personas", {}).items()
+        ]
+    except Exception:
+        personas = [
+            {"id": "AX-SYNTHIA-001", "name": "SYNTHIA", "lang": "es-MX", "org": "Kupuri Media"},
+            {"id": "AX-PAULI-BRAIN-002", "name": "PAULI BRAIN", "lang": "en-US", "org": "The Pauli Effect"},
+        ]
     return {"personas": personas}
 
 
