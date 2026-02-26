@@ -1,0 +1,6 @@
+{"event": "inbound_call", "timestamp": "2026-02-26T20:41:30Z", "call_sid": "CA_test_001", "from_number": "+15551234567", "persona_id": "AX-SYNTHIA-001"}
+{"event": "outbound_call_mock", "timestamp": "2026-02-26T20:41:30Z", "call_sid": "CA_MOCK_BEAD-TEST-PHONE-001_1772138490", "to_number": "+15559876543", "persona_id": "AX-SYNTHIA-001", "bead_id": "BEAD-TEST-PHONE-001"}
+{"event": "inbound_call", "timestamp": "2026-02-26T22:57:31Z", "call_sid": "CA_test_001", "from_number": "+15551234567", "persona_id": "AX-SYNTHIA-001"}
+{"event": "outbound_call_mock", "timestamp": "2026-02-26T22:57:31Z", "call_sid": "CA_MOCK_BEAD-TEST-PHONE-001_1772146651", "to_number": "+15559876543", "persona_id": "AX-SYNTHIA-001", "bead_id": "BEAD-TEST-PHONE-001"}
+{"event": "inbound_call", "timestamp": "2026-02-26T23:00:41Z", "call_sid": "CA_test_001", "from_number": "+15551234567", "persona_id": "AX-SYNTHIA-001"}
+{"event": "outbound_call_mock", "timestamp": "2026-02-26T23:00:41Z", "call_sid": "CA_MOCK_BEAD-TEST-PHONE-001_1772146841", "to_number": "+15559876543", "persona_id": "AX-SYNTHIA-001", "bead_id": "BEAD-TEST-PHONE-001"}

@@ -37,21 +37,23 @@ realtime_pipeline:
 
 voices:
   ax-synthia-mx:
+    elevenlabs_id: "pqHfZKP75CvOlQylNhV4"
+    display_name: "Valentina (es-MX)"
+    model: eleven_multilingual_v2
     language: es-MX
-    persona: AX-SYNTHIA-001
-    stability: 0.75
-    similarity_boost: 0.85
-    style: 0.4
-    use_speaker_boost: true
+    style: professional, warm, Mexican Spanish
+    polly_fallback: Polly.Lupe-Neural
   ax-pauli-en:
+    elevenlabs_id: "bVMeCyTHy58xNoL34h3p"
+    display_name: "Giovanni (Italian accent, en-US)"
+    model: eleven_multilingual_v2
     language: en-US
-    persona: AX-PAULI-BRAIN-002
-    stability: 0.80
-    similarity_boost: 0.90
-    style: 0.30
+    style: authoritative, Italian-American mob boss, gravelly
+    polly_fallback: Polly.Giorgio
   ax-pauli-sr:
+    elevenlabs_id: "bVMeCyTHy58xNoL34h3p"
+    display_name: "Giovanni (sr-RS)"
+    model: eleven_multilingual_v2
     language: sr-RS
-    persona: AX-PAULI-BRAIN-002
-    stability: 0.80
-    similarity_boost: 0.85
-    style: 0.35
+    style: authoritative, Serbian-Italian
+    polly_fallback: Polly.Giorgio

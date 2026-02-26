@@ -1,5 +1,5 @@
 """
-BEAD: AX-MERGE-005
+BEAD: AX-MERGE-005 / BEAD-PROD-001
 Archon-X Phone Bridge
 ======================
 Handles inbound/outbound Twilio calls for SYNTHIA and PAULI BRAIN personas.
@@ -25,6 +25,18 @@ import re
 
 _E164_PATTERN = re.compile(r"^\+[1-9]\d{9,14}$")
 
+# ElevenLabs voice IDs per persona
+PERSONA_VOICES: dict[str, str] = {
+    "AX-SYNTHIA-001": "pqHfZKP75CvOlQylNhV4",       # Valentina (es-MX)
+    "AX-PAULI-BRAIN-002": "bVMeCyTHy58xNoL34h3p",   # Giovanni (Italian accent, en-US)
+}
+
+# Twilio/Polly voice names per persona (used in TwiML outbound calls)
+PERSONA_VOICE_POLLY: dict[str, str] = {
+    "AX-SYNTHIA-001": "Polly.Lupe-Neural",
+    "AX-PAULI-BRAIN-002": "Polly.Giorgio",
+}
+
 # Persona greetings for TwiML
 _PERSONA_GREETINGS: dict[str, str] = {
     "AX-SYNTHIA-001": (
@@ -35,10 +47,10 @@ _PERSONA_GREETINGS: dict[str, str] = {
     ),
 }
 
-# Approved outbound numbers per persona (can be loaded from config in production)
+# Approved outbound numbers per persona
 _APPROVED_NUMBERS: dict[str, list[str]] = {
-    "AX-SYNTHIA-001": [],   # populated from env/config in production
-    "AX-PAULI-BRAIN-002": [],
+    "AX-SYNTHIA-001": [],
+    "AX-PAULI-BRAIN-002": ["+13234842914"],
 }
 
 
@@ -90,6 +102,9 @@ class ArchonXPhone:
         Handle an incoming Twilio call and return TwiML response.
 
         Logs the call to ops/reports/ and creates a transcript entry.
+        The very first greeting uses voice="alice" (Polly requires different
+        TwiML syntax and is not supported directly in the top-level <Say> the
+        same way). The Gather callback points to /api/voice/twilio/gather.
 
         Args:
             call_sid: Twilio Call SID.
@@ -123,12 +138,15 @@ class ArchonXPhone:
             persona_id=persona_id,
         )
 
+        # Use voice="alice" for the initial greeting (Polly requires separate
+        # TwiML configuration and does not work inline for the first <Say>).
+        # The Gather action routes speech to /api/voice/twilio/gather.
         twiml = (
             '<?xml version="1.0" encoding="UTF-8"?>\n'
             "<Response>\n"
-            f"  <Say voice=\"Polly.Lupe-Neural\" language=\"es-MX\">{greeting}</Say>\n"
-            "  <Gather input=\"speech\" timeout=\"5\" action=\"/api/voice/twilio/gather\">\n"
-            "    <Say voice=\"Polly.Lupe-Neural\" language=\"es-MX\">Por favor, dígame en qué le puedo ayudar.</Say>\n"
+            f'  <Say voice="alice">{greeting}</Say>\n'
+            '  <Gather input="speech" timeout="5" action="/api/voice/twilio/gather">\n'
+            '    <Say voice="alice">Por favor, dígame en qué le puedo ayudar.</Say>\n'
             "  </Gather>\n"
             "</Response>"
         )
@@ -146,6 +164,8 @@ class ArchonXPhone:
 
         Validates the target number, checks Iron Claw approval list,
         and either places a real call (live mode) or returns mock data.
+        TwiML uses the persona-appropriate Polly voice defined in
+        PERSONA_VOICE_POLLY.
 
         Args:
             to_number: Destination phone number (must be E.164 format).
@@ -204,20 +224,24 @@ class ArchonXPhone:
             if not from_number:
                 raise ValueError(f"Env var {twilio_number_env} not set")
 
-            client = Client(self._account_sid, self._auth_token)
+            # Select the correct Polly voice for this persona
+            polly_voice = PERSONA_VOICE_POLLY.get(persona_id, "Polly.Joanna")
             twiml = (
-                f'<Response><Say voice="Polly.Lupe-Neural">{message}</Say></Response>'
+                f'<Response><Say voice="{polly_voice}">{message}</Say></Response>'
             )
+
+            client = Client(self._account_sid, self._auth_token)
             call = client.calls.create(
                 twiml=twiml,
                 to=to_number,
                 from_=from_number,
             )
             logger.info(
-                "Outbound call initiated: sid=%s to=%s persona=%s",
+                "Outbound call initiated: sid=%s to=%s persona=%s polly_voice=%s",
                 call.sid,
                 to_number,
                 persona_id,
+                polly_voice,
             )
             self._log_call_event(
                 event="outbound_call_live",
@@ -239,6 +263,29 @@ class ArchonXPhone:
         except Exception as exc:
             logger.exception("Outbound call failed: %s", exc)
             raise
+
+    @classmethod
+    def production_call(cls) -> dict[str, Any]:
+        """
+        BEAD-PROD-CALL-001: Place the production readiness call to +13234842914
+        using the PAULI BRAIN persona (Polly.Giorgio voice).
+
+        This classmethod instantiates a fresh ArchonXPhone and calls the
+        approved production number with PAULI BRAIN's readiness statement.
+
+        Returns:
+            Dict with call_sid, status, to_number, persona_id, bead_id.
+        """
+        phone = cls()
+        return phone.initiate_outbound_call(
+            to_number="+13234842914",
+            persona_id="AX-PAULI-BRAIN-002",
+            message=(
+                "Yo. This is PAULI BRAIN. Archon-X is live and ready. "
+                "All thirty-two agents are standing by. The fleet is yours."
+            ),
+            bead_id="BEAD-PROD-CALL-001",
+        )
 
     def get_call_transcript(self, call_sid: str) -> dict[str, Any]:
         """
