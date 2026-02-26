@@ -11,7 +11,30 @@ personas:
     elevenlabs_model: eleven_multilingual_v2
     twilio_number_env: TWILIO_MX_NUMBER
     livekit_room_prefix: synthia-
-    repos: [tanda_cdmx, darya-design-throne, kupuri-media-website, synthia, amentislibrary, macs-agent-portal]
+    repos:
+      # Kupuri Media owned repos
+      - tanda_cdmx
+      - indigo-azul-catalog
+      - metamorfosis-wellness-journey
+      - agent-indigo
+      - pv-construction-platform
+      - synthia
+      - lapina
+      - ivettemilo
+      - rebanada-world-pizza-hub
+      - ivettemushrooms
+      - clandestino-rebellion-launch
+      - black-mirror
+      - que-pedo-cdmx
+      - morpho-metrics-academy
+      - kitchen-creations-planner-pro
+      - la-silueta
+      - lamonarchaintl
+      - AVATAR
+      - sweetmushrooms
+      - tila-airplant-ecommerce
+      - merlina
+      - kupuri-media-website
     domains: [mexico_city_law, sat_cfdi, cnbv_fintech, ai_agency_sales, entrepreneurship, project_management]
     proactive_brief_hour: 8
     proactive_brief_lang: es-MX
@@ -39,7 +62,380 @@ personas:
     guardian_fleet: true
     repo_ecosystem_size: 313
     repos_all_executiveusa: true
+    # Primary steward repos (The Pauli Effect brand)
+    primary_repos:
+      - darya-design-throne
+      - dashboard-agent-swarm
+      - meishael-mini-meish
+      - thepaulieffect
+      - voice-web-architect
+      - amentislibrary
+      - goat-alliance-scaffold
+      - hiring-compass
+      - goldenhearts
+      - frankenstackbyfranklyai
+      - nomadasearch
+      - culture-shock-sports
+      - abby-wellness-nexus
+      - humanatar-genesis-suite
+      - the-pauli-effect
+      - emergent-wealth-culture
+      - paulis-pope-bot
+      - devika-agent
+      - hustle-claude
+      - MetaGPT
+      - voice-agents-fork
+      - pauli-comic-funnel
+      - VisionClaw
+      - fritco-v2
+      - macscryptocasino
+      - modernairsolutions
+      - genie-assistant-magic
+      - smart-plugin-portal
+      - nicetohave
+      - blockerbuiltautosales
+      - schoolofterabithia
+      - thenetwork
+      - macstraxx
+      - terabithiaweb3
+      - cryptocuties
+      - hustle
+      - maxxiescraper
+      - pauli-effect-roi-wizard
+      - memoryblock
+      - sovereign-code-cosmos
+      - cinematic-smart-funnels-launchpad
+      - mastertoon
+      - thekey
+      - youtubetranscripts
+      - animeta-roblox-craft
+      - opal-art-preserve
+      - legalai-nexus-core
+      - reddit-focus-insight
+      - reddit-focus-finder
+      - crystal-memory-cube
+      - onboardingglobe
+      - seoforge-ai-builder
+      - archon-ui-forge
+      - artist-fold-gallery
+      - cloneflow-ai-sites
+      - sista-rolls-flutter-app
+      - codex-craft-forge
+      - aiwear-trend-hub
+      - lovable-ai-dreamweaver
+      - archon-ghl-automator
+      - wherespauli
+      - apify-studiobuilder
+      - enaswigsandhair
+      - speak-to-ship-control
+      - veronika-mvp-export
+      - kauffmans-patterrns
+      - biophillia-blog
+      - thepuppetmaster
+      - yappyverse-genesis-project
+      - FRITHCO
+      - BOILER-BOYZ
+      - BOILERBOYZ
+      - next-video-starter
+      - youtube-monster-tran
+      - pickaxe-nanobanana-g
+      - yappyverse-newsletter
+      - miranda-portfolio-spark
+      - promptation
+      - kinetic-code-canvas-dream
+      - p-72343185
+      - chatgami-supabuddy
+      - r-108043-e63b540f
+      - r-108043
+      - nodev
+      - notion-blog
+      - portal-mini-store-template-main
+      - dash-vega-luxe
+      - yappyverse-merch-forge
+      - glassy-focus-flow
+      - arkan-os-branding
+      - golden-heart-compass-ai
+      - yappyverse-drop-control
+      - digital-odyssey-scroll
+      - ani-maze
+      - nextjs-enterprise-boilerplate
+      - WEB3SAAS-APP
+      - Open-clipz
+      - chat-bot-template
+      - Rube-remix
+      - yappyverse
+      - seattle-reuse-exchange-v2
+      - frithco-remix
+      - frithco-2.0
+      - Business-Website-Template-kimi-K2
+      - remixyoursite.com
+      - ARCHON-X2.0
+      - infinite-agentic-loop
+      - GSAP-Awwwards-Website-
+      - pauli-brand-guidelines
+      - -e-commerce-remix
+      - web3sass
+      - pauli-story-tool-kit
+      - Social-Media-Post-Generator---Encore.dev
+      - jzuart-dj-saas
+      - claude-kosmos-2_5-containerized
+      - react-agent-darya-3.0
+      - Raft-Landing-Page
+      - portfolio-starter
+      - darya-design-agent
+      - Lumina-DiMOO-image-generator
+      - Paper2Video-science-avatar
+      - geist-font-design
+      - outlines-second-brain
+      - AutoAgent
+      - evershop-e-commerece
+      - base-stack-vite
+      - reel-flux-2
+      - open-lovable
+      - OPENTHC
+      - hustle-claude-code
     proactive_brief_hour: 7
     proactive_brief_lang: en-US
     approval_threshold_usd: 500
     soul_file: dashboard-agent-swarm/.agent-souls/ax-pauli-brain.soul.md
+
+# Sub-brand repo ownership map
+# These orgs fall under PAULI BRAIN guardian fleet but have distinct identities
+org_map:
+  KUPURI_MEDIA:
+    persona: AX-SYNTHIA-001
+    repos:
+      - tanda_cdmx
+      - indigo-azul-catalog
+      - metamorfosis-wellness-journey
+      - agent-indigo
+      - pv-construction-platform
+      - synthia
+      - lapina
+      - ivettemilo
+      - rebanada-world-pizza-hub
+      - ivettemushrooms
+      - clandestino-rebellion-launch
+      - black-mirror
+      - que-pedo-cdmx
+      - morpho-metrics-academy
+      - kitchen-creations-planner-pro
+      - la-silueta
+      - lamonarchaintl
+      - AVATAR
+      - sweetmushrooms
+      - tila-airplant-ecommerce
+      - merlina
+      - kupuri-media-website
+
+  THE_PAULI_EFFECT:
+    persona: AX-PAULI-BRAIN-002
+    # see primary_repos above — 113 repos
+
+  NEW_WORLD_KIDS:
+    persona: AX-PAULI-BRAIN-002
+    repos:
+      - botanical-memories
+      - newworldkids
+      - strapi-template-new-world-kids
+
+  MACS_DIGITAL_MEDIA:
+    persona: AX-PAULI-BRAIN-002
+    repos:
+      - maxx-craft
+      - macs-agent-portal
+      - maxx-clipz
+      - MAXX-Research
+      - maxx-coze-studio
+      - balldontlie
+      - MAXX-Video-Agent
+      - Agentic-AIGC-MAXX-EDITS
+      - maxx-casino-portal
+      - maxxclipz
+      - postiz-maxx-clipz
+      - spy-scape-mustang-maXx
+
+  CHEGGIE_MEDIA:
+    persona: AX-PAULI-BRAIN-002
+    repos:
+      - cheggie-lifestyle-finance
+      - dispatchhelper2
+      - CHEGGIE-AI-Trader
+
+  AKASH_ENGINE:
+    persona: AX-PAULI-BRAIN-002
+    repos:
+      - akash-orbit-platform
+      - akash-engine-2.0
+      - akash-last-edit
+      - akash-master-files
+      - akash-master-files-2
+      - akash-master-files-3
+      - akash-master-files.2.0
+      - akash-master.1.0
+      - AKASHPORTFOLIO
+
+# Repos in user list that do not match any GitHub repo name
+# (may be internal modules, planned repos, or name mismatches)
+pending_repo_clarification:
+  - user_name: chakranaarchonx-os
+    github_match: chakrana
+    note: "GitHub repo is 'chakrana' — confirm rename or separate"
+  - user_name: graphbrain-core
+    github_match: null
+    note: "Internal module within archonx-os — not a standalone GitHub repo"
+  - user_name: openclaw-gateway
+    github_match: null
+    note: "Internal module within archonx-os — not a standalone GitHub repo"
+  - user_name: darya-app
+    github_match: darya-design-agent
+    note: "Possible alias for darya-design-agent or darya-design-throne"
+  - user_name: lemon-runner
+    github_match: null
+    note: "Repo does not exist on GitHub yet — to be created"
+  - user_name: king-mode-vr
+    github_match: null
+    note: "Repo does not exist on GitHub yet — to be created"
+  - user_name: archonx-skills
+    github_match: null
+    note: "Internal module (archonx/skills/) — not a standalone GitHub repo"
+  - user_name: agent-lightning-fork
+    github_match: null
+    note: "agent-frameworks/agent-lightning is a submodule — not in executiveusa"
+
+# Unassigned GitHub repos (151 repos not yet given an org assignment)
+# These default to AX-PAULI-BRAIN-002 guardian fleet watch
+unassigned_repos:
+  - -la-pina-cdmx
+  - -lightning-claude-memory-agent
+  - -yt-knowledge-extractor
+  - AFRO-CLIPZ
+  - AI-Youtube-Shorts-Generator
+  - AdventureLog-kupri
+  - AionUi-cowork
+  - BMAD-METHOD
+  - CLONELY-FANZ
+  - Darya-designs
+  - ECO-TOUR-DIRECTORY
+  - GPT-Agent-im-ready
+  - Kupuri-studios
+  - Nextjs-Ecommerce
+  - POSTA-STUDIO.V2
+  - Pauli-claw-work
+  - Pauli-spec-kit
+  - Suenos--very_good_templates
+  - Synthia-3.0
+  - Synthia-4.2
+  - Telegram-bot
+  - VIPposta
+  - acip
+  - actual-stash
+  - afroscribble
+  - agent-kupuri-template
+  - agent-zero-Fork
+  - agent_flywheel_clawdbot_skills_and_integrations
+  - ai-sdk-computer-use
+  - ai-tool-kit
+  - airbnbauto
+  - aiwear-trend-hub-c0e24ba8
+  - allweatherroofs
+  - alphadeltarecycling
+  - archon-lovable-nexus
+  - archonx-os
+  - auto-shop-turkey
+  - breatheinternational
+  - butterflytracker
+  - cafe-cultura-
+  - chef-code-ide
+  - chromium-fork-browser
+  - claude-suna-kortix
+  - claude-task-master
+  - clawdbot-Whatsapp-agent
+  - coachdavis
+  - coding_agent_session_search
+  - coding_agent_usage_tracker
+  - continue-claude-agent
+  - cruise-reposition-oasis
+  - crush
+  - cult-directory-template
+  - cultureshocksports
+  - darya-next-js-landing-page
+  - ddev-diffy-agent-zero-
+  - dispatchhelper
+  - factory-droid-wrap-
+  - fancynancyai
+  - fish-on-texas
+  - flow-profit
+  - fritco-locale-scaffold
+  - frithco-3.0
+  - frithco-final-version
+  - goatalliance
+  - image-template
+  - impact-city-builder-verse
+  - interactive-artifact
+  - jeannieflow-
+  - kupuri-studios-landing
+  - landscaping1
+  - leon-avatar-fork-
+  - lux-desktop-claude
+  - metamorphsis-cdmx
+  - midday-suelta-app
+  - mini-meish
+  - monorepo-turborepo
+  - nano-banana-generator-pauli-fork
+  - next-forge
+  - nextjs-ai-chatbot
+  - nextjs-commerce
+  - nexusgymcdmx
+  - nomaticthecost
+  - onlook-synthi
+  - open-agent-platform-pauli
+  - open-interpreter-fork
+  - opencode
+  - pauli-agent-S-computer-use-
+  - pauli-beads
+  - pauli-deep-research
+  - pauli-design-resources-for-developers
+  - pauli-hyperedit
+  - pauli-iron-claw
+  - pauli-remote-screen-
+  - pauli-security-red-hat-
+  - pauli__mail
+  - paulis-deep-agent
+  - paulisworld-openclaw-3d
+  - payload-rancho-santiago
+  - peter-sung
+  - peter-sung-website
+  - phone-call-assistant
+  - postatees-studio
+  - postateesstudio-
+  - postateesstudioV.1
+  - prompts
+  - qr-code-maker
+  - reel-flux
+  - sassyscraper
+  - seattle-reuse-exchange
+  - second-brain-agent
+  - serene-studio-flow-hub
+  - shirt-shop-example
+  - skills-introduction-to-github
+  - speedtolead
+  - strapi-cloud-template-blog-e8d531af4f
+  - strapi-template
+  - sweet-psilocybe-app
+  - sweet-psilocybe-landing
+  - synthia-4.1
+  - synthia-demo
+  - terabithia
+  - the-minority-report
+  - the-smoke
+  - trail-mixx
+  - trail-mixx-source-code
+  - ui-ux-pro-max-skill-ht27tps-github.com-nextlevelbuilder-ui-ux-pro-max-skill
+  - v0-leonradio-website
+  - vallarta-voyage-explorer
+  - veronika-mvp-final
+  - world-matrix
+  - youtubemonster
+  - youtubemonster2.1
+  - strix-ai-que-pedo--
