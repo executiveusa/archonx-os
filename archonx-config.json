@@ -90,5 +90,9 @@
       "edge",
       "hybrid"
     ]
+  },
+  "coolify": {
+    "app_uuid": "YOUR_UUID_HERE",
+    "base_url": "https://coolify.example.com"
   }
 }
