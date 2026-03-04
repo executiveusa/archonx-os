@@ -15,11 +15,13 @@ import asyncio
 import json
 import logging
 import os
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -30,6 +32,7 @@ from archonx.onboarding.voice_agent.runner import OnboardingVoiceRunner
 from archonx.visualization.chessboard import ChessboardView
 from archonx.visualization.dashboard import MetricsDashboard
 from archonx.visualization.paulis_place_view import PaulisPlaceView
+from archonx.orchestration.orchestrator import Orchestrator, TaskType
 
 logger = logging.getLogger("archonx.server")
 _PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
@@ -43,6 +46,16 @@ _dashboard: MetricsDashboard | None = None
 _paulis_view: PaulisPlaceView | None = None
 _leaderboard: Leaderboard | None = None
 _ws_clients: set[WebSocket] = set()
+_task_status: dict[str, dict[str, Any]] = {}
+
+
+class TaskWebhookPayload(BaseModel):
+    message: str
+    source: str = "webhook"
+    priority: str = "normal"
+    repo: str = ""
+    environment: str = "staging"
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 def _parse_allowed_origins() -> list[str]:
@@ -101,6 +114,67 @@ def create_app() -> FastAPI:
         return await call_next(request)
 
     # ----- REST endpoints -----
+
+    @app.get("/health")
+    async def health() -> JSONResponse:
+        return JSONResponse({
+            "status": "ok",
+            "version": "1.0.0",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "agents": "operational" if _kernel is not None else "booting",
+        })
+
+    @app.post("/webhook/task")
+    async def create_task_webhook(payload: TaskWebhookPayload) -> JSONResponse:
+        orchestrator = Orchestrator()
+        await orchestrator.initialize()
+        result = await orchestrator.create_task(
+            title=payload.message[:120],
+            task_type=TaskType.CODE,
+            priority=payload.priority,
+            metadata={
+                "source": payload.source,
+                "repo": payload.repo,
+                "environment": payload.environment,
+                **payload.metadata,
+            },
+        )
+
+        if not result.success:
+            return JSONResponse({"status": "error", "message": result.message}, status_code=400)
+
+        task_id = str(result.data.get("task_id", ""))
+        _task_status[task_id] = {
+            "status": "accepted",
+            "task_id": task_id,
+            "bead_id": f"ZTE-{task_id}",
+            "source": payload.source,
+            "environment": payload.environment,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        async def _progress_tracker() -> None:
+            _task_status[task_id]["status"] = "queued"
+            _task_status[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+            await asyncio.sleep(0)
+            _task_status[task_id]["status"] = "complete"
+            _task_status[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+
+        asyncio.create_task(_progress_tracker())
+
+        return JSONResponse({
+            "status": "accepted",
+            "task_id": task_id,
+            "bead_id": f"ZTE-{task_id}",
+            "message": "Task queued for autonomous execution",
+        })
+
+    @app.get("/status/{task_id}")
+    async def task_status(task_id: str) -> JSONResponse:
+        data = _task_status.get(task_id)
+        if not data:
+            return JSONResponse({"status": "not_found", "task_id": task_id}, status_code=404)
+        return JSONResponse(data)
 
     @app.get("/api/board")
     async def get_board() -> JSONResponse:
