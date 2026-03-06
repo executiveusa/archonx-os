@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
+"""ZTE-20260303-9001: Deployment notification back-channel."""
+
+from __future__ import annotations
+
+import json
 import logging
 import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
 import httpx
+from urllib import request
 
 logger = logging.getLogger("archonx.notifications")
 
@@ -68,3 +74,28 @@ class Notifier:
                     },
                 )
                 response.raise_for_status()
+            body = json.dumps(
+                {
+                    "text": message,
+                    "bead_id": result.bead_id,
+                    "success": result.success,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            ).encode("utf-8")
+            req = request.Request(
+                self.webhook_url,
+                method="POST",
+                data=body,
+                headers={"Content-Type": "application/json"},
+            )
+            with request.urlopen(req, timeout=15):
+                pass
+
+    def _format_success(self, result: TaskResult) -> str:
+        return f"✅ {result.bead_id} | {result.task_name} | COMPLETE → Deployed: {result.environment}"
+
+    def _format_failure(self, result: TaskResult) -> str:
+        return (
+            f"❌ {result.bead_id} | {result.task_name} | FAILED at Stage {result.stage_failed}"
+            f" → Reason: {result.error_summary}"
+        )
