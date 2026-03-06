@@ -16,6 +16,7 @@ from archonx.tools.coolify_client import CoolifyClient
 logger = logging.getLogger("archonx.tools.deploy")
 
 _BEAD_ID = "ZTE-20260304-0002"
+_BEAD_ID = "ZTE-20260303-9001"
 _CONFIG_PATH = Path(__file__).resolve().parents[2] / "archonx-config.json"
 
 
@@ -47,6 +48,7 @@ class DeploymentTool(BaseTool):
         if not _CONFIG_PATH.exists():
             return {}
         raw = json.loads(_CONFIG_PATH.read_text(encoding="utf-8"))
+        raw = json.loads(_CONFIG_PATH.read_text())
         coolify = raw.get("coolify", {})
         return {
             "app_uuid": str(coolify.get("app_uuid", "")),
@@ -119,6 +121,53 @@ class DeploymentTool(BaseTool):
                     )
                 )
                 raise
+    async def _deploy(self, repo: str, env: str, auto_test: bool) -> dict[str, Any]:
+        coolify_cfg = self._load_coolify_config()
+        app_uuid = coolify_cfg.get("app_uuid", "")
+        if not app_uuid:
+            raise RuntimeError("Missing coolify.app_uuid in archonx-config.json")
+
+        notifier = Notifier()
+        client = CoolifyClient(base_url=coolify_cfg.get("base_url", ""))
+
+        deployment_id = ""
+        try:
+            deployment_id = await client.trigger_deploy(app_uuid=app_uuid)
+            deploy_status = await client.wait_for_deploy(deployment_id, timeout_seconds=300)
+            health = await client.check_health(app_uuid)
+            result = {
+                "status": "deployed",
+                "repo": repo,
+                "environment": env,
+                "auto_test": auto_test,
+                "deployment_id": deployment_id,
+                "deploy_status": deploy_status.status,
+                "health": health.status,
+                "url": health.url,
+                "rollback_available": True,
+            }
+            await notifier.notify(
+                TaskResult(
+                    bead_id=_BEAD_ID,
+                    task_name="deployment",
+                    success=True,
+                    environment=env,
+                    deploy_url=health.url,
+                )
+            )
+            return result
+        except Exception as exc:
+            await notifier.notify(
+                TaskResult(
+                    bead_id=_BEAD_ID,
+                    task_name="deployment",
+                    success=False,
+                    environment=env,
+                    error_summary=str(exc),
+                    stage_failed="deploy",
+                )
+            )
+            raise
 
     async def _rollback(self, repo: str, env: str, deployment_id: str) -> dict[str, Any]:
         coolify_cfg = self._load_coolify_config()
@@ -135,6 +184,14 @@ class DeploymentTool(BaseTool):
             ok = await client.rollback(app_uuid=app_uuid, deployment_id=deployment_id)
             health = await client.check_health(app_uuid)
 
+        if not app_uuid:
+            raise RuntimeError("Missing coolify.app_uuid in archonx-config.json")
+        if not deployment_id:
+            raise RuntimeError("rollback requires deployment_id")
+
+        client = CoolifyClient(base_url=coolify_cfg.get("base_url", ""))
+        ok = await client.rollback(app_uuid=app_uuid, deployment_id=deployment_id)
+        health = await client.check_health(app_uuid)
         return {
             "status": "rolled_back" if ok else "rollback_failed",
             "repo": repo,
@@ -153,6 +210,11 @@ class DeploymentTool(BaseTool):
         async with CoolifyClient(base_url=coolify_cfg.get("base_url", "")) as client:
             health = await client.check_health(app_uuid)
 
+        if not app_uuid:
+            return {"status": "unknown", "repo": repo, "environment": env, "health": "unconfigured"}
+
+        client = CoolifyClient(base_url=coolify_cfg.get("base_url", ""))
+        health = await client.check_health(app_uuid)
         return {
             "status": "running" if health.status == "running" else "degraded",
             "repo": repo,
