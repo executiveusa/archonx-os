@@ -17,10 +17,17 @@ class _FakeHealth:
 def test_deploy_success(monkeypatch):
     tool = DeploymentTool()
     monkeypatch.setattr(tool, "_load_coolify_config", lambda: {"app_uuid": "app-1", "base_url": "http://c"})
+    monkeypatch.setattr(tool, "_resolve_current_commit", lambda _repo: "abc123")
 
     class FakeClient:
         def __init__(self, base_url=""):
             self.base_url = base_url
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *_):
+            return None
 
         async def trigger_deploy(self, app_uuid, force=False):
             assert app_uuid == "app-1"
@@ -43,6 +50,7 @@ def test_deploy_success(monkeypatch):
     result = asyncio.run(tool.execute({"action": "deploy", "repo": "owner/repo", "environment": "staging"}))
     assert result.status == "success"
     assert result.data["deployment_id"] == "dep-1"
+    assert result.data["commit_sha"] == "abc123"
 
 
 def test_status_unconfigured(monkeypatch):
