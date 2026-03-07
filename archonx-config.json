@@ -43,6 +43,29 @@
       "port": 3000
     }
   },
+  "mcpServers": {
+    "open-brain": {
+      "enabled": true,
+      "command": "python",
+      "args": ["Open-brain-mcp-server/open_brain_mcp_server.py"],
+      "cwd": ".",
+      "env": {
+        "SUPABASE_HOST": "${SUPABASE_HOST}",
+        "SUPABASE_PORT": "${SUPABASE_PORT}",
+        "SUPABASE_DB": "${SUPABASE_DB}",
+        "SUPABASE_USER": "${SUPABASE_USER}",
+        "SUPABASE_PASSWORD": "${SUPABASE_PASSWORD}",
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_KEY": "${SUPABASE_KEY}",
+        "SERVICE_ROLE_KEY": "${SERVICE_ROLE_KEY}",
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+        "JCODEMUNCH_ENABLED": "true",
+        "JCODEMUNCH_INDEX": ".jcodemunch/index.db",
+        "LOG_LEVEL": "INFO"
+      },
+      "description": "Shared pgvector memory layer for agents with jcodemunch token efficiency"
+    }
+  },
   "security": {
     "safety_layer": true,
     "leak_detector": true,
