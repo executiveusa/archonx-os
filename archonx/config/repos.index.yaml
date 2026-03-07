@@ -1,0 +1,98 @@
+# =====================================================================================
+# ARCHONX REPO INDEX + ROUTING FABRIC (INDEX-ONLY — DO NOT CLONE)
+# =====================================================================================
+# PURPOSE
+# - Canonical index of repos (1..268) + ownership + domain typing + agent routing.
+# - ArchonX MUST NOT clone, download, or mirror repos when ingesting this file.
+# - ArchonX uses this as an "awareness graph" to route agents, generate PRDs, run audits.
+#
+# HARD SAFETY RULES
+# - DO NOT execute code until MCP handshake passes.
+# - DO NOT print secrets; all secrets must be fetched via Vault Manager.
+# - DO NOT assume local git state; always inspect branches/PRs via GitHub API.
+# =====================================================================================
+
+archonx_repo_index_spec:
+  version: "1.0.0"
+  generated_utc: "2026-03-05"
+  mode: "index_only"
+  do_not_clone: true
+  do_not_vendor: true
+  do_not_mirror: true
+
+  # ------------------------------------------------------------------------------------------------
+  # TEAMS (OWNERSHIP ROUTING)
+  # ------------------------------------------------------------------------------------------------
+  teams:
+    - id: pauli_effect
+      display: "The Pauli Effect / BAMBU"
+      owners: ["executiveusa"]
+      regions: ["US", "Global"]
+    - id: kupuri_media
+      display: "Kupuri (Cooperi) Media / Yvette"
+      owners: ["yvette"]
+      regions: ["LATAM", "MX", "Global"]
+    - id: max_digital_media
+      display: "Max Digital Media"
+      owners: ["max"]
+      regions: ["US", "Global"]
+    - id: cheggie_media
+      display: "Cheggie Media (Serbia)"
+      owners: ["alex"]
+      regions: ["EU", "Global"]
+    - id: akash_engine
+      display: "Akash Engine Team"
+      owners: ["akash"]
+      regions: ["Global"]
+    - id: afromations
+      display: "AfroMations (Son)"
+      owners: ["afromations"]
+      regions: ["US", "Global"]
+    - id: agent_ops
+      display: "Agent Ops / Orchestration"
+      owners: ["agentzero"]
+      regions: ["Global"]
+    - id: triage_unknown
+      display: "Triage / Unassigned"
+      owners: ["agentzero"]
+      regions: ["Global"]
+
+  # ------------------------------------------------------------------------------------------------
+  # DOMAIN TYPES (WHAT IT IS)
+  # ------------------------------------------------------------------------------------------------
+  domain_types:
+    - id: saas
+      description: "User-facing product/service (web/app), production deployable"
+    - id: tool
+      description: "Dev tool / infra / CLI / library / automation"
+    - id: agent
+      description: "Autonomous agent / orchestration / swarm"
+    - id: template
+      description: "Starter template / boilerplate / example"
+    - id: content
+      description: "Docs/content/research-only repo"
+    - id: unknown
+      description: "Needs recon to classify"
+
+  # ------------------------------------------------------------------------------------------------
+  # SAMPLE REPOS (1-30 for testing; full list has 268)
+  # ------------------------------------------------------------------------------------------------
+  repos:
+    - {id: 1,   name: "-e-commerce-remix",                   url: "https://github.com/executiveusa/-e-commerce-remix",                   vis: public,  kind: fork, team_id: pauli_effect,     domain_type_id: tool}
+    - {id: 2,   name: "-la-pina-cdmx",                       url: "https://github.com/executiveusa/-la-pina-cdmx",                       vis: public,  kind: fork, team_id: kupuri_media,     domain_type_id: saas}
+    - {id: 3,   name: "-lightning-claude-memory-agent",      url: "https://github.com/executiveusa/-lightning-claude-memory-agent",      vis: public,  kind: fork, team_id: agent_ops,        domain_type_id: agent}
+    - {id: 4,   name: "-yt-knowledge-extractor",             url: "https://github.com/executiveusa/-yt-knowledge-extractor",             vis: public,  kind: orig, team_id: pauli_effect,     domain_type_id: saas}
+    - {id: 5,   name: "abby-wellness-nexus",                 url: "https://github.com/executiveusa/abby-wellness-nexus",                 vis: private, kind: orig, team_id: pauli_effect,     domain_type_id: saas}
+    - {id: 6,   name: "actual-stash",                        url: "https://github.com/executiveusa/actual-stash",                        vis: public,  kind: fork, team_id: pauli_effect,     domain_type_id: saas}
+    - {id: 7,   name: "AFRO-CLIPZ",                          url: "https://github.com/executiveusa/AFRO-CLIPZ",                          vis: public,  kind: fork, team_id: afromations,      domain_type_id: saas}
+    - {id: 8,   name: "afroscribble",                        url: "https://github.com/executiveusa/afroscribble",                        vis: private, kind: orig, team_id: afromations,      domain_type_id: saas}
+    - {id: 9,   name: "agent-indigo",                        url: "https://github.com/executiveusa/agent-indigo",                        vis: private, kind: orig, team_id: kupuri_media,     domain_type_id: agent}
+    - {id: 10,  name: "agent-kupuri-template",               url: "https://github.com/executiveusa/agent-kupuri-template",               vis: public,  kind: fork, team_id: kupuri_media,     domain_type_id: saas}
+    - {id: 11,  name: "Agentic-AIGC-MAXX-EDITS",             url: "https://github.com/executiveusa/Agentic-AIGC-MAXX-EDITS",             vis: public,  kind: fork, team_id: max_digital_media, domain_type_id: tool}
+    - {id: 12,  name: "ai-sdk-computer-use",                 url: "https://github.com/executiveusa/ai-sdk-computer-use",                 vis: private, kind: orig, team_id: pauli_effect,     domain_type_id: tool}
+    - {id: 13,  name: "ai-tool-kit",                         url: "https://github.com/executiveusa/ai-tool-kit",                         vis: public,  kind: fork, team_id: pauli_effect,     domain_type_id: tool}
+    - {id: 14,  name: "AI-Youtube-Shorts-Generator",         url: "https://github.com/executiveusa/AI-Youtube-Shorts-Generator",         vis: public,  kind: fork, team_id: pauli_effect,     domain_type_id: saas}
+    - {id: 15,  name: "airbnbauto",                          url: "https://github.com/executiveusa/airbnbauto",                          vis: private, kind: orig, team_id: pauli_effect,     domain_type_id: saas}
+    - {id: 80,  name: "dashboard-agent-swarm",                url: "https://github.com/executiveusa/dashboard-agent-swarm",                vis: private, kind: orig, team_id: pauli_effect,     domain_type_id: agent}
+    - {id: 266, name: "placeholder-repo-266",                url: "https://github.com/executiveusa/placeholder-repo-266",                vis: public,  kind: orig, team_id: pauli_effect,     domain_type_id: unknown}
+    - {id: 267, name: "placeholder-repo-267",                url: "https://github.com/executiveusa/placeholder-repo-267",                vis: private, kind: fork, team_id: kupuri_media,     domain_type_id: unknown}

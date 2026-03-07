@@ -470,6 +470,45 @@ def main() -> None:
     p_graphbrain_propagate = gb_sub.add_parser("propagate", help="Propagate standards")
     p_graphbrain_propagate.add_argument("--all", action="store_true", help="Propagate to all repos")
 
+    # repos
+    p_repos = sub.add_parser("repos", help="Repository awareness & routing")
+    repos_sub = p_repos.add_subparsers(dest="repos_command")
+
+    p_repos_ingest = repos_sub.add_parser("ingest", help="Ingest repos from YAML index")
+    p_repos_ingest.add_argument("--file", required=True, help="Path to repos.index.yaml")
+    p_repos_ingest.add_argument("--mode", default="index_only", help="Ingest mode")
+
+    p_repos_list = repos_sub.add_parser("list", help="List repos with filters")
+    p_repos_list.add_argument("--team", help="Filter by team ID")
+    p_repos_list.add_argument("--type", help="Filter by domain type")
+    p_repos_list.add_argument("--vis", choices=["public", "private"], help="Filter by visibility")
+    p_repos_list.add_argument("--kind", choices=["orig", "fork"], help="Filter by kind")
+
+    p_repos_show = repos_sub.add_parser("show", help="Show repo details")
+    p_repos_show.add_argument("--id", type=int, required=True, help="Repo ID")
+
+    p_repos_route = repos_sub.add_parser("route", help="Route repos to agents")
+    p_repos_route.add_argument("--repo-ids", required=True, help="Comma-separated repo IDs")
+    p_repos_route.add_argument("--task", required=True, help="Task name")
+
+    # zte
+    p_zte = sub.add_parser("zte", help="Zero-Touch Engineer commands")
+    zte_sub = p_zte.add_subparsers(dest="zte_command")
+
+    p_zte_headers = zte_sub.add_parser("headers", help="ZTE header management")
+    headers_sub = p_zte_headers.add_subparsers(dest="headers_command")
+
+    p_zte_headers_plan = headers_sub.add_parser("plan", help="Plan header installations")
+    p_zte_headers_plan.add_argument("--repo-ids", help="Comma-separated repo IDs")
+    p_zte_headers_plan.add_argument("--all", action="store_true", help="All repos")
+
+    # mcp
+    p_mcp = sub.add_parser("mcp", help="MCP (Multi-Context Protocol) commands")
+    mcp_sub = p_mcp.add_subparsers(dest="mcp_command")
+
+    p_mcp_preflight = mcp_sub.add_parser("preflight", help="Run MCP preflight verification")
+    p_mcp_preflight.add_argument("--require", help="Comma-separated required tools")
+
     args = parser.parse_args()
 
     handlers = {
@@ -498,6 +537,53 @@ def main() -> None:
             handler(args)
             return
         p_graphbrain.print_help()
+        return
+
+    if args.command == "repos":
+        from archonx.repos.commands import (
+            repos_ingest,
+            repos_list,
+            repos_show,
+            repos_route,
+        )
+        repos_handlers = {
+            "ingest": repos_ingest,
+            "list": repos_list,
+            "show": repos_show,
+            "route": repos_route,
+        }
+        handler = repos_handlers.get(args.repos_command)
+        if handler:
+            handler(args)
+            return
+        p_repos.print_help()
+        return
+
+    if args.command == "zte":
+        from archonx.repos.commands import zte_headers_plan
+        if args.zte_command == "headers":
+            headers_handlers = {
+                "plan": zte_headers_plan,
+            }
+            handler = headers_handlers.get(args.headers_command)
+            if handler:
+                handler(args)
+                return
+            p_zte_headers.print_help()
+            return
+        p_zte.print_help()
+        return
+
+    if args.command == "mcp":
+        from archonx.repos.commands import mcp_preflight
+        mcp_handlers = {
+            "preflight": mcp_preflight,
+        }
+        handler = mcp_handlers.get(args.mcp_command)
+        if handler:
+            handler(args)
+            return
+        p_mcp.print_help()
         return
 
     handler = handlers.get(args.command)
