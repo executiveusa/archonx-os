@@ -120,3 +120,88 @@ All agents automatically have access to Open Brain via MCP. Enable in `archonx-c
 - **Leaving out task context in memory** = reduced searchability ✗
 
 Violating memory protocol incurs token penalties and may trigger cost guard alerts.
+
+## Vault Agent + AI Advisor Protocol (MANDATORY)
+
+### Purpose
+Every agent and deployment must implement automated secret management, rotation auditing, and AI-powered security recommendations. This prevents credential leaks, ensures compliance with rotation policies, and provides intelligent guidance for secret handling.
+
+### Vault Agent Core Functions
+The `vault_agent.py` tool provides:
+1. **Secret Discovery** — Recursively find all `.env*` files across the repo
+2. **Risk Classification** — Categorize secrets by type and assign risk levels:
+   - **CRITICAL**: Cryptographic keys, database credentials, API keys with `sk-` prefix
+   - **HIGH**: Auth tokens (JWT, GitHub, etc.), passwords without length validation
+   - **MEDIUM**: Webhook URLs, generic secrets, encoded tokens
+   - **LOW**: Configuration variables, version info, non-sensitive identifiers
+3. **Audit Reporting** — Generate JSON reports with full inventory and findings
+4. **Rotation Checklists** — Prioritized lists grouped by risk level for manual rotation
+5. **Safe Templates** — Generate `.env` templates with `[REPLACE_TYPE]` placeholders
+6. **Infisical Export** — Create import-ready JSON for HashiCorp Vault, Infisical, or similar tools
+
+### AI Advisor Integration
+The `ai_advisor.py` tool provides multi-backend recommendations:
+- **Primary**: HuggingFace Inference API (Mistral-7B) via `HF_API_KEY`
+- **Fallback 1**: Groq API (Mixtral-8x7b) via `GROQ_API_KEY`
+- **Fallback 2**: Google Gemini API via `GOOGLE_API_KEY`
+- **Fallback 3**: Offline mode (always available) with rule-based recommendations
+
+**Environment Setup**:
+```bash
+export HF_API_KEY=hf_xxxxxxxxxxxxxx         # Optional: HuggingFace token
+export GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxx    # Optional: Groq token
+export GOOGLE_API_KEY=AIzaSyxxxxxxxxxxxxxx  # Optional: Gemini token
+```
+
+### Full Orchestration
+The `run_full.py` orchestrator runs both systems in sequence:
+1. **Stage 1**: Execute vault agent audit → generates vault_audit.json
+2. **Stage 2**: Load audit, run AI advisor on critical secrets → generates ai_recommendations.json
+3. **Stage 3**: Merge both outputs → generates integrated_report.json
+
+**Run command**:
+```bash
+python3 run_full.py
+```
+
+### Mandatory Execution Points
+- **On every PAULIWHEEL sync meeting** → Run `vault_agent.py --path .` and store findings in Open Brain memory
+- **Before any deployment** → Run `run_full.py` and review ai_recommendations.json
+- **Daily automated** → Cron job at 3:00 AM (configured by setup.sh) stores reports under `ops/reports/`
+- **On secret rotation** → Update AGENTS.md with last rotation date and use AI advisor to guide new secret generation
+
+### Report Locations
+```
+ops/reports/
+├── vault_audit.json              # Complete audit with classifications
+├── ai_recommendations.json        # AI-generated guidance (top critical secrets)
+├── integrated_report.json         # Merged findings and recommendations
+├── rotation_checklist.md          # Markdown checklist by risk level
+├── safe_template.env             # Template with [REPLACE_*] placeholders
+├── infisical_import.json         # Vault import format
+└── cron.log                       # Automated daily run logs
+```
+
+### Integration with Open Brain Memory
+After every vault audit, store findings in Open Brain:
+```python
+store_memory(
+  agent_id="<your_agent_id>",
+  content="Vault audit: 24 secrets, 8 critical, rotation due for API_SECRET_KEY, MONGO_CONNECTION",
+  memory_type="insight",
+  metadata={
+    "audit_timestamp": "2026-03-07T07:59:13Z",
+    "total_secrets": 24,
+    "critical_count": 8,
+    "report_path": "ops/reports/integrated_report.json"
+  }
+)
+```
+
+### Compliance & Violations
+- **Skipping vault audit before deployment** = security breach risk ✗
+- **Not implementing AI advisor feedback** = missed rotation deadlines, compromised secrets ✗
+- **Leaving secrets in code instead of .env** = exposure to Git history ✗
+- **Ignoring CRITICAL-level findings** = grounds for `restricted` status ✗
+
+Violations trigger immediate audit escalation and cost guard alerts.
