@@ -1,0 +1,340 @@
+# 📦 COMPLETE GITHUB REPOSITORY LIST
+**Generated:** January 5, 2026  
+**Account:** executiveusa + THE-PAULI-EFFECT org  
+**Scan Method:** Authenticated `/user/repos?visibility=all` (includes private)
+---
+## 📊 SUMMARY
+| Category | Count |
+|----------|-------|
+| **TOTAL REPOSITORIES** | **268** |
+| Original Repos | 197 |
+| Forks | 71 |
+| 🌐 Public | 102 |
+| 🔒 Private | 166 |
+---
+## 🔥 RECOMMENDED 5 APPS FOR TEST DEPLOYMENT (with Supabase)
+| # | Repository | Visibility | Type | Language | Why Selected |
+|---|------------|------------|------|----------|--------------|
+| 1 | [pauli-comic-funnel](https://github.com/executiveusa/pauli-comic-funnel) | 🌐 PUBLIC | ORIG | Python | Core project, active development |
+| 2 | [archon-lovable-nexus](https://github.com/executiveusa/archon-lovable-nexus) | 🌐 PUBLIC | ORIG | TypeScript | Active, Vite-based |
+| 3 | [dashboard-agent-swarm](https://github.com/executiveusa/dashboard-agent-swarm) | 🔒 PRIVATE | ORIG | Python | Agent dashboard, needs DB |
+| 4 | [dispatchhelper](https://github.com/executiveusa/dispatchhelper) | 🌐 PUBLIC | ORIG | TypeScript | Active, business app |
+| 5 | [postatees-studio](https://github.com/executiveusa/postatees-studio) | 🌐 PUBLIC | ORIG | TypeScript | Active, needs persistence |
+---
+## 📋 FULL REPOSITORY LIST (268 repos)
+### Legend
+- 🌐 = Public
+- 🔒 = Private
+- [FORK] = Forked repository
+- [ORIG] = Original repository
+---
+### 1-50
+| # | Vis | Type | Repository URL |
+|---|-----|------|----------------|
+| 1 | 🌐 | FORK | https://github.com/executiveusa/-e-commerce-remix |
+| 2 | 🌐 | FORK | https://github.com/executiveusa/-la-pina-cdmx |
+| 3 | 🌐 | FORK | https://github.com/executiveusa/-lightning-claude-memory-agent |
+| 4 | 🌐 | ORIG | https://github.com/executiveusa/-yt-knowledge-extractor |
+| 5 | 🔒 | ORIG | https://github.com/executiveusa/abby-wellness-nexus |
+| 6 | 🌐 | FORK | https://github.com/executiveusa/actual-stash |
+| 7 | 🌐 | FORK | https://github.com/executiveusa/AFRO-CLIPZ |
+| 8 | 🔒 | ORIG | https://github.com/executiveusa/afroscribble |
+| 9 | 🔒 | ORIG | https://github.com/executiveusa/agent-indigo |
+| 10 | 🌐 | FORK | https://github.com/executiveusa/agent-kupuri-template |
+| 11 | 🌐 | FORK | https://github.com/executiveusa/Agentic-AIGC-MAXX-EDITS |
+| 12 | 🔒 | ORIG | https://github.com/executiveusa/ai-sdk-computer-use |
+| 13 | 🌐 | FORK | https://github.com/executiveusa/ai-tool-kit |
+| 14 | 🌐 | FORK | https://github.com/executiveusa/AI-Youtube-Shorts-Generator |
+| 15 | 🔒 | ORIG | https://github.com/executiveusa/airbnbauto |
+| 16 | 🔒 | ORIG | https://github.com/executiveusa/aiwear-trend-hub |
+| 17 | 🔒 | ORIG | https://github.com/executiveusa/aiwear-trend-hub-c0e24ba8 |
+| 18 | 🔒 | ORIG | https://github.com/executiveusa/akash-engine-2.0 |
+| 19 | 🔒 | ORIG | https://github.com/executiveusa/akash-last-edit |
+| 20 | 🔒 | ORIG | https://github.com/executiveusa/akash-master-files |
+| 21 | 🔒 | ORIG | https://github.com/executiveusa/akash-master-files-2 |
+| 22 | 🔒 | ORIG | https://github.com/executiveusa/akash-master-files-3 |
+| 23 | 🔒 | ORIG | https://github.com/executiveusa/akash-master-files.2.0 |
+| 24 | 🔒 | ORIG | https://github.com/executiveusa/akash-master.1.0 |
+| 25 | 🔒 | ORIG | https://github.com/executiveusa/akash-orbit-platform |
+| 26 | 🔒 | ORIG | https://github.com/executiveusa/allweatherroofs |
+| 27 | 🔒 | ORIG | https://github.com/executiveusa/alphadeltarecycling |
+| 28 | 🔒 | ORIG | https://github.com/executiveusa/amentislibrary |
+| 29 | 🔒 | ORIG | https://github.com/executiveusa/ani-maze |
+| 30 | 🔒 | ORIG | https://github.com/executiveusa/animeta-roblox-craft |
+| 31 | 🔒 | ORIG | https://github.com/executiveusa/apify-studiobuilder |
+| 32 | 🔒 | ORIG | https://github.com/executiveusa/archon-ghl-automator |
+| 33 | 🌐 | ORIG | https://github.com/executiveusa/archon-lovable-nexus |
+| 34 | 🔒 | ORIG | https://github.com/executiveusa/archon-ui-forge |
+| 35 | 🌐 | ORIG | https://github.com/executiveusa/ARCHON-X2.0 |
+| 36 | 🔒 | ORIG | https://github.com/executiveusa/arkan-os-branding |
+| 37 | 🔒 | ORIG | https://github.com/executiveusa/artist-fold-gallery |
+| 38 | 🌐 | ORIG | https://github.com/executiveusa/auto-shop-turkey |
+| 39 | 🌐 | FORK | https://github.com/executiveusa/AutoAgent |
+| 40 | 🌐 | ORIG | https://github.com/executiveusa/AVATAR |
+| 41 | 🔒 | ORIG | https://github.com/executiveusa/balldontlie |
+| 42 | 🌐 | FORK | https://github.com/executiveusa/base-stack-vite |
+| 43 | 🔒 | ORIG | https://github.com/executiveusa/biophillia-blog |
+| 44 | 🔒 | ORIG | https://github.com/executiveusa/black-mirror |
+| 45 | 🔒 | ORIG | https://github.com/executiveusa/blockerbuiltautosales |
+| 46 | 🌐 | FORK | https://github.com/executiveusa/BMAD-METHOD |
+| 47 | 🔒 | ORIG | https://github.com/executiveusa/BOILER-BOYZ |
+| 48 | 🔒 | ORIG | https://github.com/executiveusa/BOILERBOYZ |
+| 49 | 🔒 | ORIG | https://github.com/executiveusa/botanical-memories |
+| 50 | 🔒 | ORIG | https://github.com/executiveusa/breatheinternational |
+### 51-100
+| # | Vis | Type | Repository URL |
+|---|-----|------|----------------|
+| 51 | 🌐 | FORK | https://github.com/executiveusa/Business-Website-Template-kimi-K2 |
+| 52 | 🔒 | ORIG | https://github.com/executiveusa/butterflytracker |
+| 53 | 🌐 | ORIG | https://github.com/executiveusa/chakrana |
+| 54 | 🔒 | ORIG | https://github.com/executiveusa/chat-bot-template |
+| 55 | 🔒 | ORIG | https://github.com/executiveusa/chatgami-supabuddy |
+| 56 | 🌐 | FORK | https://github.com/executiveusa/chef-code-ide |
+| 57 | 🌐 | FORK | https://github.com/executiveusa/CHEGGIE-AI-Trader |
+| 58 | 🔒 | ORIG | https://github.com/executiveusa/cheggie-lifestyle-finance |
+| 59 | 🔒 | ORIG | https://github.com/executiveusa/cinematic-smart-funnels-launchpad |
+| 60 | 🔒 | ORIG | https://github.com/executiveusa/clandestino-rebellion-launch |
+| 61 | 🌐 | FORK | https://github.com/executiveusa/claude-kosmos-2_5-containerized |
+| 62 | 🌐 | FORK | https://github.com/executiveusa/claude-suna-kortix |
+| 63 | 🌐 | FORK | https://github.com/executiveusa/claude-task-master |
+| 64 | 🔒 | ORIG | https://github.com/executiveusa/cloneflow-ai-sites |
+| 65 | 🌐 | ORIG | https://github.com/executiveusa/CLONELY-FANZ |
+| 66 | 🔒 | ORIG | https://github.com/executiveusa/coachdavis |
+| 67 | 🔒 | ORIG | https://github.com/executiveusa/codex-craft-forge |
+| 68 | 🌐 | FORK | https://github.com/executiveusa/continue-claude-agent |
+| 69 | 🔒 | ORIG | https://github.com/executiveusa/cruise-reposition-oasis |
+| 70 | 🔒 | ORIG | https://github.com/executiveusa/cryptocuties |
+| 71 | 🔒 | ORIG | https://github.com/executiveusa/crystal-memory-cube |
+| 72 | 🌐 | FORK | https://github.com/executiveusa/cult-directory-template |
+| 73 | 🔒 | ORIG | https://github.com/executiveusa/culture-shock-sports |
+| 74 | 🔒 | ORIG | https://github.com/executiveusa/cultureshocksports |
+| 75 | 🌐 | FORK | https://github.com/executiveusa/darya-design-agent |
+| 76 | 🔒 | ORIG | https://github.com/executiveusa/darya-design-throne |
+| 77 | 🌐 | FORK | https://github.com/executiveusa/Darya-designs |
+| 78 | 🌐 | FORK | https://github.com/executiveusa/darya-next-js-landing-page |
+| 79 | 🔒 | ORIG | https://github.com/executiveusa/dash-vega-luxe |
+| 80 | 🔒 | ORIG | https://github.com/executiveusa/dashboard-agent-swarm |
+| 81 | 🔒 | ORIG | https://github.com/executiveusa/digital-odyssey-scroll |
+| 82 | 🌐 | ORIG | https://github.com/executiveusa/dispatchhelper |
+| 83 | 🔒 | ORIG | https://github.com/executiveusa/dispatchhelper2 |
+| 84 | 🌐 | ORIG | https://github.com/executiveusa/ECO-TOUR-DIRECTORY |
+| 85 | 🔒 | ORIG | https://github.com/executiveusa/emergent-wealth-culture |
+| 86 | 🔒 | ORIG | https://github.com/executiveusa/enaswigsandhair |
+| 87 | 🌐 | FORK | https://github.com/executiveusa/evershop-e-commerece |
+| 88 | 🌐 | FORK | https://github.com/executiveusa/factory-droid-wrap- |
+| 89 | 🔒 | ORIG | https://github.com/executiveusa/fancynancyai |
+| 90 | 🔒 | ORIG | https://github.com/executiveusa/fish-on-texas |
+| 91 | 🔒 | ORIG | https://github.com/executiveusa/flow-profit |
+| 92 | 🔒 | ORIG | https://github.com/executiveusa/frankenstackbyfranklyai |
+| 93 | 🔒 | ORIG | https://github.com/executiveusa/fritco-locale-scaffold |
+| 94 | 🔒 | ORIG | https://github.com/executiveusa/fritco-v2 |
+| 95 | 🔒 | ORIG | https://github.com/executiveusa/FRITHCO |
+| 96 | 🌐 | ORIG | https://github.com/executiveusa/frithco-2.0 |
+| 97 | 🔒 | ORIG | https://github.com/executiveusa/frithco-3.0 |
+| 98 | 🔒 | ORIG | https://github.com/executiveusa/frithco-final-version |
+| 99 | 🌐 | ORIG | https://github.com/executiveusa/frithco-remix |
+| 100 | 🌐 | FORK | https://github.com/executiveusa/geist-font-design |
+### 101-150
+| # | Vis | Type | Repository URL |
+|---|-----|------|----------------|
+| 101 | 🌐 | FORK | https://github.com/executiveusa/Gemini-Desktop |
+| 102 | 🔒 | ORIG | https://github.com/executiveusa/genie-assistant-magic |
+| 103 | 🔒 | ORIG | https://github.com/executiveusa/glassy-focus-flow |
+| 104 | 🔒 | ORIG | https://github.com/executiveusa/goat-alliance-scaffold |
+| 105 | 🌐 | ORIG | https://github.com/executiveusa/goatalliance |
+| 106 | 🔒 | ORIG | https://github.com/executiveusa/golden-heart-compass-ai |
+| 107 | 🔒 | ORIG | https://github.com/executiveusa/goldenhearts |
+| 108 | 🌐 | FORK | https://github.com/executiveusa/GPT-Agent-im-ready |
+| 109 | 🔒 | ORIG | https://github.com/executiveusa/humanatar-genesis-suite |
+| 110 | 🔒 | ORIG | https://github.com/executiveusa/hustle |
+| 111 | 🌐 | FORK | https://github.com/executiveusa/hustle-claude |
+| 112 | 🌐 | FORK | https://github.com/executiveusa/hustle-claude-code |
+| 113 | 🔒 | ORIG | https://github.com/executiveusa/image-template |
+| 114 | 🔒 | ORIG | https://github.com/executiveusa/impact-city-builder-verse |
+| 115 | 🌐 | FORK | https://github.com/executiveusa/infinite-agentic-loop |
+| 116 | 🔒 | ORIG | https://github.com/executiveusa/interactive-artifact |
+| 117 | 🔒 | ORIG | https://github.com/executiveusa/ivettemilo |
+| 118 | 🔒 | ORIG | https://github.com/executiveusa/ivettemushrooms |
+| 119 | 🌐 | ORIG | https://github.com/executiveusa/jeannieflow- |
+| 120 | 🌐 | FORK | https://github.com/executiveusa/jzuart-dj-saas |
+| 121 | 🔒 | ORIG | https://github.com/executiveusa/kauffmans-patterrns |
+| 122 | 🔒 | ORIG | https://github.com/executiveusa/kinetic-code-canvas-dream |
+| 123 | 🔒 | ORIG | https://github.com/executiveusa/kitchen-creations-planner-pro |
+| 124 | 🔒 | ORIG | https://github.com/executiveusa/kupuri-media-website |
+| 125 | 🌐 | FORK | https://github.com/executiveusa/Kupuri-studios |
+| 126 | 🔒 | ORIG | https://github.com/executiveusa/la-silueta |
+| 127 | 🔒 | ORIG | https://github.com/executiveusa/lamonarchaintl |
+| 128 | 🔒 | ORIG | https://github.com/executiveusa/landscaping1 |
+| 129 | 🔒 | ORIG | https://github.com/executiveusa/lapina |
+| 130 | 🔒 | ORIG | https://github.com/executiveusa/legalai-nexus-core |
+| 131 | 🌐 | FORK | https://github.com/executiveusa/leon-avatar-fork- |
+| 132 | 🔒 | ORIG | https://github.com/executiveusa/lovable-ai-dreamweaver |
+| 133 | 🌐 | FORK | https://github.com/executiveusa/Lumina-DiMOO-image-generator |
+| 134 | 🌐 | FORK | https://github.com/executiveusa/lux-desktop-claude |
+| 135 | 🌐 | ORIG | https://github.com/executiveusa/macs-agent-portal |
+| 136 | 🔒 | ORIG | https://github.com/executiveusa/macscryptocasino |
+| 137 | 🔒 | ORIG | https://github.com/executiveusa/macstraxx |
+| 138 | 🔒 | ORIG | https://github.com/executiveusa/mastertoon |
+| 139 | 🔒 | ORIG | https://github.com/executiveusa/maxx-casino-portal |
+| 140 | 🔒 | ORIG | https://github.com/executiveusa/maxx-clipz |
+| 141 | 🌐 | FORK | https://github.com/executiveusa/maxx-coze-studio |
+| 142 | 🔒 | ORIG | https://github.com/executiveusa/maxx-craft |
+| 143 | 🌐 | FORK | https://github.com/executiveusa/MAXX-Research |
+| 144 | 🌐 | FORK | https://github.com/executiveusa/MAXX-Video-Agent |
+| 145 | 🌐 | ORIG | https://github.com/executiveusa/maxxclipz |
+| 146 | 🔒 | ORIG | https://github.com/executiveusa/maxxiescraper |
+| 147 | 🔒 | ORIG | https://github.com/executiveusa/memoryblock |
+| 148 | 🔒 | ORIG | https://github.com/executiveusa/merlina |
+| 149 | 🔒 | ORIG | https://github.com/executiveusa/metamorfosis-wellness-journey |
+| 150 | 🔒 | ORIG | https://github.com/executiveusa/metamorphsis-cdmx |
+### 151-200
+| # | Vis | Type | Repository URL |
+|---|-----|------|----------------|
+| 151 | 🔒 | ORIG | https://github.com/executiveusa/miranda-portfolio-spark |
+| 152 | 🔒 | ORIG | https://github.com/executiveusa/modernairsolutions |
+| 153 | 🔒 | ORIG | https://github.com/executiveusa/monorepo-turborepo |
+| 154 | 🔒 | ORIG | https://github.com/executiveusa/morpho-metrics-academy |
+| 155 | 🌐 | FORK | https://github.com/executiveusa/nano-banana-generator-pauli-fork |
+| 156 | 🔒 | ORIG | https://github.com/executiveusa/newworldkids |
+| 157 | 🔒 | ORIG | https://github.com/executiveusa/next-forge |
+| 158 | 🔒 | ORIG | https://github.com/executiveusa/next-video-starter |
+| 159 | 🔒 | ORIG | https://github.com/executiveusa/nextjs-ai-chatbot |
+| 160 | 🔒 | ORIG | https://github.com/executiveusa/nextjs-commerce |
+| 161 | 🌐 | FORK | https://github.com/executiveusa/Nextjs-Ecommerce |
+| 162 | 🔒 | ORIG | https://github.com/executiveusa/nextjs-enterprise-boilerplate |
+| 163 | 🔒 | ORIG | https://github.com/executiveusa/nexusgymcdmx |
+| 164 | 🔒 | ORIG | https://github.com/executiveusa/nicetohave |
+| 165 | 🔒 | ORIG | https://github.com/executiveusa/nodev |
+| 166 | 🔒 | ORIG | https://github.com/executiveusa/nomadasearch |
+| 167 | 🔒 | ORIG | https://github.com/executiveusa/nomaticthecost |
+| 168 | 🔒 | ORIG | https://github.com/executiveusa/notion-blog |
+| 169 | 🔒 | ORIG | https://github.com/executiveusa/onboardingglobe |
+| 170 | 🌐 | FORK | https://github.com/executiveusa/onlook-synthi |
+| 171 | 🔒 | ORIG | https://github.com/executiveusa/opal-art-preserve |
+| 172 | 🔒 | ORIG | https://github.com/executiveusa/Open-clipz |
+| 173 | 🌐 | FORK | https://github.com/executiveusa/open-interpreter-fork |
+| 174 | 🌐 | FORK | https://github.com/executiveusa/open-lovable |
+| 175 | 🌐 | FORK | https://github.com/executiveusa/OPENTHC |
+| 176 | 🌐 | FORK | https://github.com/executiveusa/outlines-second-brain |
+| 177 | 🔒 | ORIG | https://github.com/executiveusa/p-72343185 |
+| 178 | 🌐 | FORK | https://github.com/executiveusa/Paper2Video-science-avatar |
+| 179 | 🌐 | ORIG | https://github.com/executiveusa/pauli-comic-funnel |
+| 180 | 🔒 | ORIG | https://github.com/executiveusa/pauli-effect-roi-wizard |
+| 181 | 🌐 | FORK | https://github.com/executiveusa/payload-rancho-santiago |
+| 182 | 🌐 | FORK | https://github.com/executiveusa/peter-sung |
+| 183 | 🔒 | ORIG | https://github.com/executiveusa/peter-sung-website |
+| 184 | 🌐 | FORK | https://github.com/executiveusa/phone-call-assistant |
+| 185 | 🔒 | ORIG | https://github.com/executiveusa/pickaxe-nanobanana-g |
+| 186 | 🔒 | ORIG | https://github.com/executiveusa/portal-mini-store-template-main |
+| 187 | 🌐 | FORK | https://github.com/executiveusa/portfolio-starter |
+| 188 | 🔒 | ORIG | https://github.com/executiveusa/POSTA-STUDIO.V2 |
+| 189 | 🌐 | ORIG | https://github.com/executiveusa/postatees-studio |
+| 190 | 🌐 | ORIG | https://github.com/executiveusa/postateesstudio- |
+| 191 | 🌐 | ORIG | https://github.com/executiveusa/postateesstudioV.1 |
+| 192 | 🌐 | FORK | https://github.com/executiveusa/postiz-maxx-clipz |
+| 193 | 🔒 | ORIG | https://github.com/executiveusa/promptation |
+| 194 | 🌐 | FORK | https://github.com/executiveusa/prompts |
+| 195 | 🔒 | ORIG | https://github.com/executiveusa/qr-code-maker |
+| 196 | 🔒 | ORIG | https://github.com/executiveusa/que-pedo-cdmx |
+| 197 | 🔒 | ORIG | https://github.com/executiveusa/r-108043 |
+| 198 | 🔒 | ORIG | https://github.com/executiveusa/r-108043-e63b540f |
+| 199 | 🌐 | FORK | https://github.com/executiveusa/Raft-Landing-Page |
+| 200 | 🔒 | ORIG | https://github.com/executiveusa/rebanada-world-pizza-hub |
+### 201-250
+| # | Vis | Type | Repository URL |
+|---|-----|------|----------------|
+| 201 | 🔒 | ORIG | https://github.com/executiveusa/reddit-focus-finder |
+| 202 | 🔒 | ORIG | https://github.com/executiveusa/reddit-focus-insight |
+| 203 | 🔒 | ORIG | https://github.com/executiveusa/reel-flux |
+| 204 | 🌐 | FORK | https://github.com/executiveusa/reel-flux-2 |
+| 205 | 🌐 | FORK | https://github.com/executiveusa/remixyoursite.com |
+| 206 | 🌐 | FORK | https://github.com/executiveusa/Rube-remix |
+| 207 | 🔒 | ORIG | https://github.com/executiveusa/sassyscraper |
+| 208 | 🔒 | ORIG | https://github.com/executiveusa/schoolofterabithia |
+| 209 | 🌐 | ORIG | https://github.com/executiveusa/seattle-reuse-exchange |
+| 210 | 🌐 | ORIG | https://github.com/executiveusa/seattle-reuse-exchange-v2 |
+| 211 | 🌐 | FORK | https://github.com/executiveusa/second-brain-agent |
+| 212 | 🔒 | ORIG | https://github.com/executiveusa/seoforge-ai-builder |
+| 213 | 🔒 | ORIG | https://github.com/executiveusa/serene-studio-flow-hub |
+| 214 | 🔒 | ORIG | https://github.com/executiveusa/shirt-shop-example |
+| 215 | 🔒 | ORIG | https://github.com/executiveusa/sista-rolls-flutter-app |
+| 216 | 🌐 | ORIG | https://github.com/executiveusa/skills-introduction-to-github |
+| 217 | 🔒 | ORIG | https://github.com/executiveusa/smart-plugin-portal |
+| 218 | 🌐 | FORK | https://github.com/executiveusa/Social-Media-Post-Generator---Encore.dev |
+| 219 | 🔒 | ORIG | https://github.com/executiveusa/sovereign-code-cosmos |
+| 220 | 🔒 | ORIG | https://github.com/executiveusa/speak-to-ship-control |
+| 221 | 🔒 | ORIG | https://github.com/executiveusa/speedtolead |
+| 222 | 🌐 | ORIG | https://github.com/executiveusa/strapi-cloud-template-blog-e8d531af4f |
+| 223 | 🌐 | ORIG | https://github.com/executiveusa/strapi-template |
+| 224 | 🌐 | FORK | https://github.com/executiveusa/strapi-template-new-world-kids |
+| 225 | 🌐 | FORK | https://github.com/executiveusa/Suenos--very_good_templates |
+| 226 | 🔒 | ORIG | https://github.com/executiveusa/sweet-psilocybe-app |
+| 227 | 🌐 | ORIG | https://github.com/executiveusa/sweet-psilocybe-landing |
+| 228 | 🌐 | ORIG | https://github.com/executiveusa/sweetmushrooms |
+| 229 | 🌐 | FORK | https://github.com/executiveusa/Synthia-3.0 |
+| 230 | 🔒 | ORIG | https://github.com/executiveusa/synthia-demo |
+| 231 | 🔒 | ORIG | https://github.com/executiveusa/terabithia |
+| 232 | 🔒 | ORIG | https://github.com/executiveusa/terabithiaweb3 |
+| 233 | 🔒 | ORIG | https://github.com/executiveusa/the-minority-report |
+| 234 | 🔒 | ORIG | https://github.com/executiveusa/the-pauli-effect |
+| 235 | 🔒 | ORIG | https://github.com/executiveusa/the-smoke |
+| 236 | 🔒 | ORIG | https://github.com/executiveusa/thekey |
+| 237 | 🔒 | ORIG | https://github.com/executiveusa/thenetwork |
+| 238 | 🔒 | ORIG | https://github.com/executiveusa/thepaulieffect |
+| 239 | 🔒 | ORIG | https://github.com/executiveusa/thepuppetmaster |
+| 240 | 🌐 | FORK | https://github.com/executiveusa/tila-airplant-ecommerce |
+| 241 | 🌐 | ORIG | https://github.com/executiveusa/trail-mixx |
+| 242 | 🌐 | FORK | https://github.com/executiveusa/trail-mixx-source-code |
+| 243 | 🔒 | ORIG | https://github.com/executiveusa/v0-leonradio-website |
+| 244 | 🌐 | ORIG | https://github.com/executiveusa/vallarta-voyage-explorer |
+| 245 | 🔒 | ORIG | https://github.com/executiveusa/veronika-mvp-export |
+| 246 | 🌐 | ORIG | https://github.com/executiveusa/veronika-mvp-final |
+| 247 | 🔒 | ORIG | https://github.com/executiveusa/VIPposta |
+| 248 | 🔒 | ORIG | https://github.com/executiveusa/voice-web-architect |
+| 249 | 🔒 | ORIG | https://github.com/executiveusa/WEB3SAAS-APP |
+| 250 | 🌐 | ORIG | https://github.com/executiveusa/web3sass |
+### 251-268
+| # | Vis | Type | Repository URL |
+|---|-----|------|----------------|
+| 251 | 🔒 | ORIG | https://github.com/executiveusa/wherespauli |
+| 252 | 🔒 | ORIG | https://github.com/executiveusa/world-matrix |
+| 253 | 🌐 | ORIG | https://github.com/executiveusa/yappyverse |
+| 254 | 🔒 | ORIG | https://github.com/executiveusa/yappyverse-drop-control |
+| 255 | 🔒 | ORIG | https://github.com/executiveusa/yappyverse-genesis-project |
+| 256 | 🔒 | ORIG | https://github.com/executiveusa/yappyverse-merch-forge |
+| 257 | 🔒 | ORIG | https://github.com/executiveusa/yappyverse-newsletter |
+| 258 | 🔒 | ORIG | https://github.com/executiveusa/youtube-monster-tran |
+| 259 | 🔒 | ORIG | https://github.com/executiveusa/youtubemonster |
+| 260 | 🔒 | ORIG | https://github.com/executiveusa/youtubemonster2.1 |
+| 261 | 🔒 | ORIG | https://github.com/executiveusa/youtubetranscripts |
+| 262 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/chef-culture-kitchen- |
+| 263 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/Claude-Business-Website-Template-kimi-K2 |
+| 264 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/cult-directory-smart--directory- |
+| 265 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/DJ-Smartsite- |
+| 266 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/hustle-claude.3.0 |
+| 267 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/posta-app |
+| 268 | 🌐 | FORK | https://github.com/THE-PAULI-EFFECT/strapi-next-monorepo-starter |
+---
+## 🚀 TEST DEPLOYMENT PLAN (5 Apps + Supabase)
+### Apps Selected for Test
+```
+1. pauli-comic-funnel     → Python    → L3 Heavy  → 1GB RAM
+2. archon-lovable-nexus   → TypeScript → L1 Light → 256MB RAM
+3. dashboard-agent-swarm  → Python    → L3 Heavy  → 1GB RAM
+4. dispatchhelper         → TypeScript → L1 Light → 256MB RAM
+5. postatees-studio       → TypeScript → L1 Light → 256MB RAM
+```
+### Resource Estimate
+| Resource | Estimate |
+|----------|----------|
+| Total App RAM | 2.8GB |
+| System Overhead | 3GB |
+| **TOTAL** | **5.8GB** |
+| KVM2 Capacity | 8GB |
+| **Headroom** | **2.2GB ✅** |
+### Supabase Configuration
+All 5 apps will share a single Supabase instance:
+- **Project:** `pauli-shared`
+- **Isolation:** Schema-per-app
+- **Tables:** Prefixed by app name (e.g., `pauli_`, `archon_`, `dispatch_`)
+---

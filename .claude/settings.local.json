@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone git@github.com:executiveusa/Pauli-spec-kit.git spec-kit)",
+      "Bash(git submodule status)",
+      "Bash(git add MISSION_BRIEF_COMPREHENSIVE_AUDIT_AND_HANDOFF.md EXECUTIVE_SUMMARY.md AGENT_QUICKSTART.md HANDOFF_CHECKLIST.md)",
+      "Bash(git commit -m \"ARCHONX: Comprehensive ecosystem audit + 8-phase implementation plan + agent handoff\")",
+      "Bash(git push origin main)",
+      "Bash(git reset --soft HEAD~1)",
+      "Bash(git commit -m \"ARCHONX: Comprehensive ecosystem audit + 8-phase implementation plan + agent handoff \\(credentials secured\\)\")"
+    ]
+  }
+}
