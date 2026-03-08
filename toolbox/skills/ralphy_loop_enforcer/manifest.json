@@ -1,0 +1,7 @@
+{
+  "name": "ralphy_loop_enforcer",
+  "version": "1.0.0",
+  "bead_id": "BEAD-0004",
+  "description": "Apply RALPHY checklist loop before and after code changes.",
+  "entrypoint": "archonx-os/AGENTS.md"
+}
