@@ -1,0 +1,117 @@
+﻿{
+    "generatedAt":  "2026-02-19T07:30:40.1993388Z",
+    "bead_id":  "BEAD-0006",
+    "source_of_truth":  "executiveusa/archonx-os",
+    "repos":  [
+                  {
+                      "repo":  "agent-zero-Fork",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "dashboard-agent-swarm",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "devika-agent",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "MetaGPT",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "open-agent-platform-pauli",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "clawdbot-Whatsapp-agent",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "voice-agents-fork",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "GPT-Agent-im-ready",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "phone-call-assistant",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "VisionClaw",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  },
+                  {
+                      "repo":  "voice-web-architect",
+                      "exists":  true,
+                      "reportback":  true,
+                      "toolbox":  true,
+                      "agents":  true,
+                      "smoke":  true,
+                      "preflight":  true,
+                      "compliant":  true
+                  }
+              ]
+}

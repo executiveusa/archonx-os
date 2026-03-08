@@ -1,0 +1,7 @@
+{
+  "name": "pauliwheel_coding_protocol",
+  "version": "1.0.0",
+  "bead_id": "BEAD-0004",
+  "description": "Enforce PAULIWHEEL coding doctrine across repos.",
+  "entrypoint": "archonx-os/AGENTS.md"
+}

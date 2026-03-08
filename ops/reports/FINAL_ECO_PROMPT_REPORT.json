@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "eco_prompt": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
   "timestamp": "2026-02-19T06:39:04Z",
   "repos_scanned": [
@@ -163,3 +164,14 @@
     "Implement repo-specific test commands in ops runner config."
   ]
 }
+=======
+  "generatedAt": "2026-02-19T07:30:49Z",
+  "bead_id": "BEAD-0006",
+  "mode": "report-only",
+  "promptsLoaded": [
+    "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING"
+  ],
+  "matrixPath": "ops\\reports\\PAULIWHEEL_COMPLIANCE_MATRIX_20260219T073049Z.json",
+  "status": "ok"
+}
+>>>>>>> origin/feature/pauliwheel-bead-0005-0006

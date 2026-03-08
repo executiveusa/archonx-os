@@ -1,0 +1,7 @@
+{
+  "name": "agent_lightning_bootstrap",
+  "version": "1.0.0",
+  "bead_id": "BEAD-0004",
+  "description": "Bootstrap Agent Lightning integration with smoke tests.",
+  "entrypoint": "archonx-os/ops/scripts/run_ops.ps1"
+}
