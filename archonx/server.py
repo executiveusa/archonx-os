@@ -33,6 +33,7 @@ from archonx.visualization.chessboard import ChessboardView
 from archonx.visualization.dashboard import MetricsDashboard
 from archonx.visualization.paulis_place_view import PaulisPlaceView
 from archonx.orchestration.orchestrator import Orchestrator, TaskType
+from archonx.monitoring.metrics import metrics
 
 logger = logging.getLogger("archonx.server")
 _PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
@@ -228,6 +229,10 @@ def create_app() -> FastAPI:
         # Broadcast update to all WS clients
         await _broadcast({"event": "task_result", "data": result})
         return JSONResponse(result)
+
+    @app.get("/api/stats")
+    async def get_stats() -> JSONResponse:
+        return JSONResponse(metrics.get_summary())
 
     # ----- Theater endpoints -----
 
