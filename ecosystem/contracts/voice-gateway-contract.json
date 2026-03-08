@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "archonx-voice-gateway-contract",
+  "version": "1.0.0",
+  "endpoints": [
+    {"method": "POST", "path": "/v1/voice/twilio/incoming", "twilio_compatible": true, "work_item_id_required": true},
+    {"method": "POST", "path": "/v1/voice/dev/simulate", "work_item_id_required": true},
+    {"method": "GET", "path": "/v1/health"}
+  ],
+  "auth_pipeline": {
+    "caller_allowlist": true,
+    "passphrase_pin": true,
+    "biometric_provider_optional": true,
+    "biometric_enabled_default": false,
+    "rate_limit_lockout": true
+  },
+  "supported_actions": [
+    "status",
+    "list_approvals",
+    "approve_grant",
+    "request_grant",
+    "doctor",
+    "sync_check"
+  ]
+}
