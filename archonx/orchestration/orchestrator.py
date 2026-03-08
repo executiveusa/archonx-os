@@ -32,6 +32,7 @@ from archonx.core.agents import (
 )
 from archonx.beads.viewer import TaskManager, Task, TaskStatus, TaskPriority
 from archonx.mail.server import AgentMailServer, MessageType
+from archonx.orchestration.agent_controller import AgentController, get_agent_controller
 
 logger = logging.getLogger("archonx.orchestration.orchestrator")
 
@@ -117,7 +118,8 @@ class Orchestrator:
         self,
         registry: Optional[AgentRegistry] = None,
         task_manager: Optional[TaskManager] = None,
-        mail_server: Optional[AgentMailServer] = None
+        mail_server: Optional[AgentMailServer] = None,
+        controller: Optional[AgentController] = None
     ) -> None:
         """
         Initialize the Orchestrator.
@@ -126,10 +128,12 @@ class Orchestrator:
             registry: Agent registry (will be created if not provided)
             task_manager: Task manager (will be created if not provided)
             mail_server: Mail server for agent communication
+            controller: Agent controller for real execution
         """
         self.registry = registry or AgentRegistry()
         self.task_manager = task_manager or TaskManager()
         self.mail_server = mail_server
+        self.controller = controller or get_agent_controller()
         
         self._initialized = False
         self._command_handlers: dict[
@@ -299,6 +303,9 @@ class Orchestrator:
             )
         
         logger.info(f"Assigned task {task_id} to {agent_id}")
+        
+        # Trigger real execution via controller (async/background)
+        asyncio.create_task(self.controller.execute_task(agent, task))
         
         return OrchestratorResult(
             success=True,
