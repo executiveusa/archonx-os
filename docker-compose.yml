@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-archonx}
+      POSTGRES_USER: ${POSTGRES_USER:-archonx}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-archonx_dev_password}
+    volumes:
+      - access_kernel_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-archonx}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  access-kernel:
+    build:
+      context: ./services/access-kernel
+    environment:
+      ACCESS_KERNEL_DB_PATH: /data/access-kernel.db
+      ACCESS_KERNEL_AUDIT_PATH: /data/audit.jsonl
+      ACCESS_KERNEL_POLICY_PATH: /app/config/policy.json
+      ACCESS_KERNEL_SECRETS_SCHEMA: /app/config/secrets-json-schema.json
+      ACCESS_KERNEL_MASTER_KEY: ${ACCESS_KERNEL_MASTER_KEY:-dev-master-key-change-me}
+    ports:
+      - "8090:8090"
+    volumes:
+      - access_kernel_data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8090/v1/health').read()"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  voice-gateway:
+    build:
+      context: ./services/voice-gateway
+    environment:
+      ACCESS_KERNEL_BASE_URL: http://access-kernel:8090
+      VOICE_ALLOWLIST: ${VOICE_ALLOWLIST:-+15550000001}
+      VOICE_PASSPHRASE: ${VOICE_PASSPHRASE:-archonx-passphrase}
+      VOICE_PIN: ${VOICE_PIN:-1234}
+      VOICE_MAX_ATTEMPTS: ${VOICE_MAX_ATTEMPTS:-5}
+      VOICE_LOCKOUT_SECONDS: ${VOICE_LOCKOUT_SECONDS:-300}
+      VOICE_STORE_TRANSCRIPTS: ${VOICE_STORE_TRANSCRIPTS:-false}
+    ports:
+      - "8091:8091"
+    depends_on:
+      access-kernel:
+        condition: service_healthy
+
+  dashboard:
+    profiles: ["dashboard"]
+    build:
+      context: ../dashboard-agent-swarm
+      dockerfile: Dockerfile
+    environment:
+      VITE_ACCESS_KERNEL_BASE: http://localhost:8090
+    ports:
+      - "8080:80"
+
+  octelium-dev:
+    profiles: ["octelium"]
+    image: golang:1.23-alpine
+    command: ["sh", "-c", "echo octelium vendor mounted for compat; sleep infinity"]
+    volumes:
+      - ./vendor/octelium:/workspace/octelium
+
+volumes:
+  access_kernel_pg:
+  access_kernel_data:

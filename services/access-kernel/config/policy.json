@@ -1,0 +1,47 @@
+{
+  "deny_by_default": true,
+  "rules": [
+    {
+      "principal_type": "human",
+      "resource": "secret",
+      "action": "upload",
+      "approval_required": false,
+      "allow": true
+    },
+    {
+      "principal_type": "human",
+      "resource": "grant",
+      "action": "request",
+      "approval_required": true,
+      "allow": true
+    },
+    {
+      "principal_type": "human",
+      "resource": "github",
+      "action": "write",
+      "approval_required": true,
+      "allow": true
+    },
+    {
+      "principal_type": "human",
+      "resource": "grant",
+      "action": "approve",
+      "approval_required": false,
+      "allow": true
+    },
+    {
+      "principal_type": "agent",
+      "resource": "grant",
+      "action": "request",
+      "approval_required": true,
+      "allow": true
+    },
+    {
+      "principal_type": "agent",
+      "resource": "grant",
+      "action": "approve",
+      "approval_required": true,
+      "allow": false
+    }
+  ]
+}
