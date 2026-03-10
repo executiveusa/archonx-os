@@ -27,6 +27,9 @@ livekit-agents = ">=0.10"
 twilio = ">=9.0"
 "python-socketio[asyncio]" = ">=5.10"
 zeroconf = ">=0.131"
+"python-telegram-bot" = ">=20.0"
+"qrcode[pil]" = ">=7.4"
+psutil = ">=5.9"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.0"

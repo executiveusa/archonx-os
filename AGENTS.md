@@ -32,3 +32,29 @@ The ArchonX Ops Runner must:
 1. Read eco-prompts from `security/codex/eco-prompts/*.json`.
 2. Execute steps in deterministic order.
 3. Write machine-readable reports under `ops/reports/`.
+
+## 7. ConX LAYER PROTOCOL
+The ConX Layer provides remote machine control as a native ARCHON-X feature.
+
+### Machine Registration
+Every connected laptop registers itself via POST /conx/register with:
+- hostname (unique machine identifier)
+- tunnel_url (Cloudflare tunnel endpoint)
+- os (Windows/Mac/Linux)
+- mcp_servers (list of wired MCP servers)
+
+### Onboarding New Machine (Human Action Required)
+For Windows:
+  iwr https://raw.githubusercontent.com/executiveusa/archonx-os/main/scripts/conx-onboard.ps1 | iex
+
+For Mac/Linux:
+  curl -fsSL https://raw.githubusercontent.com/executiveusa/archonx-os/main/scripts/conx-onboard.sh | bash
+
+This is the ONLY human action required. Everything else is automated.
+
+### Agent Access Rules
+- Agents MAY read files from registered machines via Desktop Commander tunnel
+- Agents MAY write files with explicit task authorization
+- Agents MAY run shell commands ONLY with human confirmation via Telegram
+- Agents MUST log all file operations to Notion
+- Agents MUST NOT store credentials from remote machines

@@ -117,5 +117,15 @@
   "coolify": {
     "app_uuid": "YOUR_UUID_HERE",
     "base_url": "https://coolify.example.com"
+  },
+  "conx": {
+    "enabled": true,
+    "tunnel_name_prefix": "archonx",
+    "cloudflare_team_domain": "",
+    "telegram_bot_token_env": "TELEGRAM_BOT_TOKEN",
+    "registered_machines": [],
+    "desktop_commander_port": 3000,
+    "auto_wire_claude_desktop": true,
+    "require_confirmation_for_shell": true
   }
 }
