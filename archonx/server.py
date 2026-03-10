@@ -25,6 +25,7 @@ from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+import httpx
 
 from archonx.kernel import ArchonXKernel
 from archonx.core.metrics import Leaderboard
@@ -48,6 +49,7 @@ _paulis_view: PaulisPlaceView | None = None
 _leaderboard: Leaderboard | None = None
 _ws_clients: set[WebSocket] = set()
 _task_status: dict[str, dict[str, Any]] = {}
+_registered_machines: dict[str, dict[str, Any]] = {}
 
 
 class TaskWebhookPayload(BaseModel):
@@ -335,6 +337,152 @@ def create_app() -> FastAPI:
             project_id=project_id,
         )
         return JSONResponse(result)
+
+    # ----- ConX Layer endpoints -----
+
+    @app.get("/conx/status")
+    async def conx_status() -> JSONResponse:
+        """Get status of all registered machines."""
+        machines = []
+        for machine_id, machine_data in _registered_machines.items():
+            machines.append({
+                "machine_id": machine_id,
+                **machine_data,
+            })
+        return JSONResponse({
+            "machines": machines,
+            "total": len(machines),
+        })
+
+    @app.post("/conx/register")
+    async def conx_register(body: dict[str, Any]) -> JSONResponse:
+        """Register a machine with the ConX layer."""
+        hostname = body.get("hostname", "unknown")
+        tunnel_url = body.get("tunnel_url", "")
+        os_name = body.get("os", "unknown")
+        mcp_servers = body.get("mcp_servers", [])
+
+        if not tunnel_url:
+            return JSONResponse(
+                {"error": "tunnel_url required"},
+                status_code=400,
+            )
+
+        # Generate machine ID
+        machine_id = f"{hostname}-{datetime.now(timezone.utc).timestamp()}"
+
+        # Store machine registration
+        _registered_machines[machine_id] = {
+            "hostname": hostname,
+            "tunnel_url": tunnel_url,
+            "os": os_name,
+            "mcp_servers_wired": mcp_servers,
+            "last_seen": datetime.now(timezone.utc).isoformat(),
+            "registered_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        return JSONResponse({
+            "registered": True,
+            "machine_id": machine_id,
+        })
+
+    @app.delete("/conx/register/{machine_id}")
+    async def conx_deregister(machine_id: str) -> JSONResponse:
+        """Deregister a machine from the ConX layer."""
+        if machine_id in _registered_machines:
+            del _registered_machines[machine_id]
+            return JSONResponse({"deregistered": True})
+        return JSONResponse(
+            {"error": "machine not found"},
+            status_code=404,
+        )
+
+    @app.get("/conx/machines")
+    async def conx_machines() -> JSONResponse:
+        """Get all registered machines with health status."""
+        machines = []
+        for machine_id, machine_data in _registered_machines.items():
+            # Check tunnel health if possible
+            health_status = "unknown"
+            try:
+                tunnel_url = machine_data.get("tunnel_url", "")
+                if tunnel_url:
+                    async with httpx.AsyncClient() as client:
+                        try:
+                            response = await client.get(
+                                f"{tunnel_url}/health",
+                                timeout=5.0,
+                            )
+                            health_status = "alive" if response.status_code == 200 else "offline"
+                        except Exception:
+                            health_status = "offline"
+            except Exception:
+                pass
+
+            machines.append({
+                "machine_id": machine_id,
+                "health": health_status,
+                **machine_data,
+            })
+        return JSONResponse({
+            "machines": machines,
+            "total": len(machines),
+        })
+
+    @app.post("/conx/launch")
+    async def conx_launch(body: dict[str, Any]) -> JSONResponse:
+        """Launch a task on a specific machine."""
+        machine_id = body.get("machine_id", "")
+        task = body.get("task", "")
+        agent = body.get("agent", "")
+
+        if not machine_id or not task:
+            return JSONResponse(
+                {"error": "machine_id and task required"},
+                status_code=400,
+            )
+
+        if machine_id not in _registered_machines:
+            return JSONResponse(
+                {"error": "machine not found"},
+                status_code=404,
+            )
+
+        machine = _registered_machines[machine_id]
+
+        # Generate task ID
+        task_id = f"CONX-{datetime.now(timezone.utc).timestamp()}"
+
+        # Store task status
+        _task_status[task_id] = {
+            "status": "queued",
+            "task_id": task_id,
+            "machine_id": machine_id,
+            "agent": agent,
+            "tunnel_url": machine.get("tunnel_url"),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        # Try to route to machine via tunnel
+        tunnel_url = machine.get("tunnel_url", "")
+        if tunnel_url and agent != "orgo":
+            try:
+                async with httpx.AsyncClient() as client:
+                    await client.post(
+                        f"{tunnel_url}/webhook/task",
+                        json={"message": task, "source": "conx"},
+                        timeout=10.0,
+                    )
+                _task_status[task_id]["status"] = "sent"
+            except Exception as e:
+                logger.error(f"Failed to route to machine: {e}")
+                _task_status[task_id]["status"] = "error"
+                _task_status[task_id]["error"] = str(e)
+
+        return JSONResponse({
+            "task_id": task_id,
+            "status": _task_status[task_id]["status"],
+        })
 
     # ----- WebSocket -----
 
