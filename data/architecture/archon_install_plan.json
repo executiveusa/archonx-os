@@ -1,0 +1,519 @@
+[
+  {
+    "repo_name": "archonx-os",
+    "recommended_placement": "core_dependency",
+    "why": "Primary orchestration brain, planner, router, policy engine, and state layer.",
+    "installed_under": "/core/archonx-os",
+    "install_method": "standalone canonical repo with internal routing and orchestration modules",
+    "runtime_model": "always-on control plane service",
+    "called_by": [
+      "DesktopCommanderMCP",
+      "operators",
+      "admin UI"
+    ],
+    "calls": [
+      "mcp2cli",
+      "DesktopCommanderMCP",
+      "Darya/OpenHands",
+      "agency-agents",
+      "Agent Zero",
+      "Goose",
+      "ext-apps",
+      "ralphy",
+      "jcodemunch-mcp",
+      "Notion",
+      "Cloudflare Tunnel"
+    ],
+    "required_env_categories": [
+      "auth",
+      "api",
+      "database",
+      "mcp",
+      "cloud",
+      "agent",
+      "notion"
+    ],
+    "integration_steps": [
+      "Create canonical repo registry and routing manifest inside archonx-os.",
+      "Add worker adapters for Darya, Agent Zero, Goose, and agency-agents.",
+      "Enforce controller-worker separation with job contracts and audit logs.",
+      "Use mcp2cli for all MCP and OpenAPI invocation paths."
+    ],
+    "risks_if_misplaced": [
+      "Controller logic fragments across repos",
+      "No single source of truth for routing",
+      "White-label productization becomes inconsistent"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "DesktopCommanderMCP",
+    "recommended_placement": "sidecar",
+    "why": "Primary control tower for local machine operations, file access, process control, and execution visibility.",
+    "installed_under": "/control-tower/desktopcommander-mcp",
+    "install_method": "run beside archonx-os as a privileged workstation/server sidecar",
+    "runtime_model": "always-on privileged control sidecar",
+    "called_by": [
+      "archonx-os",
+      "mcp2cli",
+      "Darya/OpenHands",
+      "agency-agents"
+    ],
+    "calls": [
+      "local file system",
+      "local shell",
+      "local processes",
+      "local search"
+    ],
+    "required_env_categories": [
+      "api",
+      "auth"
+    ],
+    "integration_steps": [
+      "Treat DesktopCommanderMCP as the default execution gateway for local operations.",
+      "Expose capability metadata to archonx-os.",
+      "Wrap high-token tool calls through mcp2cli.",
+      "Add approval boundaries for destructive actions."
+    ],
+    "risks_if_misplaced": [
+      "Desktop control gets duplicated in worker repos",
+      "Weak audit boundary for machine actions",
+      "Unsafe privilege spread"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "mcp2cli",
+    "recommended_placement": "sidecar",
+    "why": "Mandatory token-saving invocation layer for MCP and OpenAPI tools.",
+    "installed_under": "/sidecars/mcp2cli",
+    "install_method": "sidecar service with adapters registered by archonx-os",
+    "runtime_model": "stateless translation gateway",
+    "called_by": [
+      "archonx-os",
+      "DesktopCommanderMCP",
+      "agency-agents",
+      "Darya/OpenHands",
+      "Goose"
+    ],
+    "calls": [
+      "MCP servers",
+      "OpenAPI tools",
+      "CLI wrappers"
+    ],
+    "required_env_categories": [
+      "api",
+      "mcp",
+      "auth"
+    ],
+    "integration_steps": [
+      "Place mcp2cli on every tool invocation path leaving archonx-os.",
+      "Create canonical aliases for common operations.",
+      "Log raw-to-compact invocation mappings.",
+      "Use it as the standard adapter for Goose and worker agents."
+    ],
+    "risks_if_misplaced": [
+      "Token usage balloons",
+      "Tool invocations diverge across agents",
+      "Harder to white-label usage policies"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "agency-agents",
+    "recommended_placement": "worker_service",
+    "why": "Mandatory multi-agent execution layer that should sit under Archon control.",
+    "installed_under": "/workers/agency-agents",
+    "install_method": "worker service registered to archonx-os job router",
+    "runtime_model": "elastic worker pool",
+    "called_by": [
+      "archonx-os"
+    ],
+    "calls": [
+      "mcp2cli",
+      "DesktopCommanderMCP",
+      "ext-apps",
+      "Notion",
+      "Cloudflare Tunnel"
+    ],
+    "required_env_categories": [
+      "agent",
+      "api",
+      "auth",
+      "mcp"
+    ],
+    "integration_steps": [
+      "Treat agency-agents as a worker cluster, not the top-level controller.",
+      "Define task envelope schema from Archon.",
+      "Route tool usage through mcp2cli and DesktopCommanderMCP.",
+      "Attach run telemetry back to archonx-os state."
+    ],
+    "risks_if_misplaced": [
+      "Dual-brain conflict with Archon",
+      "No deterministic routing ownership",
+      "Harder governance over workers"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "Darya/OpenHands",
+    "recommended_placement": "worker_service",
+    "why": "Execution hands layer for coding and task execution under Archon planning control.",
+    "installed_under": "/workers/darya-openhands",
+    "install_method": "worker service with task API contract controlled by archonx-os",
+    "runtime_model": "long-running execution worker",
+    "called_by": [
+      "archonx-os"
+    ],
+    "calls": [
+      "mcp2cli",
+      "DesktopCommanderMCP",
+      "git",
+      "repo workspaces"
+    ],
+    "required_env_categories": [
+      "auth",
+      "api",
+      "agent",
+      "mcp"
+    ],
+    "integration_steps": [
+      "Keep Darya behind Archon routing and policy checks.",
+      "Require job envelopes, budget limits, and result schemas.",
+      "Use DesktopCommanderMCP for local machine access.",
+      "Store execution traces in Archon state."
+    ],
+    "risks_if_misplaced": [
+      "Execution layer starts acting as planner",
+      "Repo changes bypass governance",
+      "Desktop permissions become inconsistent"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "Agent Zero",
+    "recommended_placement": "worker_service",
+    "why": "Specialized worker agent layer for delegated tasks, not the central orchestrator.",
+    "installed_under": "/workers/agent-zero",
+    "install_method": "worker registration in archonx-os",
+    "runtime_model": "on-demand worker",
+    "called_by": [
+      "archonx-os"
+    ],
+    "calls": [
+      "mcp2cli",
+      "DesktopCommanderMCP",
+      "ext-apps"
+    ],
+    "required_env_categories": [
+      "agent",
+      "auth",
+      "mcp"
+    ],
+    "integration_steps": [
+      "Register as a worker class in the Archon router.",
+      "Constrain it to specific job types and tool budgets.",
+      "Return normalized results to archonx-os."
+    ],
+    "risks_if_misplaced": [
+      "Worker sprawl",
+      "Overlapping role with Darya and agency-agents",
+      "Ambiguous routing"
+    ],
+    "priority": "medium"
+  },
+  {
+    "repo_name": "Goose",
+    "recommended_placement": "worker_service",
+    "why": "Cloud coding workflow capability that should operate as an elastic remote coding worker under Archon supervision.",
+    "installed_under": "/workers/goose",
+    "install_method": "cloud worker integration with extension manifest and repo inventory feed",
+    "runtime_model": "remote coding worker",
+    "called_by": [
+      "archonx-os"
+    ],
+    "calls": [
+      "mcp2cli",
+      "repo inventory",
+      "extension registry"
+    ],
+    "required_env_categories": [
+      "cloud",
+      "api",
+      "auth",
+      "agent"
+    ],
+    "integration_steps": [
+      "Feed Goose the canonical repo inventory and task taxonomy from archonx-os.",
+      "Attach extension metadata and allowed tool bundles.",
+      "Route external tool access through mcp2cli where possible."
+    ],
+    "risks_if_misplaced": [
+      "Cloud coding becomes blind to ecosystem structure",
+      "Extension sprawl",
+      "Inconsistent worker outputs"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "ext-apps",
+    "recommended_placement": "plugin",
+    "why": "Plugin and app adapter layer for external services and product-specific integrations.",
+    "installed_under": "/plugins/ext-apps",
+    "install_method": "plugin package loaded by archonx-os integration layer",
+    "runtime_model": "loaded on demand",
+    "called_by": [
+      "archonx-os",
+      "agency-agents",
+      "Darya/OpenHands"
+    ],
+    "calls": [
+      "third-party SaaS APIs",
+      "internal app connectors"
+    ],
+    "required_env_categories": [
+      "api",
+      "auth",
+      "cloud"
+    ],
+    "integration_steps": [
+      "Define plugin manifest contract.",
+      "Map each external connector to env categories rather than raw secrets.",
+      "Make plugin routing discoverable in Archon registry."
+    ],
+    "risks_if_misplaced": [
+      "External integrations leak into core brain code",
+      "Harder plugin governance",
+      "Poor white-label portability"
+    ],
+    "priority": "medium"
+  },
+  {
+    "repo_name": "ralphy",
+    "recommended_placement": "worker_service",
+    "why": "Specialized execution-focused component in the seed graph; best fit is under Archon as a worker.",
+    "installed_under": "/workers/ralphy",
+    "install_method": "register as specialized worker service",
+    "runtime_model": "on-demand worker",
+    "called_by": [
+      "archonx-os"
+    ],
+    "calls": [
+      "mcp2cli",
+      "DesktopCommanderMCP"
+    ],
+    "required_env_categories": [
+      "agent",
+      "api"
+    ],
+    "integration_steps": [
+      "Define its narrow execution specialty.",
+      "Attach to Archon routing rules and capability registry.",
+      "Share invocation layer with mcp2cli."
+    ],
+    "risks_if_misplaced": [
+      "Unknown overlap with other workers",
+      "Invisible capability duplication"
+    ],
+    "priority": "medium"
+  },
+  {
+    "repo_name": "jcodemunch-mcp",
+    "recommended_placement": "plugin",
+    "why": "Better fit as an MCP tool provider than as a core controller.",
+    "installed_under": "/plugins/jcodemunch-mcp",
+    "install_method": "MCP plugin registered through mcp2cli and archonx-os",
+    "runtime_model": "tool plugin",
+    "called_by": [
+      "archonx-os",
+      "agency-agents",
+      "Darya/OpenHands"
+    ],
+    "calls": [
+      "mcp2cli",
+      "tool adapters"
+    ],
+    "required_env_categories": [
+      "mcp",
+      "api",
+      "auth"
+    ],
+    "integration_steps": [
+      "Register tool manifest and capability tags.",
+      "Expose through mcp2cli to reduce token overhead.",
+      "Limit direct agent-to-plugin coupling."
+    ],
+    "risks_if_misplaced": [
+      "Direct coupling between workers and tools",
+      "Difficult policy enforcement"
+    ],
+    "priority": "medium"
+  },
+  {
+    "repo_name": "Cloudflare Tunnel",
+    "recommended_placement": "sidecar",
+    "why": "Network edge exposure should be isolated from application logic and run as infrastructure sidecar.",
+    "installed_under": "/sidecars/cloudflare-tunnel",
+    "install_method": "infra sidecar managed by archonx-os deployment policies",
+    "runtime_model": "edge access sidecar",
+    "called_by": [
+      "archonx-os",
+      "deployment automation"
+    ],
+    "calls": [
+      "Cloudflare edge",
+      "internal services"
+    ],
+    "required_env_categories": [
+      "cloud",
+      "auth",
+      "api"
+    ],
+    "integration_steps": [
+      "Centralize tunnel mappings in Archon deployment manifests.",
+      "Do not bury edge exposure in app repos.",
+      "Use per-product routes for white-label separation."
+    ],
+    "risks_if_misplaced": [
+      "Edge config drift",
+      "Security exposure",
+      "Harder white-label hosting isolation"
+    ],
+    "priority": "medium"
+  },
+  {
+    "repo_name": "Notion",
+    "recommended_placement": "memory_layer",
+    "why": "Second-brain and operational memory stack for Pauli.",
+    "installed_under": "/memory/notion",
+    "install_method": "integrated external memory service referenced by archonx-os and Pauli layers",
+    "runtime_model": "external memory backend",
+    "called_by": [
+      "archonx-os",
+      "pauli-comic-funnel",
+      "THE PAULI EFFECT"
+    ],
+    "calls": [
+      "Notion API"
+    ],
+    "required_env_categories": [
+      "notion",
+      "auth",
+      "api"
+    ],
+    "integration_steps": [
+      "Define canonical database and page schemas.",
+      "Sync Archon memory writes and Pauli funnel reads against that schema.",
+      "Keep Notion integration behind service adapters."
+    ],
+    "risks_if_misplaced": [
+      "Knowledge fragmentation",
+      "Manual content drift",
+      "Pauli funnel disconnected from source memory"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "pauli-comic-funnel",
+    "recommended_placement": "frontend_layer",
+    "why": "Canonical public-funnel/frontend paired with Notion as the second-brain backend.",
+    "installed_under": "/products/pauli/pauli-comic-funnel",
+    "install_method": "product frontend wired to Archon memory and orchestration services",
+    "runtime_model": "user-facing app",
+    "called_by": [
+      "users",
+      "THE PAULI EFFECT",
+      "archonx-os"
+    ],
+    "calls": [
+      "Notion",
+      "archonx-os APIs",
+      "deployment edge",
+      "analytics"
+    ],
+    "required_env_categories": [
+      "api",
+      "notion",
+      "database",
+      "cloud",
+      "auth"
+    ],
+    "integration_steps": [
+      "Make it the canonical Pauli frontend experience.",
+      "Pull structured content from Notion-backed memory through Archon APIs.",
+      "Separate product UX concerns from orchestration logic."
+    ],
+    "risks_if_misplaced": [
+      "Frontend becomes accidental backend",
+      "Pauli knowledge and public funnel drift apart",
+      "Hard to white-label"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "THE PAULI EFFECT",
+    "recommended_placement": "frontend_layer",
+    "why": "Product and brand layer on top of Archon-X, powered by the Pauli memory and funnel stack.",
+    "installed_under": "/products/pauli/the-pauli-effect",
+    "install_method": "brand layer built on top of shared Archon services",
+    "runtime_model": "product shell and brand experience",
+    "called_by": [
+      "users",
+      "operators"
+    ],
+    "calls": [
+      "archonx-os",
+      "pauli-comic-funnel",
+      "Notion",
+      "Cloudflare Tunnel"
+    ],
+    "required_env_categories": [
+      "api",
+      "cloud",
+      "notion",
+      "auth"
+    ],
+    "integration_steps": [
+      "Treat The Pauli Effect as a product layer, not the core OS.",
+      "Use shared Archon service contracts underneath.",
+      "Keep brand-specific UX and content isolated from core orchestration code."
+    ],
+    "risks_if_misplaced": [
+      "Brand concerns contaminate platform core",
+      "Platform cannot be white-labeled cleanly"
+    ],
+    "priority": "high"
+  },
+  {
+    "repo_name": "pauli-repo-family",
+    "recommended_placement": "memory_layer",
+    "why": "Phase 1 found many Pauli references but not a stable canonical per-repo inventory.",
+    "installed_under": "/products/pauli/archive-and-memory",
+    "install_method": "family-level inventory and consolidation under Archon repo registry",
+    "runtime_model": "mixed legacy and memory assets",
+    "called_by": [
+      "archonx-os",
+      "THE PAULI EFFECT"
+    ],
+    "calls": [
+      "Notion",
+      "pauli-comic-funnel"
+    ],
+    "required_env_categories": [
+      "notion",
+      "database",
+      "cloud"
+    ],
+    "integration_steps": [
+      "Create a canonical Pauli repo map.",
+      "Merge duplicate content repos into memory, frontend, and product buckets.",
+      "Archive anything not used by the canonical Pauli stack."
+    ],
+    "risks_if_misplaced": [
+      "Duplicate Pauli surfaces",
+      "Unclear source of truth",
+      "Brand stack remains fragmented"
+    ],
+    "priority": "medium"
+  }
+]

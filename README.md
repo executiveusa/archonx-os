@@ -147,6 +147,7 @@ pytest --cov=archonx --cov-report=html
 ## 📖 Documentation
 
 - [Architecture](docs/ARCHITECTURE.md) - System design
+- [Canonical Controller-Worker Topology](docs/canonical-controller-worker-topology.md) - Current control-plane model for Archon-X
 - [API Reference](docs/API.md) - Endpoints and schemas
 - [Deployment Guide](docs/DEPLOYMENT.md) - Production setup
 - [Security Best Practices](docs/SECURITY.md) - Hardening guide

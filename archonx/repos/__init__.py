@@ -18,6 +18,7 @@ Key principles:
 from archonx.repos.models import (
     DomainType,
     Repo,
+    RepoPlacement,
     Team,
     DispatchPlan,
     DispatchPlanAgent,
@@ -31,6 +32,7 @@ __all__ = [
     "Team",
     "Repo",
     "DomainType",
+    "RepoPlacement",
     "DispatchPlan",
     "DispatchPlanAgent",
 ]

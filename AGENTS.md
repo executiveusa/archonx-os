@@ -58,3 +58,10 @@ This is the ONLY human action required. Everything else is automated.
 - Agents MAY run shell commands ONLY with human confirmation via Telegram
 - Agents MUST log all file operations to Notion
 - Agents MUST NOT store credentials from remote machines
+
+## 8. MANDATORY DESIGN LAW
+- Any frontend, visual, dashboard, landing page, product-shell, or brand-surface work MUST load `.archonx/toolbox/skills/mandatory-design-law/SKILL.md` before implementation.
+- Steve Krug logic is law for interface clarity: do not make the user think unnecessarily.
+- Design work must be both visually intentional and immediately understandable.
+- Reviewers must reject functional-but-confusing UI and generic AI-slop design.
+- This rule applies to ArchonX itself and every managed repo under its control.
