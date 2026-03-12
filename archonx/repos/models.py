@@ -28,6 +28,20 @@ class RepoKind(str, Enum):
     FORK = "fork"
 
 
+class RepoPlacement(str, Enum):
+    """Canonical placement of a repo within the ArchonX architecture."""
+
+    CORE_DEPENDENCY = "core_dependency"
+    PLUGIN = "plugin"
+    WORKER_SERVICE = "worker_service"
+    SIDECAR = "sidecar"
+    SUBMODULE = "submodule"
+    STANDALONE_TOOL = "standalone_tool"
+    MEMORY_LAYER = "memory_layer"
+    FRONTEND_LAYER = "frontend_layer"
+    UNKNOWN = "unknown"
+
+
 @dataclass
 class Team:
     """Team metadata."""
@@ -50,6 +64,13 @@ class Repo:
     kind: RepoKind
     team_id: str
     domain_type_id: DomainType
+    placement: RepoPlacement = RepoPlacement.UNKNOWN
+    runtime_model: Optional[str] = None
+    installed_under: Optional[str] = None
+    capability_tags: List[str] = field(default_factory=list)
+    called_by: List[str] = field(default_factory=list)
+    calls: List[str] = field(default_factory=list)
+    required_env_categories: List[str] = field(default_factory=list)
 
     def to_dict(self):
         return {
@@ -60,6 +81,13 @@ class Repo:
             "kind": self.kind.value,
             "team_id": self.team_id,
             "domain_type_id": self.domain_type_id.value,
+            "placement": self.placement.value,
+            "runtime_model": self.runtime_model,
+            "installed_under": self.installed_under,
+            "capability_tags": self.capability_tags,
+            "called_by": self.called_by,
+            "calls": self.calls,
+            "required_env_categories": self.required_env_categories,
         }
 
 

@@ -6,6 +6,19 @@ The Routing Engine is the "nervous system" of ArchonX, mapping repositories and 
 
 ## Routing Philosophy
 
+## Canonical Topology
+
+The current canonical topology is:
+- `archonx-os` is the sole controller and router.
+- `DesktopCommanderMCP` is the primary machine-control tower.
+- `mcp2cli` is the mandatory MCP/OpenAPI invocation layer.
+- `Darya/OpenHands`, `agency-agents`, `Agent Zero`, `Goose`, and `ralphy` are workers.
+- `Notion` is the memory layer for the Pauli stack.
+- `pauli-comic-funnel` is the canonical Pauli frontend.
+- `THE PAULI EFFECT` is a product and brand layer on top of Archon-X.
+
+See also [canonical-controller-worker-topology.md](canonical-controller-worker-topology.md) and `ecosystem/manifest.canonical.json`.
+
 ### Plan-Then-Execute
 ```
 Input (repos + task)

@@ -1,0 +1,55 @@
+{
+  "brain": [
+    "archonx-os"
+  ],
+  "workers": [
+    "Darya/OpenHands",
+    "agency-agents",
+    "Agent Zero",
+    "Goose",
+    "ralphy"
+  ],
+  "control_tower": [
+    "DesktopCommanderMCP"
+  ],
+  "memory_layers": [
+    "Notion",
+    "pauli-repo-family"
+  ],
+  "frontend_layers": [
+    "pauli-comic-funnel",
+    "THE PAULI EFFECT"
+  ],
+  "integration_layers": [
+    "mcp2cli",
+    "ext-apps",
+    "jcodemunch-mcp",
+    "Cloudflare Tunnel"
+  ],
+  "tooling_layers": [
+    "repo registry",
+    "routing manifest",
+    "env category index",
+    "deployment manifest"
+  ],
+  "product_layers": [
+    "The Pauli Effect",
+    "future white-label vertical products"
+  ],
+  "archive_candidates": [
+    "duplicate or zip-only Pauli repos not mapped into the canonical stack",
+    "standalone desktop-control experiments superseded by DesktopCommanderMCP plus mcp2cli",
+    "worker repos that duplicate Darya, agency-agents, or Goose without a distinct specialty"
+  ],
+  "merge_candidates": [
+    "Pauli content repos into a unified Pauli memory map",
+    "tool plugin wrappers into the mcp2cli invocation layer",
+    "deployment edge configs into one Archon deployment manifest"
+  ],
+  "open_questions": [
+    "Which exact repos make up the full Pauli family beyond pauli-comic-funnel and THE PAULI EFFECT?",
+    "What is the preferred event bus and state store for Archon job orchestration?",
+    "Which Goose extensions are canonical and should be whitelisted?",
+    "Should ext-apps remain one repo or split by connector domain?"
+  ]
+}

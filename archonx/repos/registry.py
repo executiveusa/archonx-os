@@ -15,6 +15,7 @@ from archonx.repos.models import (
     DomainType,
     RepoVisibility,
     RepoKind,
+    RepoPlacement,
     IngestHistory,
 )
 
@@ -77,11 +78,19 @@ class RepoRegistry:
                 kind TEXT NOT NULL,
                 team_id TEXT NOT NULL,
                 domain_type_id TEXT NOT NULL,
+                placement TEXT NOT NULL DEFAULT 'unknown',
+                runtime_model TEXT,
+                installed_under TEXT,
+                capability_tags_json TEXT,
+                called_by_json TEXT,
+                calls_json TEXT,
+                required_env_categories_json TEXT,
                 created_at TEXT,
                 FOREIGN KEY (team_id) REFERENCES teams(id),
                 FOREIGN KEY (domain_type_id) REFERENCES domain_types(id)
             )
         """)
+        self._ensure_repo_columns(cursor)
 
         # Ingest history table
         cursor.execute("""
@@ -106,6 +115,23 @@ class RepoRegistry:
                 )
 
         conn.commit()
+
+    def _ensure_repo_columns(self, cursor: sqlite3.Cursor) -> None:
+        """Ensure newer repo metadata columns exist on older databases."""
+        cursor.execute("PRAGMA table_info(repos)")
+        existing_columns = {row[1] for row in cursor.fetchall()}
+        expected_columns = {
+            "placement": "TEXT NOT NULL DEFAULT 'unknown'",
+            "runtime_model": "TEXT",
+            "installed_under": "TEXT",
+            "capability_tags_json": "TEXT",
+            "called_by_json": "TEXT",
+            "calls_json": "TEXT",
+            "required_env_categories_json": "TEXT",
+        }
+        for column_name, ddl in expected_columns.items():
+            if column_name not in existing_columns:
+                cursor.execute(f"ALTER TABLE repos ADD COLUMN {column_name} {ddl}")
 
     def ingest_yaml(self, yaml_path: Path, mode: str = "index_only") -> dict:
         """Ingest repos from YAML file.
@@ -191,6 +217,17 @@ class RepoRegistry:
                     kind=RepoKind(repo_data["kind"]),
                     team_id=repo_data["team_id"],
                     domain_type_id=DomainType(repo_data["domain_type_id"]),
+                    placement=RepoPlacement(
+                        repo_data.get("placement", RepoPlacement.UNKNOWN.value)
+                    ),
+                    runtime_model=repo_data.get("runtime_model"),
+                    installed_under=repo_data.get("installed_under"),
+                    capability_tags=repo_data.get("capability_tags", []),
+                    called_by=repo_data.get("called_by", []),
+                    calls=repo_data.get("calls", []),
+                    required_env_categories=repo_data.get(
+                        "required_env_categories", []
+                    ),
                 )
                 self._upsert_repo(repo)
                 repo_count += 1
@@ -245,8 +282,10 @@ class RepoRegistry:
 
         cursor.execute(
             """INSERT OR REPLACE INTO repos
-               (id, name, url, visibility, kind, team_id, domain_type_id, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+               (id, name, url, visibility, kind, team_id, domain_type_id, placement,
+                runtime_model, installed_under, capability_tags_json, called_by_json,
+                calls_json, required_env_categories_json, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 repo.id,
                 repo.name,
@@ -255,6 +294,13 @@ class RepoRegistry:
                 repo.kind.value,
                 repo.team_id,
                 repo.domain_type_id.value,
+                repo.placement.value,
+                repo.runtime_model,
+                repo.installed_under,
+                json.dumps(repo.capability_tags),
+                json.dumps(repo.called_by),
+                json.dumps(repo.calls),
+                json.dumps(repo.required_env_categories),
                 now,
             ),
         )
@@ -360,6 +406,15 @@ class RepoRegistry:
             kind=RepoKind(row["kind"]),
             team_id=row["team_id"],
             domain_type_id=DomainType(row["domain_type_id"]),
+            placement=RepoPlacement(row["placement"] or RepoPlacement.UNKNOWN.value),
+            runtime_model=row["runtime_model"],
+            installed_under=row["installed_under"],
+            capability_tags=json.loads(row["capability_tags_json"] or "[]"),
+            called_by=json.loads(row["called_by_json"] or "[]"),
+            calls=json.loads(row["calls_json"] or "[]"),
+            required_env_categories=json.loads(
+                row["required_env_categories_json"] or "[]"
+            ),
         )
 
     def close(self) -> None:

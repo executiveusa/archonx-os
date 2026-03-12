@@ -5,7 +5,13 @@ from pathlib import Path
 import pytest
 
 from archonx.repos.registry import RepoRegistry
-from archonx.repos.models import Repo, DomainType, RepoVisibility, RepoKind
+from archonx.repos.models import (
+    Repo,
+    DomainType,
+    RepoVisibility,
+    RepoKind,
+    RepoPlacement,
+)
 
 
 @pytest.fixture
@@ -41,7 +47,7 @@ archonx_repo_index_spec:
 
   repos:
     - {id: 1, name: "test-repo-1", url: "https://github.com/test/repo-1", vis: public, kind: orig, team_id: test_team, domain_type_id: saas}
-    - {id: 2, name: "test-repo-2", url: "https://github.com/test/repo-2", vis: private, kind: fork, team_id: test_team, domain_type_id: saas}
+    - {id: 2, name: "test-repo-2", url: "https://github.com/test/repo-2", vis: private, kind: fork, team_id: test_team, domain_type_id: saas, placement: worker_service, runtime_model: long_running_worker, installed_under: "/workers/test-repo-2", capability_tags: [agent, execution], called_by: [archonx-os], calls: [mcp2cli], required_env_categories: [auth, api]}
 """
         yaml_path.write_text(yaml_content, encoding="utf-8")
         yield yaml_path
@@ -122,6 +128,24 @@ archonx_repo_index_spec:
         assert repo.name == "test-repo-1"
         assert repo.visibility == RepoVisibility.PUBLIC
         assert repo.kind == RepoKind.ORIGINAL
+        assert repo.placement == RepoPlacement.UNKNOWN
+
+        registry.close()
+
+    def test_repo_architecture_metadata_round_trips(self, temp_db, temp_yaml):
+        """Repo placement and runtime metadata should round-trip through the registry."""
+        registry = RepoRegistry(temp_db)
+        registry.ingest_yaml(temp_yaml)
+
+        repo = registry.get_repo(2)
+        assert repo is not None
+        assert repo.placement == RepoPlacement.WORKER_SERVICE
+        assert repo.runtime_model == "long_running_worker"
+        assert repo.installed_under == "/workers/test-repo-2"
+        assert repo.capability_tags == ["agent", "execution"]
+        assert repo.called_by == ["archonx-os"]
+        assert repo.calls == ["mcp2cli"]
+        assert repo.required_env_categories == ["auth", "api"]
 
         registry.close()
 
@@ -224,6 +248,7 @@ archonx_repo_index_spec:
             kind=RepoKind.ORIGINAL,
             team_id="test_team",
             domain_type_id=DomainType.SAAS,
+            placement=RepoPlacement.CORE_DEPENDENCY,
         )
 
         registry._upsert_repo(repo1)
