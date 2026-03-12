@@ -13,7 +13,7 @@ from archonx.repos.models import (
     DispatchPlanIntegration,
 )
 from archonx.repos.registry import RepoRegistry
-from archonx.orchestration import build_default_worker_registry
+from archonx.orchestration.workers import build_default_worker_registry
 
 
 class Router:

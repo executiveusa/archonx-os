@@ -14,6 +14,7 @@ from archonx.orchestration.swarm import (
     deploy_yolo_swarm,
 )
 from archonx.orchestration.contracts import TaskEnvelope
+from archonx.orchestration.dispatch import DispatchCoordinator, DispatchDecision
 from archonx.orchestration.workers import (
     WorkerCapability,
     WorkerKind,
@@ -30,6 +31,8 @@ __all__ = [
     "create_swarm",
     "deploy_yolo_swarm",
     "TaskEnvelope",
+    "DispatchCoordinator",
+    "DispatchDecision",
     "WorkerCapability",
     "WorkerKind",
     "WorkerRegistry",
