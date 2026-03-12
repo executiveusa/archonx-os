@@ -22,6 +22,8 @@ from archonx.repos.models import (
     Team,
     DispatchPlan,
     DispatchPlanAgent,
+    DispatchPlanWorker,
+    DispatchPlanIntegration,
 )
 from archonx.repos.registry import RepoRegistry
 from archonx.repos.router import Router
@@ -35,4 +37,6 @@ __all__ = [
     "RepoPlacement",
     "DispatchPlan",
     "DispatchPlanAgent",
+    "DispatchPlanWorker",
+    "DispatchPlanIntegration",
 ]

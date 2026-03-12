@@ -103,15 +103,45 @@ class DispatchPlanAgent:
 
 
 @dataclass
+class DispatchPlanWorker:
+    """Worker recommendation attached to a dispatch plan."""
+
+    id: str
+    role: str
+    intents: List[str] = field(default_factory=list)
+    tools: List[str] = field(default_factory=list)
+    dependencies: List[str] = field(default_factory=list)
+
+    def to_dict(self):
+        return asdict(self)
+
+
+@dataclass
+class DispatchPlanIntegration:
+    """Integration requirement attached to a dispatch plan."""
+
+    id: str
+    role: str
+    required: bool = True
+    rationale: str = ""
+
+    def to_dict(self):
+        return asdict(self)
+
+
+@dataclass
 class DispatchPlan:
     """Dispatch plan for agent routing."""
     timestamp: str
     repo_ids: List[int]
     task_name: str
+    task_intent: str
     team_id: str
     repos_metadata: List[dict]
     preflight_steps: List[str] = field(default_factory=list)
     recommended_agents: List[DispatchPlanAgent] = field(default_factory=list)
+    recommended_workers: List[DispatchPlanWorker] = field(default_factory=list)
+    required_integrations: List[DispatchPlanIntegration] = field(default_factory=list)
     token_tracker: dict = field(default_factory=lambda: {
         "enabled": True,
         "csv_path": "logs/token_savings.csv",
@@ -126,10 +156,15 @@ class DispatchPlan:
             "timestamp": self.timestamp,
             "repo_ids": self.repo_ids,
             "task_name": self.task_name,
+            "task_intent": self.task_intent,
             "team_id": self.team_id,
             "repos_metadata": self.repos_metadata,
             "preflight_steps": self.preflight_steps,
             "recommended_agents": [a.to_dict() for a in self.recommended_agents],
+            "recommended_workers": [w.to_dict() for w in self.recommended_workers],
+            "required_integrations": [
+                i.to_dict() for i in self.required_integrations
+            ],
             "token_tracker": self.token_tracker,
             "notes": self.notes,
         }
