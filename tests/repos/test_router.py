@@ -76,6 +76,7 @@ class TestRouter:
         assert plan.repo_ids == [1]
         assert plan.task_name == "audit"
         assert plan.team_id == "team_a"
+        assert plan.task_intent == "code_change"
         assert len(plan.repos_metadata) == 1
         assert plan.repos_metadata[0]["domain_type_id"] == "saas"
 
@@ -86,6 +87,11 @@ class TestRouter:
         assert "qa_agent" in agent_ids
         assert "sec_agent" in agent_ids
         assert "prd_agent" in agent_ids
+        worker_ids = {w.id for w in plan.recommended_workers}
+        assert "darya_openhands" in worker_ids
+        integration_ids = {i.id for i in plan.required_integrations}
+        assert "mcp2cli" in integration_ids
+        assert "DesktopCommanderMCP" in integration_ids
 
     def test_route_single_repo_tool(self, test_registry):
         """Test routing a single TOOL repo."""
@@ -153,6 +159,32 @@ class TestRouter:
 
         assert plan.team_id == "multi_team"
         assert len(plan.repos_metadata) == 2
+
+    def test_route_respects_explicit_task_intent(self, test_registry):
+        """Explicit task intent should drive worker selection."""
+        router = Router(test_registry)
+        plan = router.route([1], "implement_ui", task_intent="cloud_coding")
+
+        assert plan.task_intent == "cloud_coding"
+        worker_ids = {worker.id for worker in plan.recommended_workers}
+        assert "goose" in worker_ids
+
+    def test_route_unknown_repo_defaults_to_repo_analysis(self, test_registry):
+        """Unknown repos should default to repo analysis intent."""
+        router = Router(test_registry)
+        plan = router.route([5], "discover")
+
+        assert plan.task_intent == "repo_analysis"
+        worker_ids = {worker.id for worker in plan.recommended_workers}
+        assert "darya_openhands" in worker_ids
+
+    def test_route_required_integrations_include_control_path(self, test_registry):
+        """Control path integrations should be attached to dispatch plans."""
+        router = Router(test_registry)
+        plan = router.route([1], "audit")
+
+        integrations = {integration.id for integration in plan.required_integrations}
+        assert integrations == {"DesktopCommanderMCP", "mcp2cli"}
 
     def test_route_preflight_steps(self, test_registry):
         """Test that preflight steps are included."""
