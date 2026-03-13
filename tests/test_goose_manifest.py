@@ -3,7 +3,10 @@
 import tempfile
 from pathlib import Path
 
-from archonx.integrations import build_goose_workspace_manifest
+from archonx.integrations import (
+    build_goose_workspace_manifest,
+    write_goose_workspace_manifest,
+)
 from archonx.repos.registry import RepoRegistry
 
 
@@ -49,6 +52,20 @@ def test_build_goose_workspace_manifest() -> None:
     assert len(manifest.repos) == 2
     assert manifest.repos[0].extensions == ["repo_inventory", "extension_registry", "cloud_coding"]
     assert manifest.repos[1].extensions == ["repo_inventory", "extension_registry", "memory_sync"]
+
+    registry.close()
+    registry._tempdir.cleanup()
+
+
+def test_write_goose_workspace_manifest() -> None:
+    registry = _build_registry()
+    manifest = build_goose_workspace_manifest(registry)
+    output_path = Path(registry._tempdir.name) / "goose_manifest.json"
+
+    written = write_goose_workspace_manifest(manifest, output_path)
+
+    assert written.exists()
+    assert '"workspace": "archonx-os"' in written.read_text(encoding="utf-8")
 
     registry.close()
     registry._tempdir.cleanup()

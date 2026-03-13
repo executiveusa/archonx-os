@@ -56,6 +56,9 @@ def test_dispatch_decision_builds_task_envelope() -> None:
     assert decision.envelope.allowed_tools == ["mcp2cli", "repo_inventory", "extension_registry"]
     assert decision.required_env_categories == ["tool_invocation"]
     assert decision.env_profiles[0]["owner"] == "mcp2cli"
+    assert decision.policy["approval_integrations"] == []
+    assert decision.env_audit["is_ready"] is True
+    assert decision.envelope.required_approvals == []
     assert decision.envelope.validate() == []
     registry.close()
     registry._tempdir.cleanup()
