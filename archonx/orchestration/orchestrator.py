@@ -256,6 +256,10 @@ class Orchestrator:
                     for integration in dispatch_decision.required_integrations
                 ],
             )
+            task_metadata.setdefault(
+                "required_env_categories",
+                dispatch_decision.required_env_categories,
+            )
         
         # Create task
         task = self.task_manager.create_task(

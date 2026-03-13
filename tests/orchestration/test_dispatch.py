@@ -54,6 +54,8 @@ def test_dispatch_decision_builds_task_envelope() -> None:
     assert decision.primary_worker.id == "goose"
     assert decision.envelope.objective == "Ship the frontend update"
     assert decision.envelope.allowed_tools == ["mcp2cli", "repo_inventory", "extension_registry"]
+    assert decision.required_env_categories == ["tool_invocation"]
+    assert decision.env_profiles[0]["owner"] == "mcp2cli"
     assert decision.envelope.validate() == []
     registry.close()
     registry._tempdir.cleanup()
