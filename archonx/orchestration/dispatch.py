@@ -7,6 +7,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from archonx.integrations import (
+    EnvCategoryRegistry,
+    IntegrationRegistry,
+    build_default_env_category_registry,
+    build_default_integration_registry,
+)
 from archonx.orchestration.contracts import TaskEnvelope
 from archonx.orchestration.workers import WorkerRegistry, build_default_worker_registry
 from archonx.repos.models import DispatchPlan, DispatchPlanIntegration, DispatchPlanWorker
@@ -23,6 +29,8 @@ class DispatchDecision:
     primary_worker: DispatchPlanWorker
     envelope: TaskEnvelope
     required_integrations: list[DispatchPlanIntegration]
+    required_env_categories: list[str]
+    env_profiles: list[dict]
 
     def to_dict(self) -> dict:
         return {
@@ -32,6 +40,8 @@ class DispatchDecision:
             "required_integrations": [
                 integration.to_dict() for integration in self.required_integrations
             ],
+            "required_env_categories": self.required_env_categories,
+            "env_profiles": self.env_profiles,
         }
 
 
@@ -42,9 +52,13 @@ class DispatchCoordinator:
         self,
         router: "Router",
         worker_registry: WorkerRegistry | None = None,
+        integration_registry: IntegrationRegistry | None = None,
+        env_category_registry: EnvCategoryRegistry | None = None,
     ) -> None:
         self.router = router
         self.worker_registry = worker_registry or build_default_worker_registry()
+        self.integration_registry = integration_registry or build_default_integration_registry()
+        self.env_category_registry = env_category_registry or build_default_env_category_registry()
 
     def create_dispatch_decision(
         self,
@@ -56,6 +70,7 @@ class DispatchCoordinator:
         """Create a dispatch decision with worker selection and task envelope."""
         plan = self.router.route(repo_ids, task_name, task_intent=task_intent)
         self._validate_required_integrations(plan.required_integrations)
+        required_env_categories, env_profiles = self._resolve_env_requirements(plan)
 
         if not plan.recommended_workers:
             raise ValueError("No recommended workers available for dispatch plan")
@@ -90,21 +105,38 @@ class DispatchCoordinator:
             primary_worker=primary_worker,
             envelope=envelope,
             required_integrations=plan.required_integrations,
+            required_env_categories=required_env_categories,
+            env_profiles=env_profiles,
         )
 
     def _validate_required_integrations(
         self, integrations: list[DispatchPlanIntegration]
     ) -> None:
-        required_ids = {integration.id for integration in integrations if integration.required}
-        missing = {
-            integration_id
-            for integration_id in required_ids
-            if integration_id not in {"DesktopCommanderMCP", "mcp2cli", "Notion", "Cloudflare Tunnel"}
-        }
-        if missing:
-            raise ValueError(f"Unknown required integrations: {sorted(missing)}")
+        required_ids = sorted(
+            integration.id for integration in integrations if integration.required
+        )
+        self.integration_registry.require(required_ids)
         if "mcp2cli" not in required_ids:
             raise ValueError("mcp2cli must be present in required integrations")
+
+    def _resolve_env_requirements(
+        self, plan: DispatchPlan
+    ) -> tuple[list[str], list[dict]]:
+        categories = {
+            category
+            for repo in plan.repos_metadata
+            for category in repo.get("required_env_categories", [])
+        }
+        for integration in plan.required_integrations:
+            capability = self.integration_registry.get(integration.id)
+            if capability:
+                categories.update(capability.env_categories)
+        required_categories = sorted(categories)
+        env_profiles = [
+            profile.to_dict()
+            for profile in self.env_category_registry.require(required_categories)
+        ]
+        return required_categories, env_profiles
 
     def _collect_required_approvals(self, worker: DispatchPlanWorker) -> list[str]:
         capability = self.worker_registry.get(worker.id)

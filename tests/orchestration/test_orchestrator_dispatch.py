@@ -72,3 +72,4 @@ def test_create_task_attaches_dispatch_decision(
     task = result.data["task"]
     assert task["metadata"]["worker_id"] == "goose"
     assert task["metadata"]["required_integrations"] == ["mcp2cli"]
+    assert task["metadata"]["required_env_categories"] == ["tool_invocation"]
