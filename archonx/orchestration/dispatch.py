@@ -7,10 +7,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from archonx.integrations import (
+from archonx.integrations.env_registry import (
     EnvCategoryRegistry,
-    IntegrationRegistry,
     build_default_env_category_registry,
+)
+from archonx.integrations.registry import (
+    IntegrationRegistry,
     build_default_integration_registry,
 )
 from archonx.orchestration.contracts import TaskEnvelope

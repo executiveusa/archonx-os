@@ -5,6 +5,11 @@ from archonx.integrations.env_registry import (
     EnvCategoryRegistry,
     build_default_env_category_registry,
 )
+from archonx.integrations.goose import (
+    GooseRepoManifestEntry,
+    GooseWorkspaceManifest,
+    build_goose_workspace_manifest,
+)
 from archonx.integrations.registry import (
     IntegrationCapability,
     IntegrationKind,
@@ -15,10 +20,13 @@ from archonx.integrations.registry import (
 __all__ = [
     "EnvCategoryProfile",
     "EnvCategoryRegistry",
+    "GooseRepoManifestEntry",
+    "GooseWorkspaceManifest",
     "IntegrationCapability",
     "IntegrationKind",
     "IntegrationRegistry",
     "build_default_env_category_registry",
     "build_default_integration_registry",
+    "build_goose_workspace_manifest",
 ]
 
