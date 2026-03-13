@@ -9,6 +9,12 @@ from archonx.integrations.goose import (
     GooseRepoManifestEntry,
     GooseWorkspaceManifest,
     build_goose_workspace_manifest,
+    write_goose_workspace_manifest,
+)
+from archonx.integrations.policy import (
+    IntegrationPolicyDecision,
+    IntegrationPolicyEnforcer,
+    IntegrationPolicyResult,
 )
 from archonx.integrations.registry import (
     IntegrationCapability,
@@ -24,9 +30,13 @@ __all__ = [
     "GooseWorkspaceManifest",
     "IntegrationCapability",
     "IntegrationKind",
+    "IntegrationPolicyDecision",
+    "IntegrationPolicyEnforcer",
+    "IntegrationPolicyResult",
     "IntegrationRegistry",
     "build_default_env_category_registry",
     "build_default_integration_registry",
     "build_goose_workspace_manifest",
+    "write_goose_workspace_manifest",
 ]
 

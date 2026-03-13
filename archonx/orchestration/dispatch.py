@@ -8,8 +8,13 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from archonx.integrations.env_registry import (
+    EnvAuditResult,
     EnvCategoryRegistry,
     build_default_env_category_registry,
+)
+from archonx.integrations.policy import (
+    IntegrationPolicyEnforcer,
+    IntegrationPolicyResult,
 )
 from archonx.integrations.registry import (
     IntegrationRegistry,
@@ -33,6 +38,8 @@ class DispatchDecision:
     required_integrations: list[DispatchPlanIntegration]
     required_env_categories: list[str]
     env_profiles: list[dict]
+    env_audit: dict
+    policy: dict
 
     def to_dict(self) -> dict:
         return {
@@ -44,6 +51,8 @@ class DispatchDecision:
             ],
             "required_env_categories": self.required_env_categories,
             "env_profiles": self.env_profiles,
+            "env_audit": self.env_audit,
+            "policy": self.policy,
         }
 
 
@@ -56,11 +65,17 @@ class DispatchCoordinator:
         worker_registry: WorkerRegistry | None = None,
         integration_registry: IntegrationRegistry | None = None,
         env_category_registry: EnvCategoryRegistry | None = None,
+        policy_enforcer: IntegrationPolicyEnforcer | None = None,
+        enforce_env_readiness: bool = True,
     ) -> None:
         self.router = router
         self.worker_registry = worker_registry or build_default_worker_registry()
         self.integration_registry = integration_registry or build_default_integration_registry()
         self.env_category_registry = env_category_registry or build_default_env_category_registry()
+        self.policy_enforcer = policy_enforcer or IntegrationPolicyEnforcer(
+            registry=self.integration_registry,
+        )
+        self.enforce_env_readiness = enforce_env_readiness
 
     def create_dispatch_decision(
         self,
@@ -73,7 +88,17 @@ class DispatchCoordinator:
         plan = self.router.route(repo_ids, task_name, task_intent=task_intent)
         self._validate_required_integrations(plan.required_integrations)
         required_env_categories, env_profiles = self._resolve_env_requirements(plan)
+        env_audit = self._audit_env_requirements(required_env_categories)
+        policy = self._evaluate_policy(plan.required_integrations)
 
+        if policy.blocked_integrations:
+            raise ValueError(
+                f"Blocked integrations in dispatch plan: {policy.blocked_integrations}"
+            )
+        if self.enforce_env_readiness and not env_audit.is_ready:
+            raise ValueError(
+                f"Missing required env keys for dispatch: {env_audit.missing_keys}"
+            )
         if not plan.recommended_workers:
             raise ValueError("No recommended workers available for dispatch plan")
 
@@ -89,7 +114,10 @@ class DispatchCoordinator:
                 "worker must execute within approved tool scope",
             ],
             allowed_tools=primary_worker.tools,
-            required_approvals=self._collect_required_approvals(primary_worker),
+            required_approvals=self._collect_required_approvals(
+                primary_worker,
+                policy,
+            ),
             budget={"mode": "bounded", "task_name": task_name},
             result_schema={
                 "status": "string",
@@ -109,6 +137,8 @@ class DispatchCoordinator:
             required_integrations=plan.required_integrations,
             required_env_categories=required_env_categories,
             env_profiles=env_profiles,
+            env_audit=env_audit.to_dict(),
+            policy=policy.to_dict(),
         )
 
     def _validate_required_integrations(
@@ -140,8 +170,25 @@ class DispatchCoordinator:
         ]
         return required_categories, env_profiles
 
-    def _collect_required_approvals(self, worker: DispatchPlanWorker) -> list[str]:
+    def _audit_env_requirements(self, categories: list[str]) -> EnvAuditResult:
+        return self.env_category_registry.audit(categories)
+
+    def _evaluate_policy(
+        self, integrations: list[DispatchPlanIntegration]
+    ) -> IntegrationPolicyResult:
+        integration_ids = [
+            integration.id for integration in integrations if integration.required
+        ]
+        return self.policy_enforcer.evaluate(integration_ids)
+
+    def _collect_required_approvals(
+        self,
+        worker: DispatchPlanWorker,
+        policy: IntegrationPolicyResult,
+    ) -> list[str]:
+        approvals: list[str] = []
         capability = self.worker_registry.get(worker.id)
-        if not capability:
-            return []
-        return list(capability.requires_approval_for)
+        if capability:
+            approvals.extend(capability.requires_approval_for)
+        approvals.extend(policy.approval_integrations)
+        return sorted(set(approvals))

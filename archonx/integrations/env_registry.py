@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import os
 
 
 @dataclass
@@ -17,6 +18,27 @@ class EnvCategoryProfile:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+@dataclass
+class EnvAuditResult:
+    """Audit result for required env categories."""
+
+    categories: list[str]
+    present_keys: list[str] = field(default_factory=list)
+    missing_keys: list[str] = field(default_factory=list)
+
+    @property
+    def is_ready(self) -> bool:
+        return not self.missing_keys
+
+    def to_dict(self) -> dict:
+        return {
+            "categories": self.categories,
+            "present_keys": self.present_keys,
+            "missing_keys": self.missing_keys,
+            "is_ready": self.is_ready,
+        }
 
 
 class EnvCategoryRegistry:
@@ -36,6 +58,27 @@ class EnvCategoryRegistry:
         if missing:
             raise ValueError(f"Unknown env categories: {sorted(missing)}")
         return [self._profiles[category] for category in categories]
+
+    def audit(
+        self,
+        categories: list[str],
+        environ: dict[str, str] | None = None,
+    ) -> EnvAuditResult:
+        profiles = self.require(categories)
+        environment = environ if environ is not None else os.environ
+        present_keys: list[str] = []
+        missing_keys: list[str] = []
+        for profile in profiles:
+            for key in profile.required_keys:
+                if environment.get(key):
+                    present_keys.append(key)
+                else:
+                    missing_keys.append(key)
+        return EnvAuditResult(
+            categories=list(categories),
+            present_keys=sorted(set(present_keys)),
+            missing_keys=sorted(set(missing_keys)),
+        )
 
 
 def build_default_env_category_registry() -> EnvCategoryRegistry:

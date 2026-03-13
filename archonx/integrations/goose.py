@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass, field
+from pathlib import Path
 
 from archonx.repos.models import RepoPlacement
 from archonx.repos.registry import RepoRegistry
@@ -67,6 +69,21 @@ def build_goose_workspace_manifest(
         generated_by="archonx.integrations.goose",
         repos=entries,
     )
+
+
+def write_goose_workspace_manifest(
+    manifest: GooseWorkspaceManifest,
+    output_path: str | Path,
+) -> Path:
+    """Persist a Goose workspace manifest as canonical JSON."""
+
+    destination = Path(output_path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(
+        json.dumps(manifest.to_dict(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return destination
 
 
 def _extensions_for_repo(placement: RepoPlacement) -> list[str]:
