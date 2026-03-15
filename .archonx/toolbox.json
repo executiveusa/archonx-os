@@ -1,4 +1,11 @@
 {
-  "source": "toolbox/toolbox.json",
-  "default_skill": "pauliwheel_coding_protocol"
+  "skills": [
+    "toolbox/skills/pauliwheel_coding_protocol",
+    "toolbox/skills/beads_manager",
+    "toolbox/skills/agent_lightning_bootstrap",
+    "toolbox/skills/ralphy_loop_enforcer",
+    "toolbox/skills/marketing/"
+  ],
+  "workflows": ["toolbox/workflows/"],
+  "tools": ["toolbox/tools/"]
 }
