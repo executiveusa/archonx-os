@@ -32,6 +32,7 @@
   "integration": {
     "openclaw": {
       "enabled": true,
+      "backend_url": "http://localhost:8080"
       "backend_url": "http://localhost:8080",
       "gateway_port": 18789,
       "auth_required": true,
