@@ -15,6 +15,12 @@ from archonx.orchestration.swarm import (
 )
 from archonx.orchestration.contracts import TaskEnvelope
 from archonx.orchestration.dispatch import DispatchCoordinator, DispatchDecision
+from archonx.orchestration.graph_spec import (
+    IntentGraphEdge,
+    IntentGraphNode,
+    IntentGraphSpec,
+    build_intent_graph_from_dispatch,
+)
 from archonx.orchestration.workers import (
     WorkerCapability,
     WorkerKind,
@@ -33,6 +39,10 @@ __all__ = [
     "TaskEnvelope",
     "DispatchCoordinator",
     "DispatchDecision",
+    "IntentGraphEdge",
+    "IntentGraphNode",
+    "IntentGraphSpec",
+    "build_intent_graph_from_dispatch",
     "WorkerCapability",
     "WorkerKind",
     "WorkerRegistry",
