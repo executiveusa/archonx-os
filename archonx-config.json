@@ -115,8 +115,8 @@
     ]
   },
   "coolify": {
-    "app_uuid": "YOUR_UUID_HERE",
-    "base_url": "https://coolify.example.com"
+    "app_uuid": "${COOLIFY_APP_UUID}",
+    "base_url": "${COOLIFY_BASE_URL}"
   },
   "conx": {
     "enabled": true,

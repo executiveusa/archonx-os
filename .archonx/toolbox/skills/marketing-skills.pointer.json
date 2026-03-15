@@ -1,0 +1,14 @@
+{
+  "skill_group": "marketing",
+  "path": "toolbox/skills/marketing/",
+  "index": "toolbox/skills/marketing/SKILL_INDEX.md",
+  "context_file": "toolbox/skills/marketing/product-marketing-context.md",
+  "agent_owner": ["VECTOR", "PRISM"],
+  "rainbow_colors": ["orange", "rainbow"],
+  "skill_count": 32,
+  "tools_count": 50,
+  "upstream_source": "https://github.com/coreyhaines31/marketingskills",
+  "license": "MIT",
+  "last_synced": "2026-03-14",
+  "notes": "Customized for The Pauli Effect brand and FrankenClaw architecture"
+}
