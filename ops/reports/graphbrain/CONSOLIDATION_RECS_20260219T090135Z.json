@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-02-19T09:01:35.082127+00:00",
+  "recommendations": [
+    {
+      "rec_id": "rec-001",
+      "type": "keep_separate",
+      "repos": [
+        "executiveusa/archonx-os"
+      ],
+      "confidence": 0.665,
+      "why": {
+        "note": "Single-repo local execution baseline."
+      }
+    }
+  ]
+}

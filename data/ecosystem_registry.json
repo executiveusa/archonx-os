@@ -1,0 +1,234 @@
+{
+  "registry_version": "1.0.0",
+  "bead_id": "BEAD-KM-010",
+  "generated_at": "2026-02-23T00:00:00Z",
+  "ecosystem": "ArchonX OS — THE PAULI EFFECT",
+  "king_mode_target": "$100M by 2030",
+  "entities": [
+    {
+      "id": "saleor_commerce_stack",
+      "name": "Saleor Commerce Stack",
+      "type": "service",
+      "category": "ecommerce",
+      "path": "services/saleor/",
+      "status": "active",
+      "operators": ["blitz_knight_white_b", "patch_knight_white_g", "flash_knight_black_b", "glitch_knight_black_g"],
+      "description": "GraphQL-first headless ecommerce platform. Agent-friendly API. 4 Knights act as commerce operators.",
+      "env_vars": ["SALEOR_API_URL", "SALEOR_AUTH_TOKEN"],
+      "docs": "services/saleor/README.md",
+      "trademark": null
+    },
+    {
+      "id": "benevolencia",
+      "name": "BENEVOLENCIA™",
+      "type": "brand_entity",
+      "category": "social_purpose",
+      "path": "ecosystem/benevolencia/",
+      "status": "active",
+      "operators": ["glitch_knight_black_g"],
+      "description": "Social Purpose Company owned by THE PAULI EFFECT. Gratitude Department. Business with soul.",
+      "trademark": "BENEVOLENCIA™",
+      "owner": "THE PAULI EFFECT",
+      "lemonis_pillar": 4,
+      "pillar_name": "Gratitude",
+      "visual": {"color": "gold", "hex": "#F5A623", "glow": true},
+      "docs": "ecosystem/benevolencia/README.md"
+    },
+    {
+      "id": "franken_claw",
+      "name": "Franken-Claw™",
+      "type": "security_framework",
+      "category": "infrastructure",
+      "path": "services/franken-claw/",
+      "status": "active",
+      "operators": ["iron_claw_rook_white_a", "darya_rook_white_h"],
+      "description": "ArchonX proprietary fork of OpenClaw + IronClaw 7-module security layer. PAULIWHEEL compliance routing.",
+      "trademark": "Franken-Claw™",
+      "owner": "THE PAULI EFFECT",
+      "websocket": "ws://localhost:18789",
+      "docs": "services/franken-claw/README.md"
+    },
+    {
+      "id": "context7_mcp",
+      "name": "Context7 MCP",
+      "type": "mcp_server",
+      "category": "toolchain",
+      "path": null,
+      "status": "active",
+      "description": "Live library documentation resolver. MANDATORY before writing any third-party library code.",
+      "command": "npx -y @upstash/context7-mcp",
+      "mcp_key": "context7",
+      "docs": "AGENTS.md#context7-compliance"
+    },
+    {
+      "id": "blender_mcp",
+      "name": "Blender MCP",
+      "type": "mcp_server",
+      "category": "toolchain",
+      "path": "services/blender/",
+      "status": "active",
+      "description": "Blender 3D control via MCP. Generates chess piece .glb models for King Mode 3D experience.",
+      "command": "uvx blender-mcp",
+      "mcp_key": "blender",
+      "tcp_port": 9000,
+      "docs": "services/blender/README.md"
+    },
+    {
+      "id": "remotion_render_tool",
+      "name": "Remotion Render Tool",
+      "type": "tool",
+      "category": "toolchain",
+      "path": "archonx/tools/remotion_render.py",
+      "status": "active",
+      "description": "Subprocess wrapper for rendering Remotion video compositions. Renders KingModeIntro.tsx to MP4.",
+      "compositions": ["KingModeIntro"],
+      "output": "dashboard-agent-swarm/public/king-mode-intro.mp4",
+      "docs": "archonx/tools/remotion_render.py"
+    },
+    {
+      "id": "blitz_knight",
+      "name": "Blitz Knight",
+      "type": "agent",
+      "category": "knight",
+      "agent_id": "blitz_knight_white_b",
+      "crew": "WHITE",
+      "piece": "Knight",
+      "board_position": "B1",
+      "lemonis_pillar": 1,
+      "pillar_name": "People",
+      "department": "PEOPLE",
+      "visual": {"color": "cyan", "hex": "#00FFFF", "animation": "heartbeat_pulse"},
+      "soul_file": ".agent-souls/white/blitz_knight.soul.md"
+    },
+    {
+      "id": "patch_knight",
+      "name": "Patch Knight",
+      "type": "agent",
+      "category": "knight",
+      "agent_id": "patch_knight_white_g",
+      "crew": "WHITE",
+      "piece": "Knight",
+      "board_position": "G1",
+      "lemonis_pillar": 2,
+      "pillar_name": "Process",
+      "department": "PROCESS",
+      "visual": {"color": "blue", "hex": "#4169E1", "animation": "steady_rotation"},
+      "soul_file": ".agent-souls/white/patch_knight.soul.md"
+    },
+    {
+      "id": "flash_knight",
+      "name": "Flash Knight",
+      "type": "agent",
+      "category": "knight",
+      "agent_id": "flash_knight_black_b",
+      "crew": "BLACK",
+      "piece": "Knight",
+      "board_position": "B8",
+      "lemonis_pillar": 3,
+      "pillar_name": "Product",
+      "department": "PRODUCT",
+      "visual": {"color": "orange", "hex": "#FF6600", "animation": "sharp_pulse"},
+      "soul_file": ".agent-souls/black/flash_knight.soul.md"
+    },
+    {
+      "id": "glitch_knight",
+      "name": "Glitch Knight",
+      "type": "agent",
+      "category": "knight",
+      "agent_id": "glitch_knight_black_g",
+      "crew": "BLACK",
+      "piece": "Knight",
+      "board_position": "G8",
+      "lemonis_pillar": 4,
+      "pillar_name": "Gratitude",
+      "department": "GRATITUDE",
+      "brand": "BENEVOLENCIA™",
+      "visual": {"color": "gold", "hex": "#F5A623", "animation": "soft_pulse", "emblem": "B"},
+      "soul_file": ".agent-souls/black/glitch_knight.soul.md"
+    },
+    {
+      "id": "popebot_training_system",
+      "name": "PopeBot Pawn Training System",
+      "type": "training_system",
+      "category": "ops",
+      "path": "paulis-pope-bot/training/",
+      "status": "active",
+      "trainer": "popebot_bishop_white_c",
+      "trainees": "all_32_pawns",
+      "modules": [
+        "module_01_identity.md",
+        "module_02_listening.md",
+        "module_03_pauliwheel.md",
+        "module_04_benevolencia.md",
+        "module_05_security.md",
+        "module_06_escalation.md"
+      ],
+      "soul_file": "paulis-pope-bot/templates/config/SOUL.md",
+      "board_position": "C1 (White Bishop)",
+      "docs": "paulis-pope-bot/training/README.md"
+    },
+    {
+      "id": "king_mode_3d",
+      "name": "King Mode 3D Experience",
+      "type": "frontend_feature",
+      "category": "visualization",
+      "path": "dashboard-agent-swarm/",
+      "status": "in_progress",
+      "description": "3D VR-ready chess board with 36 agents. Three.js + React Three Fiber + XR. GEMINI 3.1 builder.",
+      "key_files": [
+        "dashboard-agent-swarm/components/KingModeChessboard.tsx",
+        "dashboard-agent-swarm/src/pages/KingMode.tsx",
+        "visualization/remotion/src/KingModeIntro.tsx"
+      ],
+      "handoff_prd": "plans/KING_MODE_GEMINI_31_PRD.md",
+      "builder": "Gemini 3.1",
+      "target_url": "https://archonx-os.vercel.app/king-mode"
+    }
+  ],
+  "trademark_registry": [
+    {
+      "mark": "BENEVOLENCIA™",
+      "category": "Business Entity",
+      "owner": "THE PAULI EFFECT",
+      "status": "active",
+      "file": "archonx-synthia/docs/TRADEMARK_REGISTRY.md"
+    },
+    {
+      "mark": "Franken-Claw™",
+      "category": "Security Framework",
+      "owner": "THE PAULI EFFECT",
+      "status": "active",
+      "file": "archonx-synthia/docs/TRADEMARK_REGISTRY.md"
+    }
+  ],
+  "mcp_servers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "purpose": "Live library doc resolution — MANDATORY before writing library code",
+      "status": "active"
+    },
+    "blender": {
+      "command": "uvx",
+      "args": ["blender-mcp"],
+      "purpose": "Blender 3D asset generation for chess pieces",
+      "status": "active"
+    }
+  },
+  "bead_phases_completed": [
+    "BEAD-KM-001",
+    "BEAD-KM-002",
+    "BEAD-KM-003",
+    "BEAD-KM-004",
+    "BEAD-KM-005",
+    "BEAD-KM-006",
+    "BEAD-KM-007",
+    "BEAD-KM-008",
+    "BEAD-KM-009",
+    "BEAD-KM-010",
+    "BEAD-KM-011"
+  ],
+  "bead_phases_pending": [
+    "BEAD-KM-013"
+  ]
+}

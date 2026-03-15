@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SYNTHIA Tool Definitions for GLM-5 Function Calling",
+  "description": "JSON Schema definitions for all allowlisted tools. These are passed to the GLM-5 model as function definitions.",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "notion_query_tasks",
+        "description": "Query tasks from the Notion Tasks database with optional filters.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["backlog", "today", "doing", "blocked", "done"] },
+            "priority": { "type": "string", "enum": ["low", "med", "high", "urgent"] },
+            "tags": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "notion_create_task",
+        "description": "Create a new task in the Notion Tasks database.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "priority": { "type": "string", "enum": ["low", "med", "high", "urgent"] },
+            "context": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "requires_approval": { "type": "boolean" }
+          },
+          "required": ["title"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "notion_update_task",
+        "description": "Update an existing task's fields.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "task_id": { "type": "string" },
+            "status": { "type": "string" },
+            "priority": { "type": "string" },
+            "context": { "type": "string" },
+            "owner_agent": { "type": "string" }
+          },
+          "required": ["task_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "orgo_create_computer",
+        "description": "Create a new ephemeral Orgo computer for UI automation.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "ttl_minutes": { "type": "integer", "default": 30 },
+            "resolution": { "type": "string", "default": "1920x1080" }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "orgo_destroy_computer",
+        "description": "Destroy an Orgo computer. Used on job completion or kill.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "computer_id": { "type": "string" }
+          },
+          "required": ["computer_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "orgo_screenshot",
+        "description": "Take a screenshot of an Orgo computer's current display.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "computer_id": { "type": "string" }
+          },
+          "required": ["computer_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "orgo_input",
+        "description": "Send mouse/keyboard input actions to an Orgo computer.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "computer_id": { "type": "string" },
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["click", "type", "scroll", "key", "move"] },
+                  "x": { "type": "integer" },
+                  "y": { "type": "integer" },
+                  "text": { "type": "string" },
+                  "key": { "type": "string" },
+                  "delta_y": { "type": "integer" }
+                }
+              }
+            }
+          },
+          "required": ["computer_id", "actions"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "orgo_open_url",
+        "description": "Navigate an Orgo computer's browser to a URL.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "computer_id": { "type": "string" },
+            "url": { "type": "string", "format": "uri" }
+          },
+          "required": ["computer_id", "url"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "runner_exec",
+        "description": "Execute a command in the Docker sandbox. Network disabled by default.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "command": { "type": "string" },
+            "workdir": { "type": "string", "default": "/work" },
+            "timeout": { "type": "integer", "default": 300 }
+          },
+          "required": ["command"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "runner_put_file",
+        "description": "Upload a file to the sandbox /work directory.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string" },
+            "content_base64": { "type": "string" }
+          },
+          "required": ["path", "content_base64"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "runner_get_file",
+        "description": "Download a file from the sandbox /work directory.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string" }
+          },
+          "required": ["path"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "voice_say",
+        "description": "Speak text back to the user via Twilio voice.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" }
+          },
+          "required": ["text"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "policy_request_approval",
+        "description": "Request human approval for an irreversible action.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "action": { "type": "string" },
+            "context": { "type": "string" },
+            "urgency": { "type": "string", "enum": ["low", "normal", "high"] }
+          },
+          "required": ["action", "context"]
+        }
+      }
+    }
+  ]
+}

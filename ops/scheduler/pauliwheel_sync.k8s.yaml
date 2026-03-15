@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pauliwheel-sync
+spec:
+  schedule: "0 9,15,21 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: archonx-ops
+              image: python:3.12
+              command: ["/bin/sh", "-lc"]
+              args:
+                - cd /workspace/archonx-os && python3 ops/runner/archonx_ops_runner.py sync --all

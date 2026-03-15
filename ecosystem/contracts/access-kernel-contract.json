@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "archonx-access-kernel-contract",
+  "version": "1.0.0",
+  "basePath": "/v1",
+  "endpoints": [
+    {"method": "POST", "path": "/login/mock", "auth": "none", "work_item_id_required": false},
+    {"method": "POST", "path": "/secrets/upload", "auth": "session", "work_item_id_required": true},
+    {"method": "POST", "path": "/grants/request", "auth": "session", "work_item_id_required": true},
+    {"method": "POST", "path": "/grants/approve", "auth": "session", "work_item_id_required": true},
+    {"method": "POST", "path": "/grants/revoke", "auth": "session", "work_item_id_required": true},
+    {"method": "GET", "path": "/grants/list", "auth": "session", "work_item_id_required": false},
+    {"method": "GET", "path": "/audit/export", "auth": "session", "work_item_id_required": false},
+    {"method": "GET", "path": "/evidence/export", "auth": "session", "work_item_id_required": false},
+    {"method": "GET", "path": "/health", "auth": "none", "work_item_id_required": false}
+  ],
+  "security": {
+    "deny_by_default": true,
+    "secret_return_policy": "never_return_raw_values",
+    "default_voice_biometric_enabled": false
+  }
+}

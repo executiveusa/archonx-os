@@ -1,0 +1,26 @@
+name: graphbrain-15m
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run-light:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run GraphBrain light mode
+        run: python -m archonx.cli graphbrain run --mode light
+      - name: Verify fresh report exists
+        run: test -f data/reports/graphbrain_latest.json
+      - name: Upload GraphBrain artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: graphbrain-light
+          path: |
+            data/reports/graphbrain_latest.json
+            data/audit/graphbrain.log

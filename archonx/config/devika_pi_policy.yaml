@@ -1,0 +1,81 @@
+# Devika PI Policy Configuration
+# PAULIWHEEL governance settings for all Devika PI execution profiles.
+
+execution_profiles:
+  - devika-pi-default
+  - devika-pi-safe
+  - devika-pi-research
+
+bead_prefixes:
+  - BEAD-DEVIKA-PI-
+  - BEAD-P
+
+pauliwheel_stages:
+  - PLAN
+  - IMPLEMENT
+  - TEST
+  - EVALUATE
+  - PATCH
+  - REPEAT
+
+blocked_commands:
+  - "rm -rf"
+  - "DROP TABLE"
+  - eval
+  - exec
+  - __import__
+  - "curl | sh"
+  - "wget | sh"
+  - ":(){ :|:& }"
+  - "mkfs."
+  - "dd if=/dev/zero"
+  - "chmod -R 777 /"
+  - shutdown
+  - reboot
+
+report_dir: ops/reports
+
+min_bead_id_length: 10
+
+profile_settings:
+  devika-pi-default:
+    allowlist_mode: false
+    max_execution_seconds: 300
+    allow_network: true
+    description: "Standard Devika PI profile with blocklist-mode command guard."
+
+  devika-pi-safe:
+    allowlist_mode: true
+    max_execution_seconds: 120
+    allow_network: false
+    description: "Restricted Devika PI profile; only explicitly allowed commands run."
+
+  devika-pi-research:
+    allowlist_mode: false
+    max_execution_seconds: 600
+    allow_network: true
+    description: "Research-oriented profile with extended timeout and prototype toolchain."
+
+stage_timeouts_seconds:
+  PLAN: 60
+  IMPLEMENT: 300
+  TEST: 180
+  EVALUATE: 60
+  PATCH: 120
+  REPEAT: 30
+
+audit:
+  enabled: true
+  log_level: INFO
+  emit_json_reports: true
+  report_prefix: AUDIT
+
+error_codes:
+  ERR-GOV-001: invalid_execution_profile
+  ERR-GOV-002: invalid_bead_id
+  ERR-GOV-003: empty_bead_id
+  ERR-GOV-004: bead_id_too_short
+  ERR-GOV-005: invalid_stage
+  ERR-GOV-006: illegal_stage_advance
+  ERR-GOV-007: blocked_command
+  OK-000: ok

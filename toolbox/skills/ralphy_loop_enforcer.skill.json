@@ -1,0 +1,8 @@
+{
+  "name": "ralphy_loop_enforcer",
+  "version": "1.0.0",
+  "description": "Enforces PLAN→IMPLEMENT→TEST→EVALUATE→PATCH→REPEAT loop until completion.",
+  "inputs": ["bead_id", "iteration"],
+  "requires": ["bead_id"],
+  "logs_to": ["ops/reports", "artifacts/beads"]
+}

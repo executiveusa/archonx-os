@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-037",
+  "name": "Report Generation",
+  "category": "dashboard",
+  "version": "1.0.0",
+  "description": "Generates a comprehensive operational report for a specified time range and scope.",
+  "trigger": {
+    "event": "report_generation_requested",
+    "condition": "operator_authenticated",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["report_type", "from_date", "to_date"],
+    "properties": {
+      "report_type": { "type": "string", "enum": ["audit", "telemetry", "bead_summary", "phase_summary"] },
+      "from_date": { "type": "string" },
+      "to_date": { "type": "string" },
+      "requested_by": { "type": "string" },
+      "format": { "type": "string", "enum": ["json", "csv", "markdown"] }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "report_generated",
+    "fields": ["report_type", "from_date", "to_date", "record_count", "timestamp"]
+  },
+  "evidence_path": "ops/reports/generated_reports/",
+  "success_criteria": [
+    "report covers the full requested date range",
+    "record count is non-zero",
+    "report written to ops/reports/generated_reports/"
+  ],
+  "timeout_seconds": 900
+}

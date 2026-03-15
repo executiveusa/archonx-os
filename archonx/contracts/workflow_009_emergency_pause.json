@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-009",
+  "name": "Emergency Pause",
+  "category": "control_plane",
+  "version": "1.0.0",
+  "description": "Immediately halts all running agent executions in response to a critical system event.",
+  "trigger": {
+    "event": "emergency_pause_requested",
+    "condition": "critical_system_event OR manual_override",
+    "actor": "approver"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["reason", "initiated_by"],
+    "properties": {
+      "reason": { "type": "string" },
+      "initiated_by": { "type": "string" },
+      "affected_agents": { "type": "array", "items": { "type": "string" } },
+      "resume_token": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "approver",
+    "compliance_level": "PAULIWHEEL_CRITICAL",
+    "approval_required": true
+  },
+  "telemetry": {
+    "event_name": "emergency_pause_activated",
+    "fields": ["reason", "initiated_by", "affected_agents", "timestamp"]
+  },
+  "evidence_path": "ops/reports/emergency_pauses/",
+  "success_criteria": [
+    "all running agent tasks halted within 5 seconds",
+    "pause reason recorded in audit log",
+    "resume token issued for post-investigation restart"
+  ],
+  "timeout_seconds": 3600
+}

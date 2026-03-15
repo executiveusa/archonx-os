@@ -1,0 +1,57 @@
+{
+<<<<<<< HEAD
+  "name": "ArchonX Toolbox",
+  "version": "1.1.0",
+  "skills": [
+    "toolbox/skills/remotion_video_generator.json",
+    "toolbox/skills/access_grant_orchestrator.json",
+    "toolbox/skills/pauliwheel_coding_protocol.skill.json",
+    "toolbox/skills/agent_lightning_bootstrap.skill.json",
+    "toolbox/skills/beads_manager.skill.json",
+    "toolbox/skills/ralphy_loop_enforcer.skill.json",
+    ".archonx/toolbox/skills/bmad-auto-method/SKILL.md",
+    ".archonx/toolbox/skills/universal-skills-manager/SKILL.md"
+  ],
+  "tools": [
+    "toolbox/tools/request_grant.py",
+    "toolbox/tools/audit_emit.py"
+  ],
+  "workflows": [
+    "toolbox/workflows/grant-request-approval-playbook.json",
+    "toolbox/workflows/restricted-mode-recovery-playbook.json"
+  ],
+  "security": {
+    "requires_grant": true,
+    "requires_work_item": true
+  },
+  "endpoints": {
+    "remotion_render_url": "${ARCHONX_REMOTION_RENDER_URL:-http://localhost:7555/v1/render}"
+  },
+  "defaults": {
+    "coding_behavior": "pauliwheel_coding_protocol",
+    "requires_bead_id_for_code_actions": true,
+    "enforce_agent_lightning_first": true
+  }
+=======
+  "version": "1.0.0",
+  "bead_id": "BEAD-0004",
+  "skills": [
+    {
+      "name": "pauliwheel_coding_protocol",
+      "manifest": "toolbox/skills/pauliwheel_coding_protocol/manifest.json"
+    },
+    {
+      "name": "beads_manager",
+      "manifest": "toolbox/skills/beads_manager/manifest.json"
+    },
+    {
+      "name": "ralphy_loop_enforcer",
+      "manifest": "toolbox/skills/ralphy_loop_enforcer/manifest.json"
+    },
+    {
+      "name": "agent_lightning_bootstrap",
+      "manifest": "toolbox/skills/agent_lightning_bootstrap/manifest.json"
+    }
+  ]
+>>>>>>> origin/feature/pauliwheel-bead-0005-0006
+}

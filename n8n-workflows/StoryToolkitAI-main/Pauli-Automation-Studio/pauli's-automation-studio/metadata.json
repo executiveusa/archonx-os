@@ -1,0 +1,8 @@
+{
+  "name": "Pauli's Automation Studio",
+  "description": "A high-end content creation suite for the 'Pauli's Cartoon Truth' series, featuring AI script generation, voice brainstorming, image analysis, and professional automation insights.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

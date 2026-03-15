@@ -1,0 +1,38 @@
+guardian_fleet:
+  enabled: true
+  github_token_env: GH_PAT
+  github_org: executiveusa
+  total_repos: 313
+
+  cron_schedule:
+    health_pulse: "*/6 * * * *"
+    deep_scan: "0 6 * * *"
+    weekly_summary: "0 12 * * 1"
+    monthly_archive: "0 0 1 * *"
+
+  self_healing:
+    enabled: true
+    auto_fix_allowed:
+      - typos_and_linting
+      - package_minor_version_bumps
+      - missing_init_files
+      - readme_badge_updates
+    requires_bead_approval:
+      - breaking_api_changes
+      - database_migrations
+      - infrastructure_changes
+      - security_sensitive_code
+
+  escalation:
+    to_archon_x:
+      - build_broken_over_2_hours
+      - bug_severity_critical
+    to_human:
+      - fix_requires_over_300_lines
+      - architectural_decision_needed
+    to_iron_claw:
+      - security_vulnerability_detected
+
+  report:
+    path: ops/reports/guardian_{slug}_{date}.json
+    fields: [repo, status, bugs_found, bugs_fixed, prs_opened, build_status, coverage_delta]

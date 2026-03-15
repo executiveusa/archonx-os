@@ -1,0 +1,8 @@
+{
+  "name": "beads_manager",
+  "version": "1.0.0",
+  "description": "Tracks bead state transitions for code-affecting actions.",
+  "inputs": ["bead_id", "stage"],
+  "requires": ["bead_id"],
+  "logs_to": ["ops/reports", "artifacts/beads"]
+}

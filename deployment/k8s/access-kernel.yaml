@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: access-kernel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: access-kernel
+  template:
+    metadata:
+      labels:
+        app: access-kernel
+    spec:
+      containers:
+        - name: access-kernel
+          image: archonx/access-kernel:latest
+          ports:
+            - containerPort: 8090
+          env:
+            - name: ACCESS_KERNEL_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: access-kernel-secrets
+                  key: master-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: access-kernel
+spec:
+  selector:
+    app: access-kernel
+  ports:
+    - port: 8090
+      targetPort: 8090

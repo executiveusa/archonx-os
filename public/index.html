@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ArchonX Mission Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <header class="hero">
+    <p class="eyebrow">ARCHONX OPERATING SYSTEM</p>
+    <h1>Mission Console</h1>
+    <p class="sub">Real-time command surface for the 64-agent swarm, flywheel loop, and live theater feed.</p>
+    <div class="actions">
+      <button id="refreshBtn" class="btn btn-primary">Refresh Signals</button>
+      <button id="sampleTaskBtn" class="btn btn-secondary">Run Sample Task</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card" id="overviewCard">
+      <h2>System Overview</h2>
+      <div class="stats">
+        <div><span>Agents</span><strong id="agentsCount">--</strong></div>
+        <div><span>Skills</span><strong id="skillsCount">--</strong></div>
+        <div><span>Tools</span><strong id="toolsCount">--</strong></div>
+        <div><span>Flywheel</span><strong id="flywheelCount">--</strong></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Agent Theater</h2>
+      <ul id="eventsList" class="list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Pauli's Place Schedule</h2>
+      <ul id="meetingList" class="list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Task Output</h2>
+      <pre id="taskOutput">No task submitted yet.</pre>
+    </section>
+  </main>
+
+  <footer>
+    <span>Status: <b id="statusText">Connecting</b></span>
+    <span>built by the pauli effect</span>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

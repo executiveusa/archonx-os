@@ -1,0 +1,25 @@
+{
+  "files_indexed": 1,
+  "top_bridges": [
+    {
+      "term": "toolbox",
+      "betweenness": 18.333333333333332
+    },
+    {
+      "term": "reportback",
+      "betweenness": 14.0
+    },
+    {
+      "term": "contracts",
+      "betweenness": 10.666666666666666
+    },
+    {
+      "term": "archonx",
+      "betweenness": 10.0
+    },
+    {
+      "term": "json",
+      "betweenness": 9.166666666666666
+    }
+  ]
+}

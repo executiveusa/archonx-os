@@ -1,0 +1,11 @@
+{
+  "name": "grant-request-approval",
+  "steps": [
+    "validate_work_item_id",
+    "request_grant",
+    "route_to_yapp_control_tower",
+    "approve_or_deny",
+    "emit_audit_event",
+    "execute_if_allowed"
+  ]
+}

@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<claude_code_directive>
+  <metadata>
+    <version>1.0.0</version>
+    <system_name>PAULI_SECOND_BRAIN_IMPLEMENTATION</system_name>
+    <created>2025-12-21</created>
+    <target_audience>Claude Code Builder Agent</target_audience>
+    <objective>Execute comprehensive triple-sync architecture wiring</objective>
+  </metadata>
+
+  <execution_phases>
+    <phase id="PHASE_1" name="Foundation Setup" duration="2 days" priority="CRITICAL">
+      <objective>Create folder structure and initialize repositories</objective>
+      
+      <task id="P1_T1">
+        <name>Clone Second Brain Repository</name>
+        <command>git clone https://github.com/executiveusa/outlines-second-brain.git pauli-second-brain</command>
+        <verification>
+          <check>Directory exists: pauli-second-brain/</check>
+          <check>Remote origin: github.com/executiveusa/outlines-second-brain</check>
+        </verification>
+      </task>
+
+      <task id="P1_T2">
+        <name>Create Master System Architecture Folder</name>
+        <folder_structure>
+          <folder path="pauli-second-brain/00_SYSTEM">
+            <file>PAULI_ARCHITECTURE.md</file>
+            <file>BYTEROVER_CONFIG.yml</file>
+            <file>NOTION_SCHEMA.json</file>
+            <file>GOOGLE_CLOUD_CONFIG.yaml</file>
+            <file>pauli_parse_unstructured.py</file>
+            <file>LLMS_MANIFEST.txt</file>
+          </folder>
+          <folder path="pauli-second-brain/01_PROJECTS">
+            <folder>core_mission</folder>
+            <folder>revenue_operations</folder>
+            <folder>creative_ip</folder>
+            <folder>ai_infrastructure</folder>
+            <folder>training_education</folder>
+            <file>project_index.json</file>
+          </folder>
+          <folder path="pauli-second-brain/02_DECISIONS">
+            <file>decision_archive.json</file>
+          </folder>
+          <folder path="pauli-second-brain/03_AGENTS">
+            <file>pauli_prime.md</file>
+            <file>agents_manifest.json</file>
+          </folder>
+          <folder path="pauli-second-brain/04_SKILLS">
+            <comment>18 Cloud Skills</comment>
+          </folder>
+          <folder path="pauli-second-brain/05_VOICE">
+            <file>pauli_voice_persona.md</file>
+          </folder>
+        </folder_structure>
+      </task>
+
+      <task id="P1_T3">
+        <name>Copy System Files to Repository</name>
+        <files_to_copy>
+          <source>00_SYSTEM/PAULI_ARCHITECTURE.md</source>
+          <source>00_SYSTEM/BYTEROVER_CONFIG.yml</source>
+          <source>00_SYSTEM/NOTION_SCHEMA.json</source>
+          <source>00_SYSTEM/pauli_parse_unstructured.py</source>
+          <destination>pauli-second-brain/00_SYSTEM/</destination>
+        </files_to_copy>
+      </task>
+
+      <task id="P1_T4">
+        <name>Initialize Git with Phase 1 Commit</name>
+        <git_commands>
+          <add>pauli-second-brain/00_SYSTEM/*</add>
+          <commit>message: "🏗️ [PHASE_1] Initialize PAULI Second Brain architecture"</commit>
+          <push>branch: master</push>
+        </git_commands>
+      </task>
+    </phase>
+
+    <phase id="PHASE_2" name="ByteRover + Notion Sync" duration="3 days" priority="CRITICAL">
+      <objective>Wire triple-sync system connecting GitHub, Notion, Google Cloud</objective>
+
+      <task id="P2_T1">
+        <name>Validate Environment Variables</name>
+        <required_env_vars>
+          <var>GITHUB_TOKEN</var>
+          <var>NOTION_API_KEY</var>
+          <var>NOTION_WORKSPACE_ID</var>
+          <var>GOOGLE_CLOUD_PROJECT_ID</var>
+          <var>GOOGLE_CLOUD_CREDENTIALS_JSON</var>
+          <var>GOOGLE_DRIVE_FOLDER_ID</var>
+          <var>SUPABASE_URL</var>
+          <var>SUPABASE_KEY</var>
+        </required_env_vars>
+        <action>Verify all variables set in environment. If missing, alert and wait for input.</action>
+      </task>
+
+      <task id="P2_T2">
+        <name>Deploy ByteRover MCP Configuration</name>
+        <setup>
+          <install_package>byterover-mcp</install_package>
+          <copy_config>BYTEROVER_CONFIG.yml → ~/.byterover/config.yml</copy_config>
+          <initialize_service>systemctl start byterover-mcp (or equivalent for OS)</initialize_service>
+        </setup>
+        <verification>
+          <check>ByteRover service running</check>
+          <check>Test sync: Create test file in GitHub, verify appears in Notion within 2 minutes</check>
+        </verification>
+      </task>
+
+      <task id="P2_T3">
+        <name>Create Notion Database Schema</name>
+        <action>
+          <use_api>Notion API</use_api>
+          <payload>NOTION_SCHEMA.json</payload>
+          <create_databases>Projects, Tasks, Agents, Skills, Decisions, Metrics, Voice_Commands</create_databases>
+        </action>
+        <output>
+          <store_env>NOTION_PROJECTS_DB_ID</store_env>
+          <store_env>NOTION_TASKS_DB_ID</store_env>
+          <store_env>NOTION_AGENTS_DB_ID</store_env>
+          <store_env>NOTION_SKILLS_DB_ID</store_env>
+          <store_env>NOTION_DECISIONS_DB_ID</store_env>
+          <store_env>NOTION_METRICS_DB_ID</store_env>
+          <store_env>NOTION_VOICE_COMMANDS_DB_ID</store_env>
+        </output>
+      </task>
+
+      <task id="P2_T4">
+        <name>Configure Google Cloud Storage Backup</name>
+        <setup>
+          <create_bucket>pauli-second-brain-storage</create_bucket>
+          <enable_versioning>true</enable_versioning>
+          <set_retention>7 years (2555 days)</set_retention>
+          <configure_access>Restricted to service account</configure_access>
+        </setup>
+      </task>
+
+      <task id="P2_T5">
+        <name>Test Triple-Sync Flow</name>
+        <test_steps>
+          <step id="1">Create project in Notion → Verify GitHub commit within 2 min</step>
+          <step id="2">Push markdown to GitHub → Verify Notion database update within 15 min</step>
+          <step id="3">Check Google Cloud backup → Verify files present</step>
+          <step id="4">Simulate conflict → Verify GitHub wins (source of truth)</step>
+        </test_steps>
+        <success_criteria>All 4 steps pass</success_criteria>
+      </task>
+    </phase>
+
+    <phase id="PHASE_3" name="Project Inventory Import" duration="2 days" priority="HIGH">
+      <objective>Parse 100 projects from Google Drive and populate Notion</objective>
+
+      <task id="P3_T1">
+        <name>Run LLM-Text Parsing Pipeline</name>
+        <command>python pauli_parse_unstructured.py --input /path/to/google_exports --output ./01_PROJECTS</command>
+        <expected_output>PARSE_MANIFEST.json with conversion statistics</expected_output>
+      </task>
+
+      <task id="P3_T2">
+        <name>Create Project Index JSON</name>
+        <structure>
+          <property>project_id (1-100)</property>
+          <property>title</property>
+          <property>category</property>
+          <property>rating</property>
+          <property>status</property>
+          <property>github_path</property>
+          <property>notion_db_id</property>
+        </structure>
+        <output>01_PROJECTS/project_index.json</output>
+      </task>
+
+      <task id="P3_T3">
+        <name>Populate Notion Projects Database</name>
+        <action>
+          <iterate_over>project_index.json</iterate_over>
+          <for_each>Create Notion database entry with all properties</for_each>
+          <batch_size>50 entries per API call</batch_size>
+        </action>
+        <verification>
+          <check>All 100 projects appear in Notion Projects database</check>
+          <check>Related_Tasks links populated</check>
+        </verification>
+      </task>
+    </phase>
+
+    <phase id="PHASE_4" name="Agent Deployment" duration="3 days" priority="HIGH">
+      <objective>Deploy 19 AI agents and wire into orchestration system</objective>
+
+      <task id="P4_T1">
+        <name>Define Agent Manifests</name>
+        <agents>
+          <agent id="PAULI_PRIME">
+            <role>Master Orchestrator</role>
+            <capabilities>Request routing, decision making, system oversight</capabilities>
+            <deployment>Claude Code instance</deployment>
+          </agent>
+          <agent id="CLAUDE_CODE">
+            <role>Builder/Executor</role>
+            <capabilities>Code generation, task execution</capabilities>
+            <deployment>Native Claude Code environment</deployment>
+          </agent>
+          <agent id="VALIDATOR">
+            <role>Quality Review</role>
+            <capabilities>Code review, testing, validation</capabilities>
+            <deployment>Claude Code instance</deployment>
+          </agent>
+          <agent id="MICROSOFT_LIGHTNING">
+            <role>Monitoring/Optimization</role>
+            <capabilities>Performance tracking, learning, improvement</capabilities>
+            <deployment>Azure Agent Framework</deployment>
+          </agent>
+          <agent id="VOICE_JARVIS">
+            <role>Voice Interface</role>
+            <capabilities>Speech recognition, voice commands, TTS</capabilities>
+            <deployment>VAPI integration</deployment>
+          </agent>
+          <comment>14 more skill-based orchestrator agents defined similarly</comment>
+        </agents>
+        <output>03_AGENTS/agents_manifest.json</output>
+      </task>
+
+      <task id="P4_T2">
+        <name>Wire Agent Orchestration System</name>
+        <architecture>
+          <pauli_prime>
+            <listens_to>Voice commands, Notion updates, GitHub pushes</listens_to>
+            <routes_to>Appropriate skill orchestrator agents</routes_to>
+            <logs_to>Notion Decisions database</logs_to>
+          </pauli_prime>
+          <skill_orchestrators>
+            <spawn_sub_agents>Based on task complexity</spawn_sub_agents>
+            <coordinate>CrewAI swarms for parallel execution</coordinate>
+            <report_back>Status to PAULI_PRIME</report_back>
+          </skill_orchestrators>
+          <validator>
+            <monitors>All code output from CLAUDE_CODE</monitors>
+            <triggers>Strict review workflows</triggers>
+            <reports>Issues back for resolution</reports>
+          </validator>
+          <lightning>
+            <tracks>Agent performance metrics</tracks>
+            <stores>In Notion Metrics database</stores>
+            <generates>Weekly improvement reports</generates>
+          </lightning>
+        </architecture>
+      </task>
+
+      <task id="P4_T3">
+        <name>Implement Adversarial Agent Review System</name>
+        <description>Coder vs Validator agents argue until optimal solution</description>
+        <flow>
+          <step>CLAUDE_CODE generates solution A</step>
+          <step>VALIDATOR reviews strictly, identifies issues</step>
+          <step>CLAUDE_CODE revises to solution B</step>
+          <step>VALIDATOR validates again</step>
+          <step>Loop until VALIDATOR approves or max iterations reached</step>
+          <step>Log entire discussion to GitHub</step>
+        </flow>
+      </task>
+
+      <task id="P4_T4">
+        <name>Deploy Agents to Production</name>
+        <deployment>
+          <pauli_prime>Deploy to primary Claude Code instance</pauli_prime>
+          <validator>Deploy secondary Claude Code instance</validator>
+          <skill_orchestrators>Deploy as modular agents</skill_orchestrators>
+          <lightning>Activate Azure Agent Framework monitoring</lightning>
+          <jarvis>Initialize VAPI voice interface</jarvis>
+        </deployment>
+      </task>
+    </phase>
+
+    <phase id="PHASE_5" name="Dashboard & Voice UI" duration="3 days" priority="MEDIUM">
+      <objective>Build ARCHON-X spaceship cockpit dashboard and voice interface</objective>
+
+      <task id="P5_T1">
+        <name>Design Spaceship Cockpit Dashboard</name>
+        <tech_stack>
+          <frontend>React 18 + TypeScript + Vite</frontend>
+          <3d_graphics>Three.js or Babylon.js</3d_graphics>
+          <animations>GSAP + Framer Motion</animations>
+          <styling>Tailwind CSS + custom sci-fi theme</styling>
+          <colors>
+            <primary>#00d4ff (Cyan)</primary>
+            <secondary>#ff0000 (Red)</secondary>
+            <tertiary>#0a0a0a (Black)</tertiary>
+            <accent>#39ff14 (Matrix Green)</accent>
+          </colors>
+        </tech_stack>
+
+        <components>
+          <hero>
+            <type>3D Animated Spaceship Interior</type>
+            <features>
+              <feature>Real-time agent status as orbiting entities</feature>
+              <feature>Holographic readouts for each agent's metrics</feature>
+              <feature>Voice command waveform visualization</feature>
+            </features>
+          </hero>
+          <control_panels>
+            <type>Interactive Game-Style Buttons</type>
+            <design>LED glowing borders, haptic-ready</design>
+            <actions>Deploy Agent, Monitor Tasks, Voice Command, System Status</actions>
+          </control_panels>
+          <metrics_display>
+            <type>Real-time Data Streams</type>
+            <visualizations>Agent performance radar, task completion, system health, voice activity</visualizations>
+          </metrics_display>
+        </components>
+      </task>
+
+      <task id="P5_T2">
+        <name>Integrate VAPI Voice Interface</name>
+        <setup>
+          <configure_vapi>Set up VAPI project with Pauli voice persona</configure_vapi>
+          <define_intents>Deploy, Monitor, Status, Help, Execute, Rollback</define_intents>
+          <train_model>Voice model recognition for command accuracy</train_model>
+          <test_flow>Voice command → Intent recognition → Agent execution → Voice response</test_flow>
+        </setup>
+      </task>
+
+      <task id="P5_T3">
+        <name>Connect Dashboard to Real-time Data</name>
+        <datasources>
+          <notion>Sync agent metrics from Metrics database</notion>
+          <github>Real-time commit activity feed</github>
+          <supabase>Voice command logs + execution status</supabase>
+          <agent_apis>Direct polling of agent status endpoints</agent_apis>
+        </datasources>
+      </task>
+
+      <task id="P5_T4">
+        <name>Deploy Dashboard</name>
+        <deployment>
+          <host>Vercel (Frontend) + Railway (Backend)</host>
+          <authentication>Supabase Auth + GitHub OAuth</authentication>
+          <https>Auto-configured by Vercel</https>
+          <domain>https://archon-x.pauli-effect.com (or custom)</domain>
+        </deployment>
+      </task>
+    </phase>
+
+    <phase id="PHASE_6" name="CLI Tools Integration" duration="2 days" priority="HIGH">
+      <objective>Wire all deployment and management CLIs for voice automation</objective>
+
+      <task id="P6_T1">
+        <name>Integrate Supabase CLI</name>
+        <setup>
+          <install>npm install -g supabase-cli</install>
+          <authenticate>supabase login --token $SUPABASE_KEY</authenticate>
+          <link_project>supabase link --project-ref {PROJECT_ID}</link_project>
+          <create_migrations_script>Auto-generate migrations from schema changes</create_migrations_script>
+        </setup>
+        <voice_command>Voice: "Pauli, deploy database schema update"</voice_command>
+      </task>
+
+      <task id="P6_T2">
+        <name>Integrate GitHub CLI</name>
+        <setup>
+          <install>npm install -g gh</install>
+          <authenticate>gh auth login --with-token $GITHUB_TOKEN</authenticate>
+          <configure_repos>
+            <repo>executiveusa/pauli-comic-funnel</repo>
+            <repo>executiveusa/outlines-second-brain</repo>
+            <repo>executiveusa/the-pauli-effect</repo>
+          </configure_repos>
+        </setup>
+        <voice_command>Voice: "Pauli, create pull request for new feature"</voice_command>
+      </task>
+
+      <task id="P6_T3">
+        <name>Integrate Vercel CLI</name>
+        <setup>
+          <install>npm install -g vercel</install>
+          <authenticate>vercel login --token $VERCEL_TOKEN</authenticate>
+          <link_projects>
+            <project>pauli-comic-funnel (Frontend)</project>
+            <project>archon-x-dashboard (Dashboard)</project>
+          </link_projects>
+        </setup>
+        <voice_command>Voice: "Pauli, deploy dashboard to production"</voice_command>
+      </task>
+
+      <task id="P6_T4">
+        <name>Integrate Railway CLI</name>
+        <setup>
+          <install>npm install -g @railway/cli</install>
+          <authenticate>railway login --token $RAILWAY_TOKEN</authenticate>
+          <link_services>Link all Railway services for deployment</link_services>
+        </setup>
+        <voice_command>Voice: "Pauli, restart backend services"</voice_command>
+      </task>
+
+      <task id="P6_T5">
+        <name>Integrate Coolify CLI</name>
+        <setup>
+          <install>Direct API integration (no official CLI)</install>
+          <authenticate>Use Coolify API token $COOLIFY_API_TOKEN</authenticate>
+          <create_wrapper>Build Node.js wrapper around Coolify API</create_wrapper>
+          <commands>Deploy app, Monitor status, View logs, Rollback</commands>
+        </setup>
+        <voice_command>Voice: "Pauli, deploy to Coolify on Hostinger"</voice_command>
+      </task>
+
+      <task id="P6_T6">
+        <name>Create Unified CLI Orchestration Script</name>
+        <script_language>Node.js</script_language>
+        <functionality>
+          <route_commands>Parse voice intent to appropriate CLI tool</route_commands>
+          <execute_cli>Run CLI with appropriate flags and environment variables</execute_cli>
+          <capture_output>Return results to voice interface</capture_output>
+          <log_execution>All CLI calls logged to GitHub and Notion</log_execution>
+        </functionality>
+        <output>pauli-cli-orchestrator.js → Available to all agents</output>
+      </task>
+    </phase>
+
+    <phase id="PHASE_7" name="Voice Command Automation" duration="2 days" priority="MEDIUM">
+      <objective>Enable fully hands-free operation via voice</objective>
+
+      <task id="P7_T1">
+        <name>Define Voice Command Library</name>
+        <commands>
+          <category name="Deployment">
+            <cmd>"Deploy {app} to {platform}"</cmd>
+            <cmd>"Rollback {app} to previous version"</cmd>
+            <cmd>"Check deployment status"</cmd>
+          </category>
+          <category name="Monitoring">
+            <cmd>"What's the status of {agent}?"</cmd>
+            <cmd>"Show me agent performance metrics"</cmd>
+            <cmd>"Is the system healthy?"</cmd>
+          </category>
+          <category name="Operations">
+            <cmd>"Create new project: {project_name}"</cmd>
+            <cmd>"Log a decision: {decision_text}"</cmd>
+            <cmd>"What was the rationale for {decision}?"</cmd>
+          </category>
+          <category name="Voice Search">
+            <cmd>"Ask PAULI: {question}"</cmd>
+            <cmd>"Search second brain for {keyword}"</cmd>
+          </category>
+        </commands>
+        <storage>05_VOICE/command_library.json</storage>
+      </task>
+
+      <task id="P7_T2">
+        <name>Train Voice Model for Recognition</name>
+        <action>
+          <feed_commands>All voice commands to VAPI voice model</feed_commands>
+          <optimize>Train for accent, tone, speed variations</optimize>
+          <test>Test against real user speech samples</test>
+          <accuracy_target>&gt;95% command recognition</accuracy_target>
+        </action>
+      </task>
+
+      <task id="P7_T3">
+        <name>Create Voice Command Response Templates</name>
+        <responses>
+          <success>"Acknowledged. {agent_name} is executing. Status: {status_summary}"</success>
+          <confirmation>"Confirming: {operation}. Should I proceed?"</confirmation>
+          <error>"Error: {error_description}. Recommendation: {fix}"</error>
+          <query_result>"{question} → {answer_with_source}"</query_result>
+        </responses>
+        <delivery>Voice synthesis + dashboard notification</delivery>
+      </task>
+
+      <task id="P7_T4">
+        <name>Log All Voice Interactions</name>
+        <storage>Notion Voice_Commands database</storage>
+        <fields>
+          <field>Command text (transcribed)</field>
+          <field>Intent (detected)</field>
+          <field>Agent executed</field>
+          <field>Result (success/failure)</field>
+          <field>Execution time</field>
+          <field>Timestamp</field>
+        </fields>
+      </task>
+    </phase>
+
+    <phase id="PHASE_8" name="Testing & Validation" duration="2 days" priority="HIGH">
+      <objective>Comprehensive testing before production</objective>
+
+      <task id="P8_T1">
+        <name>Unit Tests</name>
+        <coverage>
+          <test>Parser: Convert PDF → Markdown correctly</test>
+          <test>Sync: GitHub → Notion within 2 minutes</test>
+          <test>Agent: Route request to correct agent</test>
+          <test>Voice: Recognize commands &gt;95% accuracy</test>
+        </coverage>
+      </task>
+
+      <task id="P8_T2">
+        <name>Integration Tests</name>
+        <flows>
+          <flow>Voice command → Agent execution → Dashboard update → Notion log</flow>
+          <flow>GitHub push → ByteRover sync → Notion update → Lightning monitoring</flow>
+          <flow>Project creation in Notion → GitHub commit → Voice notification</flow>
+        </flows>
+      </task>
+
+      <task id="P8_T3">
+        <name>Load Testing</name>
+        <scenarios>
+          <scenario>1000 voice commands per day</scenario>
+          <scenario>100 concurrent agent executions</scenario>
+          <scenario>Real-time sync with 5-second interval</scenario>
+        </scenarios>
+        <tool>Apache JMeter or k6</tool>
+      </task>
+
+      <task id="P8_T4">
+        <name>Security Audit</name>
+        <checks>
+          <check>No secrets in GitHub (use environment variables)</check>
+          <check>API keys rotated correctly (every 30-90 days)</check>
+          <check>Audit logging enabled (all operations logged)</check>
+          <check>Access controls: Only authorized users can execute commands</check>
+        </checks>
+      </task>
+    </phase>
+
+    <phase id="PHASE_9" name="Documentation & Training" duration="1 day" priority="MEDIUM">
+      <objective>Complete documentation for operations and future developers</objective>
+
+      <task id="P9_T1">
+        <name>Create Runbooks</name>
+        <documents>
+          <doc>Deployment Runbook (how to deploy any app)</doc>
+          <doc>Troubleshooting Guide (common issues + fixes)</doc>
+          <doc>Voice Command Reference (all commands + examples)</doc>
+          <doc>Agent Architecture Deep Dive (how agents work)</doc>
+          <doc>Adding New Skills (how to create new Cloud Skills)</doc>
+        </documents>
+      </task>
+
+      <task id="P9_T2">
+        <name>Create "Ask PAULI" Documentation</name>
+        <content>
+          <explanation>How to query PAULI for historical decisions</explanation>
+          <examples>3-5 example queries and answers</examples>
+          <limitations>What PAULI knows and doesn't know</limitations>
+        </content>
+      </task>
+
+      <task id="P9_T3">
+        <name>7-Generation Legacy Documentation</name>
+        <content>
+          <explanation>How nephews/nieces can access PAULI in 2050+</explanation>
+          <access_instructions>Cloud access, credentials, permissions</access_instructions>
+          <knowledge_base>Complete history of all decisions and projects</knowledge_base>
+        </content>
+      </task>
+    </phase>
+
+    <phase id="PHASE_10" name="Production Deployment" duration="1 day" priority="CRITICAL">
+      <objective>Deploy to production and monitor</objective>
+
+      <task id="P10_T1">
+        <name>Final Pre-flight Checks</name>
+        <checklist>
+          <check>All 7 phases completed</check>
+          <check>All tests passing</check>
+          <check>Security audit passed</check>
+          <check>Documentation complete</check>
+          <check>Rollback procedures documented</check>
+          <check>Monitoring dashboards active</check>
+        </checklist>
+      </task>
+
+      <task id="P10_T2">
+        <name>Deploy All Services</name>
+        <services>
+          <service>PAULI_PRIME orchestrator → Active</service>
+          <service>Validator agent → Active</service>
+          <service>ByteRover sync → Active</service>
+          <service>Dashboard UI → https://archon-x.pauli-effect.com</service>
+          <service>VAPI voice interface → Active</service>
+          <service>Agent Lightning monitoring → Active</service>
+        </services>
+      </task>
+
+      <task id="P10_T3">
+        <name>Monitor for 24 Hours</name>
+        <monitoring>
+          <metric>System uptime &gt;99.9%</metric>
+          <metric>Sync success rate 100%</metric>
+          <metric>Voice command accuracy &gt;95%</metric>
+          <metric>Agent response time &lt;2 seconds</metric>
+        </monitoring>
+      </task>
+
+      <task id="P10_T4">
+        <name>Declare Production Ready</name>
+        <action>GitHub release: v1.0.0 PAULI Second Brain Production</action>
+        <notification>All stakeholders notified of system availability</notification>
+      </task>
+    </phase>
+  </execution_phases>
+
+  <success_criteria>
+    <criterion id="SC1">All 100 projects indexed and searchable</criterion>
+    <criterion id="SC2">Triple-sync working: GitHub ↔ Notion ↔ Cloud with 100% data integrity</criterion>
+    <criterion id="SC3">Voice commands work: "Pauli, deploy my website" → Full execution</criterion>
+    <criterion id="SC4">Agent Lightning tracking all metrics and optimizing</criterion>
+    <criterion id="SC5">Dashboard accessible at production URL with real-time data</criterion>
+    <criterion id="SC6">All CLIs (Supabase, GitHub, Vercel, Railway, Coolify) integrated and functional</criterion>
+    <criterion id="SC7">"Ask PAULI" system working: Query for historical decision, get complete answer</criterion>
+    <criterion id="SC8">7-generation archive set up in Google Cloud with access controls</criterion>
+  </success_criteria>
+
+  <error_handling>
+    <policy>
+      <on_failure>Roll back to previous stable state</on_failure>
+      <retry_strategy>Exponential backoff: 1s, 2s, 4s, 8s max</retry_strategy>
+      <notification>Alert via Notion, GitHub issue, and email</notification>
+      <manual_intervention>If automated recovery fails after 3 retries</manual_intervention>
+    </policy>
+  </error_handling>
+
+  <execution_notes>
+    <note>Claude Code: Execute phases sequentially, don't skip steps</note>
+    <note>Verify each phase completes before moving to next</note>
+    <note>When blocked: Create GitHub issue and wait for human input</note>
+    <note>All code pushed to https://github.com/executiveusa/outlines-second-brain</note>
+    <note>This is production-grade system: Test thoroughly before deployment</note>
+  </execution_notes>
+</claude_code_directive>

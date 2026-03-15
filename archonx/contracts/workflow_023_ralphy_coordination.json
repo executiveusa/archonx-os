@@ -1,0 +1,47 @@
+{
+  "workflow_id": "WF-023",
+  "name": "Ralphy Coordination",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Coordinates task assignments between Devika PI and the Ralphy orchestration agent.",
+  "trigger": {
+    "event": "ralphy_coordination_requested",
+    "condition": "multi_agent_task_detected",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "task_assignments"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "task_assignments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["agent", "task"],
+          "properties": {
+            "agent": { "type": "string" },
+            "task": { "type": "string" }
+          }
+        }
+      },
+      "coordination_strategy": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "ralphy_coordination_complete",
+    "fields": ["bead_id", "assigned_count", "coordination_strategy", "timestamp"]
+  },
+  "evidence_path": "ops/reports/ralphy_coordination/",
+  "success_criteria": [
+    "all task assignments have a valid agent",
+    "no circular dependencies in assignment graph",
+    "coordination plan written to ops/reports/"
+  ],
+  "timeout_seconds": 900
+}

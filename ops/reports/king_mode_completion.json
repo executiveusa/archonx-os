@@ -1,0 +1,165 @@
+{
+  "report": "King Mode Build — Phase 1 Handoff Report",
+  "bead_id": "BEAD-KM-013",
+  "generated_at": "2026-02-23T00:00:00Z",
+  "generated_by": "Claude Sonnet 4.6 (Claude Code)",
+  "builder_handoff_target": "Gemini 3.1",
+  "mission": "$100M by New Year's 2030",
+  "overall_status": "PRE-BUILD COMPLETE — READY FOR GEMINI 3.1 BUILD PHASES",
+
+  "phases_completed": {
+    "BEAD-KM-001": {
+      "title": "Git sync + security lockdown",
+      "status": "DONE",
+      "summary": "Synced all local changes, pulled remote (BEAD-101 merge), cleared __pycache__ from tracking, pushed 1072 files. Dependabot PR #7 auto-merged."
+    },
+    "BEAD-KM-002": {
+      "title": "Saleor agentic commerce stack",
+      "status": "DONE",
+      "files": [
+        "services/saleor/README.md",
+        "services/saleor/tools/product_search.py",
+        "services/saleor/tools/checkout_flow.py",
+        "services/saleor/tools/order_management.py",
+        "services/saleor/agents/saleor_agent.py",
+        "services/saleor/data/stack_entry.json"
+      ]
+    },
+    "BEAD-KM-003": {
+      "title": "4 Knights — Marcus Lemonis framework",
+      "status": "DONE",
+      "summary": "Updated archonx/core/agents.py with lemonis_department, lemonis_pillar, department_mission metadata for all 4 knights. Corrected knight names: Flash (Product), Glitch (Gratitude).",
+      "knights": {
+        "blitz_knight_white_b": {"pillar": 1, "department": "People", "visual": "Cyan #00FFFF heartbeat pulse"},
+        "patch_knight_white_g": {"pillar": 2, "department": "Process", "visual": "Blue #4169E1 steady rotation"},
+        "flash_knight_black_b": {"pillar": 3, "department": "Product", "visual": "Orange #FF6600 sharp pulse"},
+        "glitch_knight_black_g": {"pillar": 4, "department": "Gratitude/BENEVOLENCIA", "visual": "Gold #F5A623 soft pulse + B emblem"}
+      }
+    },
+    "BEAD-KM-004": {
+      "title": "BENEVOLENCIA entity",
+      "status": "DONE",
+      "files": [
+        "ecosystem/benevolencia/README.md",
+        "ecosystem/benevolencia/BRAND.md",
+        "ecosystem/benevolencia/PROGRAMS.md",
+        "ecosystem/benevolencia/AGENT_CONFIG.md",
+        "ecosystem/benevolencia/DATABASE_ENTRY.json"
+      ],
+      "note": "GLITCH KNIGHT confirmed as operator (not Stitch). Correction applied."
+    },
+    "BEAD-KM-005": {
+      "title": "Franken-Claw™ trademark + brand",
+      "status": "DONE",
+      "files": [
+        "services/franken-claw/README.md",
+        "services/franken-claw/BRAND.md",
+        "services/franken-claw/ARCHITECTURE.md",
+        "services/franken-claw/CHANGELOG.md"
+      ]
+    },
+    "BEAD-KM-006": {
+      "title": "Heart & Soul files — all 36 agents",
+      "status": "DONE",
+      "soul_file_count": 36,
+      "white_back_rank": ["pauli_king", "synthia_queen", "popebot_bishop", "devika_bishop", "visionclaw_knight", "agent_zero_knight", "blitz_knight", "patch_knight", "iron_claw_rook", "darya_rook"],
+      "white_pawns": ["scout", "craft", "quill", "lens", "cipher", "pulse", "probe", "link"],
+      "black_back_rank": ["shannon_king", "cynthia_queen", "tyrone_bishop", "brenner_bishop", "mustang_maxx_knight", "cosmos_knight", "flash_knight", "glitch_knight", "frankenstack_rook", "pooracho_rook"],
+      "black_pawns": ["whisper", "forge", "echo", "pixel", "vault", "spark", "trace", "bridge"],
+      "soul_file_path": ".agent-souls/{white|black}/{name}.soul.md"
+    },
+    "BEAD-KM-007": {
+      "title": "Context7 MCP wiring",
+      "status": "DONE",
+      "summary": "Context7 MCP added to mcp_settings.json. AGENTS.md updated with mandatory Context7 compliance section — violation = restricted status.",
+      "command": "npx -y @upstash/context7-mcp"
+    },
+    "BEAD-KM-008": {
+      "title": "Blender MCP + Remotion skills",
+      "status": "DONE",
+      "files": [
+        "services/blender/README.md",
+        "archonx/tools/remotion_render.py",
+        "visualization/remotion/src/KingModeIntro.tsx",
+        "visualization/remotion/src/index.ts"
+      ],
+      "blender_command": "uvx blender-mcp",
+      "remotion_composition": "KingModeIntro (300 frames, 30fps, 1920x1080)"
+    },
+    "BEAD-KM-009": {
+      "title": "PopeBot activation + pawn training",
+      "status": "DONE",
+      "files": [
+        "paulis-pope-bot/templates/config/SOUL.md (updated)",
+        "paulis-pope-bot/training/README.md",
+        "paulis-pope-bot/training/module_01_identity.md",
+        "paulis-pope-bot/training/module_02_listening.md",
+        "paulis-pope-bot/training/module_03_pauliwheel.md",
+        "paulis-pope-bot/training/module_04_benevolencia.md",
+        "paulis-pope-bot/training/module_05_security.md",
+        "paulis-pope-bot/training/module_06_escalation.md"
+      ],
+      "submodule_commit": "3105d37",
+      "trainees": "all 32 pawns (16 white + 16 black)"
+    },
+    "BEAD-KM-010": {
+      "title": "Database entries",
+      "status": "DONE",
+      "file": "data/ecosystem_registry.json",
+      "entity_count": 12
+    },
+    "BEAD-KM-011": {
+      "title": "Skills completion",
+      "status": "DONE",
+      "summary": "Audited all 9 skill files — found 8 already fully implemented. Fixed 1 real stub: invoice_management.py _refund_invoice Stripe API call (line 428). upwork_scout.py line 134 was not a pass stub."
+    }
+  },
+
+  "ready_for_gemini_31": {
+    "handoff_prd": "plans/KING_MODE_GEMINI_31_PRD.md",
+    "build_prompt_location": "plans/KING_MODE_GEMINI_31_PRD.md#strict-build-prompt",
+    "files_gemini_31_will_extend": [
+      "dashboard-agent-swarm/components/KingModeChessboard.tsx",
+      "dashboard-agent-swarm/src/pages/KingMode.tsx"
+    ],
+    "files_gemini_31_will_create": [
+      "visualization/remotion/src/KingModeIntro.tsx (render to MP4)",
+      "dashboard-agent-swarm/public/models/chess/*.glb",
+      "dashboard-agent-swarm/public/king-mode-intro.mp4"
+    ],
+    "soul_files_available": ".agent-souls/ (36 files)",
+    "ecosystem_registry": "data/ecosystem_registry.json",
+    "saleor_stack": "services/saleor/",
+    "benevolencia": "ecosystem/benevolencia/",
+    "franken_claw": "services/franken-claw/",
+    "blender_mcp_config": "services/blender/README.md",
+    "context7_mandatory": true
+  },
+
+  "git_log_bead_km": [
+    "559c1b9 BEAD-KM-006/009/010/011: Soul files, registry, skills, BENEVOLENCIA fix",
+    "4088c39 BEAD-KM-002 through BEAD-KM-008: Saleor + BENEVOLENCIA + Franken-Claw + MCPs + Remotion",
+    "d2619dd BEAD-019 Security hardening sprints 1-4 (prior session)"
+  ],
+
+  "pre_build_checklist": {
+    "soul_files_all_36_present": true,
+    "ecosystem_registry_written": true,
+    "saleor_stack_scaffolded": true,
+    "benevolencia_entity_defined": true,
+    "franken_claw_branded": true,
+    "context7_mcp_wired": true,
+    "blender_mcp_wired": true,
+    "remotion_composition_created": true,
+    "popebot_training_curriculum_complete": true,
+    "4_knights_lemonis_metadata_in_agents_py": true,
+    "trademark_registry_updated": true,
+    "all_skill_stubs_resolved": true,
+    "repo_pushed_to_remote": true
+  },
+
+  "known_remaining_manual_steps": [
+    "Open PRs for feature/access-kernel-v1 and feature/pauliwheel-bead-0005-0006 (GitHub token cannot create PRs)",
+    "Dependabot security alerts: 2 moderate + 2 low (auto-merge enabled for minor/patch)"
+  ]
+}

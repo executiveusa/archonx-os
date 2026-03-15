@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArchonX Repo Index Schema",
+  "description": "Schema for repos.index.yaml canonical repo index",
+  "type": "object",
+  "required": ["archonx_repo_index_spec"],
+  "properties": {
+    "archonx_repo_index_spec": {
+      "type": "object",
+      "required": ["version", "mode", "do_not_clone", "do_not_vendor", "do_not_mirror", "teams", "domain_types", "repos"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "generated_utc": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["index_only"]
+        },
+        "do_not_clone": {
+          "type": "boolean",
+          "const": true
+        },
+        "do_not_vendor": {
+          "type": "boolean",
+          "const": true
+        },
+        "do_not_mirror": {
+          "type": "boolean",
+          "const": true
+        },
+        "teams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "display"],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "display": {
+                "type": "string"
+              },
+              "owners": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "regions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "domain_types": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "description"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": ["saas", "tool", "agent", "template", "content", "unknown"]
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "repos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "url", "vis", "kind", "team_id", "domain_type_id"],
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "vis": {
+                "type": "string",
+                "enum": ["public", "private"]
+              },
+              "kind": {
+                "type": "string",
+                "enum": ["orig", "fork"]
+              },
+              "team_id": {
+                "type": "string"
+              },
+              "domain_type_id": {
+                "type": "string",
+                "enum": ["saas", "tool", "agent", "template", "content", "unknown"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

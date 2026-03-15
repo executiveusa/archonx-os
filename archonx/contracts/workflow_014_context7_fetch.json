@@ -1,0 +1,37 @@
+{
+  "workflow_id": "WF-014",
+  "name": "Context7 Fetch",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Fetches library documentation via Context7 for the libraries referenced in a task prompt.",
+  "trigger": {
+    "event": "context7_fetch_requested",
+    "condition": "plan_stage_active AND libraries_detected",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "libraries"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "libraries": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+      "doc_depth": { "type": "string", "enum": ["shallow", "deep"] }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "context7_fetch_complete",
+    "fields": ["bead_id", "libraries", "fetch_status", "timestamp"]
+  },
+  "evidence_path": "ops/reports/context7_fetches/",
+  "success_criteria": [
+    "all requested libraries resolved",
+    "documentation snippets stored in context",
+    "Context7Guard marks each library as resolved and queried"
+  ],
+  "timeout_seconds": 900
+}

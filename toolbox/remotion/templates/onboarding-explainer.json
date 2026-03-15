@@ -1,0 +1,6 @@
+{
+  "template": "onboarding-explainer",
+  "version": "1.0.0",
+  "inputs": ["brand", "script", "assets", "output_format"],
+  "security": {"requires_grant": true, "requires_work_item": true}
+}

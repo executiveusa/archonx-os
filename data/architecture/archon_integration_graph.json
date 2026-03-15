@@ -1,0 +1,183 @@
+{
+  "nodes": [
+    {
+      "id": "archonx-os",
+      "type": "brain",
+      "role": "controller"
+    },
+    {
+      "id": "DesktopCommanderMCP",
+      "type": "control_tower",
+      "role": "machine_control"
+    },
+    {
+      "id": "mcp2cli",
+      "type": "integration",
+      "role": "invocation_gateway"
+    },
+    {
+      "id": "agency-agents",
+      "type": "worker",
+      "role": "multi_agent_worker"
+    },
+    {
+      "id": "Darya/OpenHands",
+      "type": "worker",
+      "role": "execution_hands"
+    },
+    {
+      "id": "Agent Zero",
+      "type": "worker",
+      "role": "specialized_worker"
+    },
+    {
+      "id": "Goose",
+      "type": "worker",
+      "role": "cloud_coding_worker"
+    },
+    {
+      "id": "ext-apps",
+      "type": "integration",
+      "role": "connector_plugins"
+    },
+    {
+      "id": "ralphy",
+      "type": "worker",
+      "role": "specialized_worker"
+    },
+    {
+      "id": "jcodemunch-mcp",
+      "type": "integration",
+      "role": "mcp_plugin"
+    },
+    {
+      "id": "Notion",
+      "type": "memory",
+      "role": "second_brain_backend"
+    },
+    {
+      "id": "pauli-comic-funnel",
+      "type": "frontend",
+      "role": "public_funnel"
+    },
+    {
+      "id": "THE PAULI EFFECT",
+      "type": "product",
+      "role": "brand_layer"
+    },
+    {
+      "id": "Cloudflare Tunnel",
+      "type": "integration",
+      "role": "edge_access"
+    }
+  ],
+  "edges": [
+    {
+      "from": "archonx-os",
+      "to": "DesktopCommanderMCP",
+      "relationship": "governs_and_routes_to"
+    },
+    {
+      "from": "archonx-os",
+      "to": "mcp2cli",
+      "relationship": "invokes_through"
+    },
+    {
+      "from": "archonx-os",
+      "to": "Darya/OpenHands",
+      "relationship": "plans_for_and_controls"
+    },
+    {
+      "from": "archonx-os",
+      "to": "agency-agents",
+      "relationship": "dispatches_jobs_to"
+    },
+    {
+      "from": "archonx-os",
+      "to": "Agent Zero",
+      "relationship": "dispatches_jobs_to"
+    },
+    {
+      "from": "archonx-os",
+      "to": "Goose",
+      "relationship": "dispatches_cloud_coding_to"
+    },
+    {
+      "from": "archonx-os",
+      "to": "ralphy",
+      "relationship": "dispatches_specialized_jobs_to"
+    },
+    {
+      "from": "archonx-os",
+      "to": "ext-apps",
+      "relationship": "loads_plugins_from"
+    },
+    {
+      "from": "archonx-os",
+      "to": "jcodemunch-mcp",
+      "relationship": "uses_tool_plugin"
+    },
+    {
+      "from": "DesktopCommanderMCP",
+      "to": "local_desktop",
+      "relationship": "controls"
+    },
+    {
+      "from": "mcp2cli",
+      "to": "DesktopCommanderMCP",
+      "relationship": "compresses_and_invokes"
+    },
+    {
+      "from": "mcp2cli",
+      "to": "jcodemunch-mcp",
+      "relationship": "wraps"
+    },
+    {
+      "from": "mcp2cli",
+      "to": "ext-apps",
+      "relationship": "normalizes_calls_to"
+    },
+    {
+      "from": "Goose",
+      "to": "repo_inventory",
+      "relationship": "requires_awareness_of"
+    },
+    {
+      "from": "Goose",
+      "to": "extension_registry",
+      "relationship": "requires_awareness_of"
+    },
+    {
+      "from": "pauli-comic-funnel",
+      "to": "Notion",
+      "relationship": "reads_structured_content_from"
+    },
+    {
+      "from": "THE PAULI EFFECT",
+      "to": "pauli-comic-funnel",
+      "relationship": "brands_and_surfaces"
+    },
+    {
+      "from": "THE PAULI EFFECT",
+      "to": "archonx-os",
+      "relationship": "runs_on_top_of"
+    },
+    {
+      "from": "Cloudflare Tunnel",
+      "to": "archonx-os",
+      "relationship": "exposes_edge_routes_for"
+    },
+    {
+      "from": "Cloudflare Tunnel",
+      "to": "THE PAULI EFFECT",
+      "relationship": "publishes"
+    }
+  ],
+  "routing_principles": [
+    "Archon-X owns planning, routing, state, and policy.",
+    "Workers execute but do not become planners.",
+    "DesktopCommanderMCP is the default machine-control tower.",
+    "mcp2cli is mandatory on tool invocation paths.",
+    "Product layers consume shared platform services rather than embedding orchestration."
+  ]
+}

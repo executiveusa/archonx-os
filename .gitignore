@@ -1,0 +1,115 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.env.*
+*.env
+master.env
+.secrets/
+secrets/
+.envrc
+.direnv/
+.venv/
+venv/
+
+# Keys / certs (never commit)
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.enc
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (visualization)
+visualization/web/node_modules/
+visualization/web/dist/
+
+# Testing / Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+logs/
+*.log
+
+# Archives (keep out of repo)
+*.zip
+*.tar.gz
+
+# Large binary files (exceed GitHub 100MB limit)
+01-main/01-main/hardware/light/bodies/
+
+# Extra safety ignores
+master.env
+*.env
+*.pem
+*.key
+*.pfx
+*.p12
+*.zip
+*.7z
+*.tar
+*.tar.gz
+.archive/
+.zencoder/
+01-app-main/
+01-main/
+open-interpreter-fork-main/
+Darya-designs-main/
+agents-official-brand-guidelines-master/
+n8n-workflows/StoryToolkitAI-main/StoryToolkitAI-main/FFmpeg-master/
+scripts/secrets.py
+
+# Additional secret files (never commit)
+kilo-code-secrets.json
+*.secrets.json
+master.env.txt
+orgo-agent/SANDBOX_CONFIG/credentials/
+credentials/
+
+# Vault Agent generated reports (never commit - they contain secrets)
+ops/reports/vault_audit.json
+ops/reports/ai_recommendations.json
+ops/reports/infisical_import.json
+ops/reports/integrated_report.json
+ops/reports/rotation_checklist.md
+ops/reports/safe_template.env
+ops/reports/cron.log
+.env.test
+
+# ============================================
+# SECRETS — NEVER COMMIT (BEAD-MASTER-002)
+# ============================================
+*.env
+!.env.example
+!.env.template
+master.env
+*-secrets.json
+GITHUB_TOKEN*.txt
+*KEYS*.txt
+*PASSWORD*.txt
+*SECRET*.txt
+*TOKEN*.txt
+*PRIVATE_KEY*.txt
+vault/local/

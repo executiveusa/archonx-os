@@ -1,0 +1,49 @@
+{
+  "workflow_id": "WF-025",
+  "name": "Parallel Execution",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Launches multiple independent subagent tasks in parallel to reduce total execution time.",
+  "trigger": {
+    "event": "parallel_execution_requested",
+    "condition": "independent_tasks_available",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "tasks"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["task_id", "agent", "payload"],
+          "properties": {
+            "task_id": { "type": "string" },
+            "agent": { "type": "string" },
+            "payload": { "type": "object" }
+          }
+        },
+        "minItems": 2
+      },
+      "max_concurrency": { "type": "integer", "minimum": 1 }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "parallel_execution_complete",
+    "fields": ["bead_id", "task_count", "succeeded", "failed", "elapsed_seconds", "timestamp"]
+  },
+  "evidence_path": "ops/reports/parallel_executions/",
+  "success_criteria": [
+    "all tasks launched within max_concurrency limit",
+    "task results collected before timeout",
+    "no task left in pending state at completion"
+  ],
+  "timeout_seconds": 900
+}

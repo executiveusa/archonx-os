@@ -1,0 +1,24 @@
+[submodule "archonx/tools/chrome-devtools-mcp"]
+	path = archonx/tools/chrome-devtools-mcp
+	url = https://github.com/ChromeDevTools/chrome-devtools-mcp.git
+[submodule "archonx/tools/orgo-mcp"]
+	path = archonx/tools/orgo-mcp
+	url = https://github.com/nickvasilescu/orgo-mcp.git
+[submodule "archonx/tools/brightdata-mcp"]
+	path = archonx/tools/brightdata-mcp
+	url = https://github.com/brightdata/brightdata-mcp.git
+[submodule "agent-frameworks/agent-lightning"]
+	path = agent-frameworks/agent-lightning
+	url = https://github.com/microsoft/agent-lightning.git
+[submodule "paulis-pope-bot"]
+	path = paulis-pope-bot
+	url = https://github.com/executiveusa/paulis-pope-bot.git
+[submodule "VisionClaw"]
+	path = VisionClaw
+	url = https://github.com/executiveusa/VisionClaw.git
+[submodule "archon-x"]
+	path = archon-x
+	url = https://github.com/nazirlouis/ada_v2.git
+[submodule "dashboard-agent-swarm"]
+	path = dashboard-agent-swarm
+	url = https://github.com/executiveusa/dashboard-agent-swarm.git

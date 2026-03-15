@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-021",
+  "name": "Subagent Spawn",
+  "category": "orchestration",
+  "version": "1.0.0",
+  "description": "Spawns a new subagent instance for a specific role within a bead execution.",
+  "trigger": {
+    "event": "subagent_spawn_requested",
+    "condition": "plan_stage_active AND role_unassigned",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "role", "profile"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "role": { "type": "string" },
+      "profile": { "type": "string" },
+      "config_overrides": { "type": "object" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "subagent_spawned",
+    "fields": ["bead_id", "role", "agent_id", "profile", "timestamp"]
+  },
+  "evidence_path": "ops/reports/subagent_spawns/",
+  "success_criteria": [
+    "subagent registered with unique agent_id",
+    "role matches one of: planner, implementer, tester, reviewer",
+    "subagent ready signal received within timeout"
+  ],
+  "timeout_seconds": 900
+}

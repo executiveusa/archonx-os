@@ -1,0 +1,199 @@
+# ByteRover MCP Configuration
+# Enables real-time sync between GitHub, Notion, Google Drive, and Local System
+
+version: "1.0.0"
+system_name: "PAULI_SECOND_BRAIN_TRIPLE_SYNC"
+
+sync_engine:
+  primary_tool: "byterover-mcp"
+  backup_tools:
+    - "notion-mcp"
+    - "google-drive-mcp"
+  conflict_resolution: "github_wins"  # GitHub is source of truth
+
+repositories:
+  source_of_truth:
+    url: "https://github.com/executiveusa/outlines-second-brain.git"
+    branch: "master"
+    polling_interval: "5 seconds"
+    auto_commit: true
+    commit_prefix: "🤖 [AUTO-SYNC]"
+
+sync_targets:
+  notion:
+    workspace_id: "${NOTION_WORKSPACE_ID}"
+    api_token: "${NOTION_API_KEY}"
+    databases:
+      - id: "${NOTION_PROJECTS_DB_ID}"
+        name: "Projects"
+        sync_direction: "bidirectional"
+        on_create: "push_to_github"
+        on_update: "push_to_github"
+      - id: "${NOTION_TASKS_DB_ID}"
+        name: "Tasks"
+        sync_direction: "bidirectional"
+      - id: "${NOTION_AGENTS_DB_ID}"
+        name: "Agents"
+        sync_direction: "bidirectional"
+      - id: "${NOTION_DECISIONS_DB_ID}"
+        name: "Decisions"
+        sync_direction: "bidirectional"
+    sync_interval: "15 minutes"
+
+  google_cloud:
+    project_id: "${GOOGLE_CLOUD_PROJECT_ID}"
+    bucket: "pauli-second-brain-storage"
+    credentials_file: "${GOOGLE_CLOUD_CREDENTIALS_PATH}"
+    sync_path: "gs://pauli-second-brain-storage/backups/"
+    sync_interval: "1 hour"
+    backup_retention: "7 years"  # 7-generation retention
+
+  google_drive:
+    folder_id: "${GOOGLE_DRIVE_SECOND_BRAIN_FOLDER_ID}"
+    service_account: "${GOOGLE_DRIVE_SERVICE_ACCOUNT_JSON}"
+    watch_folders:
+      - "SECOND BRAIN CHAT GPT EXPORTS"
+      - "ACTIVE PROJECTS 2.0"
+      - "MASTER FILES ALL COMPLETED PROJECTS"
+    auto_parse: true
+    parser: "llms-txt"
+    sync_interval: "daily at 02:00 UTC"
+
+  local:
+    watch_path: "E:\\DESKTOP BACKUP FILES\\THE PAULI EFFECT\\pauli-comic-funnel-main"
+    sync_on_change: true
+    debounce_ms: 1000
+    exclude_patterns:
+      - "node_modules/"
+      - ".git/"
+      - "dist/"
+      - "build/"
+
+transformations:
+  - source: "github/markdown"
+    target: "notion/database_block"
+    transformer: "markdown_to_notion"
+  
+  - source: "google_drive/doc_export"
+    target: "github/markdown"
+    transformer: "llms-txt"
+  
+  - source: "notion/property"
+    target: "github/frontmatter"
+    transformer: "notion_property_to_yaml"
+
+data_pipelines:
+  ingest_unstructured:
+    sources:
+      - google_drive_exports
+      - chatgpt_conversations
+      - pdf_documents
+      - zip_files
+    processor: "llms-txt"
+    output_format: "machine_readable_markdown"
+    steps:
+      - extract_text
+      - parse_structure
+      - embed_vectors
+      - create_index
+      - push_to_github
+      - sync_to_notion
+      - backup_to_cloud
+
+  project_indexing:
+    source: "01_PROJECTS/"
+    index_format: "json"
+    output: "project_index.json"
+    update_frequency: "every push"
+    fields:
+      - project_name
+      - rating
+      - category
+      - status
+      - next_actions
+
+  decision_logging:
+    source: "02_DECISIONS/"
+    archive_format: "markdown_with_metadata"
+    indexing: "full_text_search"
+    backup_to_cloud: true
+    retention: "permanent"
+
+monitoring:
+  sync_health:
+    check_interval: "5 minutes"
+    alert_on_failure: true
+    alert_channels:
+      - notion_status_db
+      - github_issue
+      - email
+
+  metrics:
+    track:
+      - sync_success_rate
+      - sync_latency
+      - data_integrity
+      - conflict_count
+    dashboard: "notion/Metrics database"
+
+agents:
+  coder:
+    name: "Claude Code Builder"
+    trigger: "on github push"
+    action: "parse changes, create implementation tasks"
+  
+  validator:
+    name: "Validator Agent"
+    trigger: "on pull request"
+    action: "strict code review, testing"
+  
+  sync_monitor:
+    name: "ByteRover Monitor"
+    trigger: "continuous"
+    action: "maintain sync health, retry failures"
+
+error_handling:
+  retry_policy: "exponential backoff"
+  max_retries: 3
+  fallback_to_manual: true
+  notification_channels:
+    - github_issue: "Sync Error"
+    - notion_property: "sync_status = 'ERROR'"
+    - email: "admin@pauli-effect.com"
+
+security:
+  secrets_management: "environment variables only"
+  git_ignore_rules:
+    - "*.env"
+    - "*.env.local"
+    - "secrets.txt"
+    - "credentials/"
+  
+  api_key_rotation:
+    notion: "every 90 days"
+    google_drive: "every 30 days"
+    google_cloud: "every 60 days"
+  
+  audit_logging: true
+  audit_destination: "gs://pauli-second-brain-storage/audit-logs/"
+
+---
+
+# Implementation Checklist
+
+## Before Activation
+- [ ] GitHub Personal Access Token configured
+- [ ] Notion API key + Workspace ID ready
+- [ ] Google Cloud credentials JSON ready
+- [ ] Google Drive folder ID noted
+- [ ] Local folder path verified
+- [ ] All environment variables set
+
+## After Activation
+- [ ] Test sync: GitHub → Notion (check projects sync)
+- [ ] Test sync: Notion → GitHub (check commit appears)
+- [ ] Test sync: Google Drive → GitHub (check llms-txt conversion)
+- [ ] Verify ByteRover running (GitHub issues)
+- [ ] Monitor first 24 hours for conflicts
+- [ ] Activate automatic conflict resolution
+- [ ] Enable Lightning monitoring dashboards

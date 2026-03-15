@@ -1,0 +1,61 @@
+version: 1
+updated_at: "2026-02-23T00:00:00Z"
+mission: "Ship one validated revenue-producing product path"
+
+now:
+  - id: NOW-001
+    title: "Lock secure secret storage and rotate exposed credentials"
+    tier: "tier1"
+    owner: "ops"
+    due_days: 1
+    status: "active"
+    acceptance:
+      - "No plaintext secrets in tracked repo paths"
+      - "All leaked credentials rotated"
+
+  - id: NOW-002
+    title: "Run GraphBrain loop in light mode and produce artifact report"
+    tier: "tier1"
+    owner: "platform"
+    due_days: 1
+    status: "active"
+    acceptance:
+      - "Loop completes with phase history"
+      - "Report written under data/reports"
+
+next:
+  - id: NEXT-001
+    title: "Map Vercel projects to GitHub repos and branch strategy"
+    tier: "tier1"
+    owner: "platform"
+    due_days: 3
+    status: "planned"
+    acceptance:
+      - "projects.json and repo_map.json generated"
+      - "orphan projects flagged"
+
+  - id: NEXT-002
+    title: "Prompt registry ingestion for local prompt corpus"
+    tier: "tier2"
+    owner: "ai-systems"
+    due_days: 7
+    status: "planned"
+    acceptance:
+      - "Prompt metadata catalog created"
+      - "Pauli-effect prompts tagged as subdomain"
+
+later:
+  - id: LATER-001
+    title: "Autonomous promotion gates preview->staging->production"
+    tier: "tier2"
+    owner: "platform"
+    due_days: 14
+    status: "deferred"
+
+parking_lot:
+  - id: PL-001
+    title: "VR and advanced immersive UX experiments"
+    reason: "No direct short-term revenue validation"
+  - id: PL-002
+    title: "Blockchain enhancement layer"
+    reason: "Not required before core product-market validation"

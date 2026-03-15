@@ -1,0 +1,12 @@
+{
+  "skill_id": "graphbrain_second_brain",
+  "name": "GraphBrain Second Brain",
+  "version": "1.0.0",
+  "entrypoint": "ops/runner/archonx_graphbrain_runner.py",
+  "security": {
+    "requires_grant": true,
+    "requires_work_item": true,
+    "deny_by_default": true
+  },
+  "description": "Runs GraphBrain indexing, graph analysis, and recommendation report generation."
+}

@@ -1,0 +1,35 @@
+{
+  "phase": "in-progress",
+  "items": [
+    {
+      "id": "sec-01",
+      "title": "Rotate and revoke exposed secrets",
+      "status": "pending",
+      "owner": "ops"
+    },
+    {
+      "id": "runtime-01",
+      "title": "Wire dashboard runtime routes to ArchonX API",
+      "status": "completed",
+      "owner": "platform"
+    },
+    {
+      "id": "tooling-01",
+      "title": "Enable grep_mcp for all agents",
+      "status": "completed",
+      "owner": "core"
+    },
+    {
+      "id": "deploy-01",
+      "title": "Ship self-contained Coolify compose",
+      "status": "completed",
+      "owner": "platform"
+    },
+    {
+      "id": "voice-01",
+      "title": "Scaffold onboarding voice-agent package",
+      "status": "completed",
+      "owner": "product"
+    }
+  ]
+}

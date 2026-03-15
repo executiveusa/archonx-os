@@ -1,0 +1,38 @@
+{
+  "workflow_id": "WF-040",
+  "name": "Log Aggregation",
+  "category": "system_ops",
+  "version": "1.0.0",
+  "description": "Aggregates structured logs from all agents and services into the central log store.",
+  "trigger": {
+    "event": "log_aggregation_cycle",
+    "condition": "scheduled_log_flush",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["sources", "from_timestamp", "to_timestamp"],
+    "properties": {
+      "sources": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+      "from_timestamp": { "type": "string" },
+      "to_timestamp": { "type": "string" },
+      "log_level_filter": { "type": "string", "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_LOW",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "log_aggregation_complete",
+    "fields": ["source_count", "record_count", "from_timestamp", "to_timestamp", "timestamp"]
+  },
+  "evidence_path": "ops/reports/log_aggregation/",
+  "success_criteria": [
+    "logs collected from all specified sources",
+    "record count written to report",
+    "no log records lost during aggregation"
+  ],
+  "timeout_seconds": 300
+}

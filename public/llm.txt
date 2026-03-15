@@ -1,0 +1,77 @@
+# ARCHONX Operating System - LLM Metadata
+
+## Description
+ARCHONX is an enterprise AI operating system featuring a 64-agent swarm organized as dual chess crews for autonomous business automation.
+
+## Capabilities
+- Multi-agent task orchestration (64 specialized AI agents)
+- Dual-protocol decision engine (Bobby Fischer + Tyrone)
+- Real-time deployment automation
+- Business analytics and metrics
+- Security scanning and threat detection
+- Multi-tenant client isolation
+- WebSocket gateway for real-time communication
+
+## API Endpoints
+Base URL: https://api.archonx.io/v1
+
+### Execute Task
+POST /api/task
+Execute a task using the 64-agent swarm with dual-protocol validation.
+
+### Get Agent Status
+GET /api/agents
+Retrieve status of all 64 agents (White Crew + Black Crew).
+
+### Deployment Pipeline
+POST /api/deploy
+Trigger multi-stage deployment (staging → testing → production).
+
+### Analytics Query
+POST /api/analytics
+Query business metrics and performance data.
+
+### Chessboard View
+GET /api/board
+Get real-time 8x8 chessboard visualization of agent activity.
+
+## Authentication
+OAuth 2.0 with JWT tokens. Register for API keys at: https://archonx.io/developers
+
+## Rate Limits
+- Free tier: 100 requests/hour
+- Pro tier: 1,000 requests/hour
+- Enterprise: Custom limits
+
+## Security
+- AES-256-GCM encryption
+- TLS 1.3 for all API calls
+- Prompt injection defense
+- Anti-scraping protection
+- Audit logging
+
+## Use Cases
+1. Automated deployment pipelines
+2. Real-time business analytics
+3. Multi-agent task coordination
+4. Security scanning and monitoring
+5. Client infrastructure automation
+
+## Example Prompts
+- "Deploy my application to staging and run tests"
+- "What's the status of all agents in the White Crew?"
+- "Analyze user growth metrics for the past 30 days"
+- "Show me the chessboard view of current agent activity"
+- "Run a security scan on the production environment"
+
+## Documentation
+https://docs.archonx.io
+
+## Support
+support@archonx.io
+
+## Terms of Service
+https://archonx.io/terms
+
+## Privacy Policy
+https://archonx.io/privacy

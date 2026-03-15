@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "endpoints": {
+    "latest_recommendations": "/api/graphbrain/recommendations/latest",
+    "graph_snapshot": "/api/graphbrain/snapshots/latest",
+    "bead_status": "/api/graphbrain/beads/status",
+    "audit_summary": "/api/graphbrain/audit/summary"
+  }
+}

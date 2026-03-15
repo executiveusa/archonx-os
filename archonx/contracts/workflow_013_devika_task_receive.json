@@ -1,0 +1,39 @@
+{
+  "workflow_id": "WF-013",
+  "name": "Devika Task Receive",
+  "category": "devika_pi",
+  "version": "1.0.0",
+  "description": "Receives an incoming task request for Devika PI and validates its contract before queuing.",
+  "trigger": {
+    "event": "devika_task_received",
+    "condition": "task_payload_valid AND bead_id_valid",
+    "actor": "operator"
+  },
+  "payload_schema": {
+    "type": "object",
+    "required": ["bead_id", "profile", "prompt", "project_name"],
+    "properties": {
+      "bead_id": { "type": "string" },
+      "profile": { "type": "string" },
+      "prompt": { "type": "string" },
+      "project_name": { "type": "string" },
+      "priority": { "type": "string" }
+    }
+  },
+  "policy_gates": {
+    "required_role": "operator",
+    "compliance_level": "PAULIWHEEL_MEDIUM",
+    "approval_required": false
+  },
+  "telemetry": {
+    "event_name": "devika_task_queued",
+    "fields": ["bead_id", "profile", "project_name", "timestamp"]
+  },
+  "evidence_path": "ops/reports/devika_tasks/",
+  "success_criteria": [
+    "bead_id passes prefix and length validation",
+    "profile is in allowed execution profiles",
+    "task queued for PLAN stage execution"
+  ],
+  "timeout_seconds": 900
+}

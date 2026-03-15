@@ -1,0 +1,20 @@
+
+# Pauli UGC Factory (LLM Instructions)
+
+## What this repo is
+This repository contains a self-hosted autonomous automation factory designed to generate "Pauli's Cartoon Truth" content and deploy niche-specific automations.
+
+## Core Objective
+Convert confusion about automation (n8n vs Python) into trust and leads for an autonomous AI agency.
+
+## Technical Rules
+- Prefer Python code/logs over UI-driven workflows for production reliability.
+- All LLM outputs must be valid JSON when requested via the API.
+- Never store secrets in code; use process.env.API_KEY.
+- Character Voice: Urban Gen Z/Millennial, cynical of hype, direct, snappy.
+
+## Interfaces
+- dashboard: Control center for the daily pipeline.
+- generator: Script factory for UGC ads.
+- visuals: Cartoon scene generation (Gemini 3 Pro Image).
+- production: Video animation (Veo 3.1).
