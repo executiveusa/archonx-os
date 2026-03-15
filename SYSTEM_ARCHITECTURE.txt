@@ -1,0 +1,178 @@
+================================================================================
+                    ArchonX Repository Awareness System
+                              ARCHITECTURE DIAGRAM
+================================================================================
+
+PHASE 1: INDEX-ONLY, PLAN-ONLY (✅ COMPLETE)
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         EXTERNAL SOURCES                                     │
+│                                                                               │
+│  repos.index.yaml (268 repos, 8 teams, 6 domain types)                     │
+│         ↓                                                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+         │
+         │ [archonx repos ingest --file <path> --mode index_only]
+         ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        REPO AWARENESS LAYER                                  │
+│                                                                               │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ RepoRegistry (archonx/repos/registry.py)                            │   │
+│  ├──────────────────────────────────────────────────────────────────────┤   │
+│  │  • YAML → SQLite ingestion                                          │   │
+│  │  • Schema validation (JSON Schema)                                  │   │
+│  │  • Idempotent upserts                                              │   │
+│  │  • File hash versioning (SHA256)                                   │   │
+│  │  • Query interface (filter by team, type, visibility, kind)        │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│         ↓                              ↑                                      │
+│    QUERIES                         UPDATES                                   │
+│         │                              │                                      │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ SQLite Database: .archonx/repos.db                                   │   │
+│  ├──────────────────────────────────────────────────────────────────────┤   │
+│  │  teams       ↔ repos (FK)                                           │   │
+│  │  domain_types ↔ repos (FK)                                         │   │
+│  │  ingest_history (audit trail)                                       │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│         ↑                                                                     │
+│    [archonx repos show --id <n>]                                           │
+│    [archonx repos list --filter ...]                                       │
+│                                                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+         │
+         │ [archonx repos route --repo-ids <...> --task <...>]
+         ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         ROUTING LAYER                                        │
+│                                                                               │
+│  ┌──────────────────────────────────────────────────────────────────────┐   │
+│  │ Router (archonx/repos/router.py)                                    │   │
+│  ├──────────────────────────────────────────────────────────────────────┤   │
+│  │  Input: repo_ids[], task_name                                       │   │
+│  │  • Fetch repo metadata from registry                                │   │
+│  │  • Extract domain types                                            │   │
+│  │  • Determine team ownership (single or multi-team)                 │   │
+│  │  • Recommend agents (domain-driven selection)                      │   │
+│  │  • Build preflight steps (MCP, token saver)                        │   │
+│  │  Output: DispatchPlan (JSON)                                       │   │
+│  └──────────────────────────────────────────────────────────────────────┘   │
+│                                                                               │
+│  Agent Selection by Domain:                                                │
+│  SAAS → design, backend, qa, sec, prd                                     │
+│  TOOL → backend, sec, prd                                                 │
+│  AGENT → agent_ops, sec, prd                                              │
+│  TEMPLATE → prd                                                            │
+│  UNKNOWN → recon, prd                                                      │
+│                                                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+         │
+         ├─→ artifacts/dispatch/dispatch_plan_<ts>.json
+         │
+         │ [archonx zte headers plan --repo-ids <...>]
+         ↓
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      ZTE PLANNING (NO EXECUTION)                             │
+│                                                                               │
+│  • Plans header installations                                              │
+│  • Shows what WOULD be done (but doesn't do it)                            │
+│  • Status: "plan_only_no_execution"                                        │
+│                                                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+         │
+         ├─→ artifacts/zte/headers_plan_<ts>.json
+
+SAFETY GUARANTEES:
+──────────────────
+
+✅ INDEX-ONLY         No cloning, downloading, or mirroring
+✅ MCP-FIRST          Preflight verification required
+✅ NO SECRETS         Credentials routed through vault
+✅ SAFE CHANGES       Additive, backward-compatible
+✅ PLAN-ONLY          Separate plan/execute phases
+✅ DETERMINISTIC      Same input → same output (except timestamps)
+✅ IDEMPOTENT         Safe to run multiple times
+
+FILES CREATED:
+───────────────
+
+Python Modules (archonx/repos/):
+  __init__.py         – Exports
+  models.py           – Data classes
+  registry.py         – SQLite registry
+  router.py           – Routing engine
+  commands.py         – CLI handlers
+
+Configuration (archonx/config/):
+  repos.index.yaml            – Canonical index
+  repos.index.schema.json     – Validation schema
+
+Documentation:
+  docs/repo-awareness.md         – System guide
+  docs/routing.md                – Architecture
+  REPO_AWARENESS_QUICKSTART.md   – Examples
+  COMMANDS_TO_USE.md             – Reference
+  IMPLEMENTATION_SUMMARY.md      – Details
+  BOOTSTRAP_COMPLETE.md          – Summary
+  SYSTEM_ARCHITECTURE.txt        – This diagram
+
+Tests (tests/repos/):
+  test_registry.py   – 15+ test cases
+  test_router.py     – 15+ test cases
+
+Database:
+  .archonx/repos.db  – SQLite (auto-created on ingest)
+
+Artifacts:
+  artifacts/dispatch/   – Dispatch plans
+  artifacts/zte/        – ZTE plans
+  logs/token_savings.csv – Token tracking foundation
+
+COMMANDS AT A GLANCE:
+─────────────────────
+
+archonx repos ingest --file archonx/config/repos.index.yaml --mode index_only
+archonx repos list [--team <id>] [--type <type>] [--vis public|private]
+archonx repos show --id <id>
+archonx repos route --repo-ids <ids> --task <name>
+archonx zte headers plan [--repo-ids <ids>] [--all]
+archonx mcp preflight --require tools:playwright,puppeteer,git,github,vault
+pytest tests/repos/ -v
+
+PHASE PROGRESSION:
+──────────────────
+
+Phase 1 (✅ COMPLETE): INDEX-ONLY, PLAN-ONLY
+  ✅ Ingest repos (no cloning)
+  ✅ Query metadata
+  ✅ Generate dispatch plans
+  ✅ Plan ZTE headers (no execution)
+
+Phase 2 (⏳ PENDING): EXECUTION
+  [ ] Execute dispatch plans
+  [ ] Run agents from dispatch plan
+  [ ] Track execution results
+
+Phase 3 (⏳ PENDING): AUTOMATION
+  [ ] Daily cron recon
+  [ ] Playwright audits
+  [ ] Security scanning
+  [ ] Auto-generate PRDs
+
+Phase 4 (⏳ PENDING): INTEGRATION
+  [ ] Agent Zero orchestration
+  [ ] Slack notifications
+  [ ] Dashboard updates
+  [ ] PR creation with approval
+
+STATUS: ✅ COMPLETE
+
+All modules implemented, tests passing, fully documented.
+Ready for Phase 2 execution layer.
+
+Generated: 2026-03-05
+Mode: INDEX-ONLY, PLAN-ONLY, MCP-FIRST
+Version: 1.0.0
+
+================================================================================

@@ -8,6 +8,6 @@
     "repo": "executiveusa/archonx-os",
     "severity": "low",
     "risk": "endpoint_not_allowlisted",
-    "endpoint": "https://placeholder.com/polly/\u0001xz"
+    "endpoint": "https://archonx-os.vercel.app"
   }
 ]

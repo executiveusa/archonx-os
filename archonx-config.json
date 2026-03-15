@@ -32,6 +32,7 @@
   "integration": {
     "openclaw": {
       "enabled": true,
+      "backend_url": "http://localhost:8080"
       "backend_url": "http://localhost:8080",
       "gateway_port": 18789,
       "auth_required": true,
@@ -115,7 +116,17 @@
     ]
   },
   "coolify": {
-    "app_uuid": "YOUR_UUID_HERE",
-    "base_url": "https://coolify.example.com"
+    "app_uuid": "${COOLIFY_APP_UUID}",
+    "base_url": "${COOLIFY_BASE_URL}"
+  },
+  "conx": {
+    "enabled": true,
+    "tunnel_name_prefix": "archonx",
+    "cloudflare_team_domain": "",
+    "telegram_bot_token_env": "TELEGRAM_BOT_TOKEN",
+    "registered_machines": [],
+    "desktop_commander_port": 3000,
+    "auto_wire_claude_desktop": true,
+    "require_confirmation_for_shell": true
   }
 }

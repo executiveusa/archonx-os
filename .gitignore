@@ -87,3 +87,29 @@ kilo-code-secrets.json
 master.env.txt
 orgo-agent/SANDBOX_CONFIG/credentials/
 credentials/
+
+# Vault Agent generated reports (never commit - they contain secrets)
+ops/reports/vault_audit.json
+ops/reports/ai_recommendations.json
+ops/reports/infisical_import.json
+ops/reports/integrated_report.json
+ops/reports/rotation_checklist.md
+ops/reports/safe_template.env
+ops/reports/cron.log
+.env.test
+
+# ============================================
+# SECRETS — NEVER COMMIT (BEAD-MASTER-002)
+# ============================================
+*.env
+!.env.example
+!.env.template
+master.env
+*-secrets.json
+GITHUB_TOKEN*.txt
+*KEYS*.txt
+*PASSWORD*.txt
+*SECRET*.txt
+*TOKEN*.txt
+*PRIVATE_KEY*.txt
+vault/local/

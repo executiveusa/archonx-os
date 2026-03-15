@@ -1,0 +1,60 @@
+{
+  "build": {
+    "beforeBuildCommand": "npm run frontend:build",
+    "beforeDevCommand": "npm run backend:dev",
+    "devPath": "http://localhost:5173",
+    "frontendDist": "./dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "ArchonX OS",
+        "width": 1400,
+        "height": 900,
+        "minWidth": 1200,
+        "minHeight": 700,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:;"
+    }
+  },
+  "package": {
+    "productName": "ArchonX OS",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "execute": false,
+        "sidecar": false,
+        "open": true
+      },
+      "fs": {
+        "all": true,
+        "readDir": true,
+        "readFile": true,
+        "writeFile": true,
+        "createDir": true
+      },
+      "http": {
+        "all": true,
+        "request": true
+      }
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "ArchonX OS",
+        "url": "http://localhost:5173",
+        "resizable": true,
+        "width": 1400,
+        "height": 900
+      }
+    ]
+  }
+}

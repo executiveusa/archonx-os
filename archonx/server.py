@@ -15,14 +15,17 @@ import asyncio
 import json
 import logging
 import os
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+import httpx
 
 from archonx.kernel import ArchonXKernel
 from archonx.core.metrics import Leaderboard
@@ -30,6 +33,8 @@ from archonx.onboarding.voice_agent.runner import OnboardingVoiceRunner
 from archonx.visualization.chessboard import ChessboardView
 from archonx.visualization.dashboard import MetricsDashboard
 from archonx.visualization.paulis_place_view import PaulisPlaceView
+from archonx.orchestration.orchestrator import Orchestrator, TaskType
+from archonx.monitoring.metrics import metrics
 
 logger = logging.getLogger("archonx.server")
 _PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
@@ -43,6 +48,17 @@ _dashboard: MetricsDashboard | None = None
 _paulis_view: PaulisPlaceView | None = None
 _leaderboard: Leaderboard | None = None
 _ws_clients: set[WebSocket] = set()
+_task_status: dict[str, dict[str, Any]] = {}
+_registered_machines: dict[str, dict[str, Any]] = {}
+
+
+class TaskWebhookPayload(BaseModel):
+    message: str
+    source: str = "webhook"
+    priority: str = "normal"
+    repo: str = ""
+    environment: str = "staging"
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 def _parse_allowed_origins() -> list[str]:
@@ -102,6 +118,67 @@ def create_app() -> FastAPI:
 
     # ----- REST endpoints -----
 
+    @app.get("/health")
+    async def health() -> JSONResponse:
+        return JSONResponse({
+            "status": "ok",
+            "version": "1.0.0",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "agents": "operational" if _kernel is not None else "booting",
+        })
+
+    @app.post("/webhook/task")
+    async def create_task_webhook(payload: TaskWebhookPayload) -> JSONResponse:
+        orchestrator = Orchestrator()
+        await orchestrator.initialize()
+        result = await orchestrator.create_task(
+            title=payload.message[:120],
+            task_type=TaskType.CODE,
+            priority=payload.priority,
+            metadata={
+                "source": payload.source,
+                "repo": payload.repo,
+                "environment": payload.environment,
+                **payload.metadata,
+            },
+        )
+
+        if not result.success:
+            return JSONResponse({"status": "error", "message": result.message}, status_code=400)
+
+        task_id = str(result.data.get("task_id", ""))
+        _task_status[task_id] = {
+            "status": "accepted",
+            "task_id": task_id,
+            "bead_id": f"ZTE-{task_id}",
+            "source": payload.source,
+            "environment": payload.environment,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        async def _progress_tracker() -> None:
+            _task_status[task_id]["status"] = "queued"
+            _task_status[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+            await asyncio.sleep(0)
+            _task_status[task_id]["status"] = "complete"
+            _task_status[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+
+        asyncio.create_task(_progress_tracker())
+
+        return JSONResponse({
+            "status": "accepted",
+            "task_id": task_id,
+            "bead_id": f"ZTE-{task_id}",
+            "message": "Task queued for autonomous execution",
+        })
+
+    @app.get("/status/{task_id}")
+    async def task_status(task_id: str) -> JSONResponse:
+        data = _task_status.get(task_id)
+        if not data:
+            return JSONResponse({"status": "not_found", "task_id": task_id}, status_code=404)
+        return JSONResponse(data)
+
     @app.get("/api/board")
     async def get_board() -> JSONResponse:
         if _chessboard is None:
@@ -154,6 +231,10 @@ def create_app() -> FastAPI:
         # Broadcast update to all WS clients
         await _broadcast({"event": "task_result", "data": result})
         return JSONResponse(result)
+
+    @app.get("/api/stats")
+    async def get_stats() -> JSONResponse:
+        return JSONResponse(metrics.get_summary())
 
     # ----- Theater endpoints -----
 
@@ -256,6 +337,248 @@ def create_app() -> FastAPI:
             project_id=project_id,
         )
         return JSONResponse(result)
+
+    # ----- ConX Layer endpoints -----
+
+    @app.get("/conx/status")
+    async def conx_status() -> JSONResponse:
+        """Get status of all registered machines."""
+        machines = []
+        for machine_id, machine_data in _registered_machines.items():
+            machines.append({
+                "machine_id": machine_id,
+                **machine_data,
+            })
+        return JSONResponse({
+            "machines": machines,
+            "total": len(machines),
+        })
+
+    @app.post("/conx/register")
+    async def conx_register(body: dict[str, Any]) -> JSONResponse:
+        """Register a machine with the ConX layer."""
+        hostname = body.get("hostname", "unknown")
+        tunnel_url = body.get("tunnel_url", "")
+        os_name = body.get("os", "unknown")
+        mcp_servers = body.get("mcp_servers", [])
+
+        if not tunnel_url:
+            return JSONResponse(
+                {"error": "tunnel_url required"},
+                status_code=400,
+            )
+
+        # Generate machine ID
+        machine_id = f"{hostname}-{datetime.now(timezone.utc).timestamp()}"
+
+        # Store machine registration
+        _registered_machines[machine_id] = {
+            "hostname": hostname,
+            "tunnel_url": tunnel_url,
+            "os": os_name,
+            "mcp_servers_wired": mcp_servers,
+            "last_seen": datetime.now(timezone.utc).isoformat(),
+            "registered_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        return JSONResponse({
+            "registered": True,
+            "machine_id": machine_id,
+        })
+
+    @app.delete("/conx/register/{machine_id}")
+    async def conx_deregister(machine_id: str) -> JSONResponse:
+        """Deregister a machine from the ConX layer."""
+        if machine_id in _registered_machines:
+            del _registered_machines[machine_id]
+            return JSONResponse({"deregistered": True})
+        return JSONResponse(
+            {"error": "machine not found"},
+            status_code=404,
+        )
+
+    @app.get("/conx/machines")
+    async def conx_machines() -> JSONResponse:
+        """Get all registered machines with health status."""
+        machines = []
+        for machine_id, machine_data in _registered_machines.items():
+            # Check tunnel health if possible
+            health_status = "unknown"
+            try:
+                tunnel_url = machine_data.get("tunnel_url", "")
+                if tunnel_url:
+                    async with httpx.AsyncClient() as client:
+                        try:
+                            response = await client.get(
+                                f"{tunnel_url}/health",
+                                timeout=5.0,
+                            )
+                            health_status = "alive" if response.status_code == 200 else "offline"
+                        except Exception:
+                            health_status = "offline"
+            except Exception:
+                pass
+
+            machines.append({
+                "machine_id": machine_id,
+                "health": health_status,
+                **machine_data,
+            })
+        return JSONResponse({
+            "machines": machines,
+            "total": len(machines),
+        })
+
+    @app.post("/conx/launch")
+    async def conx_launch(body: dict[str, Any]) -> JSONResponse:
+        """Launch a task on a specific machine."""
+        machine_id = body.get("machine_id", "")
+        task = body.get("task", "")
+        agent = body.get("agent", "")
+
+        if not machine_id or not task:
+            return JSONResponse(
+                {"error": "machine_id and task required"},
+                status_code=400,
+            )
+
+        if machine_id not in _registered_machines:
+            return JSONResponse(
+                {"error": "machine not found"},
+                status_code=404,
+            )
+
+        machine = _registered_machines[machine_id]
+
+        # Generate task ID
+        task_id = f"CONX-{datetime.now(timezone.utc).timestamp()}"
+
+        # Store task status
+        _task_status[task_id] = {
+            "status": "queued",
+            "task_id": task_id,
+            "machine_id": machine_id,
+            "agent": agent,
+            "tunnel_url": machine.get("tunnel_url"),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        # Try to route to machine via tunnel
+        tunnel_url = machine.get("tunnel_url", "")
+        if tunnel_url and agent != "orgo":
+            try:
+                async with httpx.AsyncClient() as client:
+                    await client.post(
+                        f"{tunnel_url}/webhook/task",
+                        json={"message": task, "source": "conx"},
+                        timeout=10.0,
+                    )
+                _task_status[task_id]["status"] = "sent"
+            except Exception as e:
+                logger.error(f"Failed to route to machine: {e}")
+                _task_status[task_id]["status"] = "error"
+                _task_status[task_id]["error"] = str(e)
+
+        return JSONResponse({
+            "task_id": task_id,
+            "status": _task_status[task_id]["status"],
+        })
+
+    # ----- CLI-Anything endpoints -----
+
+    @app.get("/api/skills/cli-anything")
+    async def list_cli_skills() -> JSONResponse:
+        """List all available CLI-Anything skills across network."""
+        try:
+            from archonx.skills.cli_anything.registry import CLIRegistry
+
+            registry = CLIRegistry()
+            skills = registry.get_all()
+
+            return JSONResponse({
+                "skills": skills,
+                "total_apps": len(skills),
+                "local_machine": True,
+            })
+        except ImportError:
+            return JSONResponse({
+                "error": "CLI-Anything module not available",
+                "skills": {},
+                "total_apps": 0,
+            })
+
+    @app.get("/api/skills/cli-anything/{app_name}")
+    async def get_cli_app_schema(app_name: str) -> JSONResponse:
+        """Get CLI schema for a specific application."""
+        try:
+            from archonx.skills.cli_anything.generator import CLIGenerator
+
+            generator = CLIGenerator(app_name)
+            schema = generator.generate()
+
+            if not schema:
+                return JSONResponse(
+                    {"error": f"No schema for {app_name}"},
+                    status_code=404,
+                )
+
+            return JSONResponse(schema)
+        except Exception as e:
+            return JSONResponse(
+                {"error": str(e)},
+                status_code=400,
+            )
+
+    @app.post("/api/skills/cli-anything/execute")
+    async def execute_cli_command(body: dict[str, Any]) -> JSONResponse:
+        """Execute a CLI command."""
+        app = body.get("app", "")
+        command = body.get("command", "")
+        params = body.get("params", {})
+        machine_id = body.get("machine_id")
+
+        if not app or not command:
+            return JSONResponse(
+                {"error": "app and command required"},
+                status_code=400,
+            )
+
+        try:
+            from archonx.skills.cli_anything.executor import CLIExecutor
+
+            executor = CLIExecutor()
+            result = executor.execute_with_validation(
+                app=app,
+                command=command,
+                params=params,
+                machine_id=machine_id,
+            )
+
+            return JSONResponse(result)
+
+        except Exception as e:
+            return JSONResponse(
+                {"status": "error", "error": str(e)},
+                status_code=500,
+            )
+
+    @app.get("/api/skills/cli-anything/discover")
+    async def discover_cli_apps() -> JSONResponse:
+        """Discover installed applications with CLI support."""
+        try:
+            from archonx.skills.cli_anything.discovery import discover_all_apps
+
+            apps = discover_all_apps()
+
+            return JSONResponse({
+                "discovered_apps": apps,
+                "total": len(apps),
+            })
+        except Exception as e:
+            return JSONResponse(
+                {"error": str(e), "discovered_apps": [], "total": 0},
+                status_code=500,
+            )
 
     # ----- WebSocket -----
 

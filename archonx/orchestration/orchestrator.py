@@ -32,6 +32,10 @@ from archonx.core.agents import (
 )
 from archonx.beads.viewer import TaskManager, Task, TaskStatus, TaskPriority
 from archonx.mail.server import AgentMailServer, MessageType
+from archonx.orchestration.agent_controller import AgentController, get_agent_controller
+from archonx.orchestration.dispatch import DispatchCoordinator
+from archonx.repos.registry import RepoRegistry
+from archonx.repos.router import Router
 
 logger = logging.getLogger("archonx.orchestration.orchestrator")
 
@@ -117,7 +121,8 @@ class Orchestrator:
         self,
         registry: Optional[AgentRegistry] = None,
         task_manager: Optional[TaskManager] = None,
-        mail_server: Optional[AgentMailServer] = None
+        mail_server: Optional[AgentMailServer] = None,
+        controller: Optional[AgentController] = None
     ) -> None:
         """
         Initialize the Orchestrator.
@@ -126,10 +131,15 @@ class Orchestrator:
             registry: Agent registry (will be created if not provided)
             task_manager: Task manager (will be created if not provided)
             mail_server: Mail server for agent communication
+            controller: Agent controller for real execution
         """
         self.registry = registry or AgentRegistry()
         self.task_manager = task_manager or TaskManager()
         self.mail_server = mail_server
+        self.controller = controller or get_agent_controller()
+        self.repo_registry = RepoRegistry()
+        self.repo_router = Router(self.repo_registry)
+        self.dispatch_coordinator = DispatchCoordinator(self.repo_router)
         
         self._initialized = False
         self._command_handlers: dict[
@@ -225,6 +235,31 @@ class Orchestrator:
         all_tags = tags or []
         if task_type.value not in all_tags:
             all_tags.append(task_type.value)
+
+        task_metadata = metadata.copy() if metadata else {}
+        dispatch_decision = None
+        repo_ids = task_metadata.get("repo_ids")
+        task_intent = task_metadata.get("task_intent")
+        if repo_ids:
+            dispatch_decision = self.dispatch_coordinator.create_dispatch_decision(
+                repo_ids=repo_ids,
+                task_name=title,
+                task_intent=task_intent,
+                objective=description or title,
+            )
+            task_metadata["dispatch_decision"] = dispatch_decision.to_dict()
+            task_metadata.setdefault("worker_id", dispatch_decision.primary_worker.id)
+            task_metadata.setdefault(
+                "required_integrations",
+                [
+                    integration.id
+                    for integration in dispatch_decision.required_integrations
+                ],
+            )
+            task_metadata.setdefault(
+                "required_env_categories",
+                dispatch_decision.required_env_categories,
+            )
         
         # Create task
         task = self.task_manager.create_task(
@@ -233,7 +268,7 @@ class Orchestrator:
             priority=priority,
             assigned_agent=assigned_agent,
             tags=all_tags,
-            metadata=metadata or {}
+            metadata=task_metadata
         )
         
         # Notify via mail if agent assigned
@@ -252,7 +287,13 @@ class Orchestrator:
             success=True,
             command=OrchestratorCommand.CREATE,
             message=f"Task {task.id} created",
-            data={"task_id": task.id, "task": task.to_dict()}
+            data={
+                "task_id": task.id,
+                "task": task.to_dict(),
+                "dispatch_decision": dispatch_decision.to_dict()
+                if dispatch_decision
+                else None,
+            }
         )
 
     async def _handle_assign(
@@ -299,6 +340,9 @@ class Orchestrator:
             )
         
         logger.info(f"Assigned task {task_id} to {agent_id}")
+        
+        # Trigger real execution via controller (async/background)
+        asyncio.create_task(self.controller.execute_task(agent, task))
         
         return OrchestratorResult(
             success=True,
