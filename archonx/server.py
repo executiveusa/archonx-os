@@ -484,6 +484,102 @@ def create_app() -> FastAPI:
             "status": _task_status[task_id]["status"],
         })
 
+    # ----- CLI-Anything endpoints -----
+
+    @app.get("/api/skills/cli-anything")
+    async def list_cli_skills() -> JSONResponse:
+        """List all available CLI-Anything skills across network."""
+        try:
+            from archonx.skills.cli_anything.registry import CLIRegistry
+
+            registry = CLIRegistry()
+            skills = registry.get_all()
+
+            return JSONResponse({
+                "skills": skills,
+                "total_apps": len(skills),
+                "local_machine": True,
+            })
+        except ImportError:
+            return JSONResponse({
+                "error": "CLI-Anything module not available",
+                "skills": {},
+                "total_apps": 0,
+            })
+
+    @app.get("/api/skills/cli-anything/{app_name}")
+    async def get_cli_app_schema(app_name: str) -> JSONResponse:
+        """Get CLI schema for a specific application."""
+        try:
+            from archonx.skills.cli_anything.generator import CLIGenerator
+
+            generator = CLIGenerator(app_name)
+            schema = generator.generate()
+
+            if not schema:
+                return JSONResponse(
+                    {"error": f"No schema for {app_name}"},
+                    status_code=404,
+                )
+
+            return JSONResponse(schema)
+        except Exception as e:
+            return JSONResponse(
+                {"error": str(e)},
+                status_code=400,
+            )
+
+    @app.post("/api/skills/cli-anything/execute")
+    async def execute_cli_command(body: dict[str, Any]) -> JSONResponse:
+        """Execute a CLI command."""
+        app = body.get("app", "")
+        command = body.get("command", "")
+        params = body.get("params", {})
+        machine_id = body.get("machine_id")
+
+        if not app or not command:
+            return JSONResponse(
+                {"error": "app and command required"},
+                status_code=400,
+            )
+
+        try:
+            from archonx.skills.cli_anything.executor import CLIExecutor
+
+            executor = CLIExecutor()
+            result = executor.execute_with_validation(
+                app=app,
+                command=command,
+                params=params,
+                machine_id=machine_id,
+            )
+
+            return JSONResponse(result)
+
+        except Exception as e:
+            return JSONResponse(
+                {"status": "error", "error": str(e)},
+                status_code=500,
+            )
+
+    @app.get("/api/skills/cli-anything/discover")
+    async def discover_cli_apps() -> JSONResponse:
+        """Discover installed applications with CLI support."""
+        try:
+            from archonx.skills.cli_anything.discovery import discover_all_apps
+
+            apps = discover_all_apps()
+
+            return JSONResponse({
+                "discovered_apps": apps,
+                "total": len(apps),
+            })
+        except Exception as e:
+            return JSONResponse(
+                {"error": str(e), "discovered_apps": [], "total": 0},
+                status_code=500,
+            )
+
     # ----- WebSocket -----
 
     @app.websocket("/ws")

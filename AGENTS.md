@@ -59,6 +59,69 @@ This is the ONLY human action required. Everything else is automated.
 - Agents MUST log all file operations to Notion
 - Agents MUST NOT store credentials from remote machines
 
+## 8. CLI-ANYTHING LAYER PROTOCOL
+
+The CLI-Anything Layer extends ARCHON-X with universal software control - agents can now control ANY installed application (GIMP, Blender, LibreOffice, Audacity, custom enterprise software, etc.).
+
+### How It Works
+
+CLI-Anything auto-generates command-line interfaces for desktop applications:
+- **Discovery:** Auto-detects installed apps (GIMP, Blender, Audacity, LibreOffice, etc.)
+- **Generation:** Creates JSON-RPC schemas for each app's commands
+- **Registry:** Maintains list of available CLIs across network
+- **Execution:** Safely executes commands with validation and sandboxing
+
+### Available Applications
+
+**Design & Graphics:**
+- GIMP - Image editor (create_image, apply_filter, export_image)
+- Inkscape - Vector graphics
+- Blender - 3D creation (create_scene, render_scene, add_object)
+- Krita - Digital painting
+
+**Office Suite:**
+- LibreOffice - Documents, Spreadsheets, Presentations
+
+**Media Production:**
+- FFmpeg - Video/audio encoding
+- Audacity - Audio editing (open_audio, apply_effect, export_audio)
+- OBS - Screen recording/streaming
+- Kdenlive - Video editing
+
+**3D/CAD:**
+- FreeCAD - 3D modeling
+- Blender - Professional 3D suite
+
+### Agent Usage via REST API
+
+```bash
+# List all available CLIs
+GET /api/skills/cli-anything
+→ {skills: {gimp: [...], blender: [...], ...}}
+
+# Get schema for app
+GET /api/skills/cli-anything/gimp
+→ {commands: {create_image: {...}, apply_filter: {...}, ...}}
+
+# Execute command
+POST /api/skills/cli-anything/execute
+Body: {app: "gimp", command: "create_image", params: {...}}
+→ {status: "success", result: {...}}
+
+# Discover installed apps
+GET /api/skills/cli-anything/discover
+→ {discovered_apps: [...], total: N}
+```
+
+### Agent Access Rules
+
+✓ Agents MAY discover installed applications
+✓ Agents MAY execute CLI commands with validation
+✓ Agents MAY retrieve command schemas
+✓ Agents MAY route commands to specific machines via ConX Layer
+✗ Agents MUST NOT bypass validation
+✗ Agents MUST NOT execute arbitrary shell
+✗ Agents MUST NOT store app credentials
 ## 8. MANDATORY DESIGN LAW
 - Any frontend, visual, dashboard, landing page, product-shell, or brand-surface work MUST load `.archonx/toolbox/skills/mandatory-design-law/SKILL.md` before implementation.
 - Steve Krug logic is law for interface clarity: do not make the user think unnecessarily.
