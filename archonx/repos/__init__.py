@@ -18,9 +18,12 @@ Key principles:
 from archonx.repos.models import (
     DomainType,
     Repo,
+    RepoPlacement,
     Team,
     DispatchPlan,
     DispatchPlanAgent,
+    DispatchPlanWorker,
+    DispatchPlanIntegration,
 )
 from archonx.repos.registry import RepoRegistry
 from archonx.repos.router import Router
@@ -31,6 +34,9 @@ __all__ = [
     "Team",
     "Repo",
     "DomainType",
+    "RepoPlacement",
     "DispatchPlan",
     "DispatchPlanAgent",
+    "DispatchPlanWorker",
+    "DispatchPlanIntegration",
 ]

@@ -1,0 +1,139 @@
+{
+  "risks": [
+    {
+      "id": "R1",
+      "title": "Controller-worker role blur",
+      "severity": "high",
+      "affected_components": [
+        "archonx-os",
+        "Darya/OpenHands",
+        "agency-agents",
+        "Agent Zero",
+        "Goose"
+      ],
+      "description": "Execution systems may compete with Archon for orchestration ownership.",
+      "mitigation": [
+        "Centralize planning in archonx-os",
+        "Use task envelopes and capability routing",
+        "Disallow ad hoc cross-worker orchestration"
+      ],
+      "phase": "Foundation"
+    },
+    {
+      "id": "R2",
+      "title": "No canonical repo registry",
+      "severity": "high",
+      "affected_components": [
+        "archonx-os",
+        "Goose",
+        "pauli-repo-family"
+      ],
+      "description": "Phase 1 inventory was sparse, leaving no stable machine-readable source of repo truth.",
+      "mitigation": [
+        "Create canonical repo registry in archonx-os",
+        "Map repo classes to placement and capability tags"
+      ],
+      "phase": "Foundation"
+    },
+    {
+      "id": "R3",
+      "title": "Pauli stack fragmentation",
+      "severity": "high",
+      "affected_components": [
+        "THE PAULI EFFECT",
+        "pauli-comic-funnel",
+        "Notion",
+        "pauli-repo-family"
+      ],
+      "description": "Pauli memory, frontend, and brand layers are not yet normalized into one canonical stack.",
+      "mitigation": [
+        "Designate pauli-comic-funnel as canonical frontend",
+        "Use Notion as structured memory backend",
+        "Archive duplicate Pauli repos after mapping"
+      ],
+      "phase": "Productization"
+    },
+    {
+      "id": "R4",
+      "title": "Desktop privilege sprawl",
+      "severity": "high",
+      "affected_components": [
+        "DesktopCommanderMCP",
+        "Darya/OpenHands",
+        "agency-agents"
+      ],
+      "description": "If desktop and shell access are embedded directly in workers, auditability and safety degrade.",
+      "mitigation": [
+        "Use DesktopCommanderMCP as primary control tower",
+        "Add approval policies",
+        "Route calls through mcp2cli where possible"
+      ],
+      "phase": "Foundation"
+    },
+    {
+      "id": "R5",
+      "title": "Token inefficiency across tool layers",
+      "severity": "medium",
+      "affected_components": [
+        "mcp2cli",
+        "DesktopCommanderMCP",
+        "Goose",
+        "agency-agents",
+        "Darya/OpenHands"
+      ],
+      "description": "Bypassing mcp2cli leads to larger prompts and duplicated adapter logic.",
+      "mitigation": [
+        "Make mcp2cli mandatory",
+        "Track invocation costs and alias usage"
+      ],
+      "phase": "Foundation"
+    },
+    {
+      "id": "R6",
+      "title": "Environment secret sprawl",
+      "severity": "high",
+      "affected_components": [
+        "all services"
+      ],
+      "description": "The env index shows many auth, API, database, cloud, and notion variables with no canonical ownership map.",
+      "mitigation": [
+        "Manage env by category and owning service",
+        "Create per-layer env manifests",
+        "Avoid raw secret duplication across repos"
+      ],
+      "phase": "Foundation"
+    },
+    {
+      "id": "R7",
+      "title": "Goose is blind to repo inventory and extensions",
+      "severity": "medium",
+      "affected_components": [
+        "Goose",
+        "archonx-os"
+      ],
+      "description": "Cloud coding workflows cannot be trusted until they ingest the canonical repo and extension manifests.",
+      "mitigation": [
+        "Publish repo inventory API",
+        "Publish extension registry API",
+        "Whitelist canonical Goose extensions"
+      ],
+      "phase": "Worker Integration"
+    },
+    {
+      "id": "R8",
+      "title": "White-label readiness blocked by brand-core coupling",
+      "severity": "high",
+      "affected_components": [
+        "archonx-os",
+        "THE PAULI EFFECT"
+      ],
+      "description": "If The Pauli Effect stays intertwined with the platform core, the system will not scale into a reusable product architecture.",
+      "mitigation": [
+        "Keep Archon-X generic",
+        "Make products consume shared services",
+        "Separate brand content and product configs from core"
+      ],
+      "phase": "Productization"
+    }
+  ]
+}

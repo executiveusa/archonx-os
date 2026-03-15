@@ -1,0 +1,43 @@
+{
+  "name": "archonx-ecosystem-canonical",
+  "version": "2.0.0",
+  "source_of_truth": "executiveusa/archonx-os",
+  "controller": "archonx-os",
+  "control_tower": "DesktopCommanderMCP",
+  "invocation_layer": "mcp2cli",
+  "workers": [
+    "Darya/OpenHands",
+    "agency-agents",
+    "Agent Zero",
+    "Goose",
+    "ralphy"
+  ],
+  "memory_layers": [
+    "Notion",
+    "pauli-repo-family"
+  ],
+  "frontend_layers": [
+    "pauli-comic-funnel",
+    "THE PAULI EFFECT"
+  ],
+  "integration_layers": [
+    "ext-apps",
+    "jcodemunch-mcp",
+    "Cloudflare Tunnel"
+  ],
+  "architecture_bundle": {
+    "install_plan": "data/architecture/archon_install_plan.json",
+    "integration_graph": "data/architecture/archon_integration_graph.json",
+    "risk_register": "data/architecture/archon_risk_register.json",
+    "canonical_architecture": "data/architecture/archon_canonical_architecture.json",
+    "build_plan": "plans/ARCHONX_BUILD_PLAN_SYNTHESIS.md",
+    "final_report": "plans/ARCHONX_FINAL_ARCHITECTURE_REPORT.md"
+  },
+  "routing_principles": [
+    "archonx-os is the sole planner and router",
+    "workers execute but do not own orchestration",
+    "DesktopCommanderMCP is the default machine-control gateway",
+    "mcp2cli is mandatory for MCP and OpenAPI invocation paths",
+    "product layers consume shared platform services rather than embedding orchestration"
+  ]
+}
