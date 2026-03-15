@@ -11,6 +11,10 @@ from archonx.agents.archon_x_phone import ArchonXPhone
 from archonx.agents.archon_x_proactive import ProactiveEngine
 from archonx.agents.archon_x_router import ArchonXRouter
 from archonx.agents.archon_x_voice_engine import ArchonXVoiceEngine
+from archonx.agents.phone_desktop_bridge import (
+    PhoneDesktopBridge,
+    RemoteDesktopControlPlan,
+)
 from archonx.agents.pauli_brain_persona import PauliBrainPersona
 from archonx.agents.synthia_persona import SynthiaPersona
 
@@ -51,5 +55,7 @@ __all__ = [
     "ArchonXPhone",
     "GuardianFleet",
     "ProactiveEngine",
+    "PhoneDesktopBridge",
+    "RemoteDesktopControlPlan",
     "load_persona_config",
 ]
