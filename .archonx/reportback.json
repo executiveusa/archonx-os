@@ -1,9 +1,16 @@
 {
-  "repo": "executiveusa/archonx-os",
-  "status": "managed",
-  "agent_lightning": "stub",
-  "notes": [
-    "Root compliance pointer for ArchonX ecosystem automation."
-  ],
-  "contract": "openclaw-reportback-v1"
+  "repo": "archonx-os",
+  "agent_owner": "BAMBU",
+  "last_reported": "2026-03-14",
+  "health_status": "patching",
+  "bead_active": "BEAD-MASTER-002",
+  "next_action": "Await PR merge and secret rotation confirmation from Bambu",
+  "compliance": {
+    "secrets_clean": false,
+    "gitignore_hardened": true,
+    "submodules_valid": true,
+    "marketing_skills_moved": true,
+    "darya_gstack_wired": true,
+    "frankenclaw_browser_upgraded": true
+  }
 }

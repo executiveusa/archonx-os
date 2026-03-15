@@ -97,3 +97,19 @@ ops/reports/rotation_checklist.md
 ops/reports/safe_template.env
 ops/reports/cron.log
 .env.test
+
+# ============================================
+# SECRETS — NEVER COMMIT (BEAD-MASTER-002)
+# ============================================
+*.env
+!.env.example
+!.env.template
+master.env
+*-secrets.json
+GITHUB_TOKEN*.txt
+*KEYS*.txt
+*PASSWORD*.txt
+*SECRET*.txt
+*TOKEN*.txt
+*PRIVATE_KEY*.txt
+vault/local/
