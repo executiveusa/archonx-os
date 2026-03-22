@@ -44,6 +44,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
     libpq5 \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/target/release/archonx-api /usr/local/bin/archonx-api

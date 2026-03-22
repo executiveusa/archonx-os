@@ -155,8 +155,8 @@ mod tests {
     #[tokio::test]
     async fn healthz_returns_ok() {
         let app = app();
-        let resp = ServiceExt::<Request<Body>>::oneshot(app,
-            Request::builder().uri("/healthz").body(Body::empty()).unwrap())
+        let resp = app
+            .oneshot(Request::builder().uri("/healthz").body(Body::empty()).unwrap())
             .await
             .unwrap();
         assert_eq!(resp.status(), StatusCode::OK);
@@ -168,8 +168,8 @@ mod tests {
     #[tokio::test]
     async fn get_agents_returns_64() {
         let app = app();
-        let resp = ServiceExt::<Request<Body>>::oneshot(app,
-            Request::builder().uri("/api/agents").body(Body::empty()).unwrap())
+        let resp = app
+            .oneshot(Request::builder().uri("/api/agents").body(Body::empty()).unwrap())
             .await
             .unwrap();
         assert_eq!(resp.status(), StatusCode::OK);
@@ -182,8 +182,8 @@ mod tests {
     #[tokio::test]
     async fn agent_response_has_required_fields() {
         let app = app();
-        let resp = ServiceExt::<Request<Body>>::oneshot(app,
-            Request::builder().uri("/api/agents").body(Body::empty()).unwrap())
+        let resp = app
+            .oneshot(Request::builder().uri("/api/agents").body(Body::empty()).unwrap())
             .await
             .unwrap();
         let body = body_bytes(resp.into_body()).await;
@@ -197,8 +197,8 @@ mod tests {
     #[tokio::test]
     async fn get_approvals_returns_empty_list() {
         let app = app();
-        let resp = ServiceExt::<Request<Body>>::oneshot(app,
-            Request::builder().uri("/api/approvals").body(Body::empty()).unwrap())
+        let resp = app
+            .oneshot(Request::builder().uri("/api/approvals").body(Body::empty()).unwrap())
             .await
             .unwrap();
         assert_eq!(resp.status(), StatusCode::OK);

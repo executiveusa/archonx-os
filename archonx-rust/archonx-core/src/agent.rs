@@ -125,26 +125,42 @@ impl AgentRegistry {
     }
 
     pub fn get_by_crew(&self, crew: Crew) -> Vec<Arc<RwLock<Agent>>> {
-        self.agents
+        let mut agents: Vec<Arc<RwLock<Agent>>> = self.agents
             .iter()
             .filter(|e| e.value().read().unwrap().crew == crew)
             .map(|e| e.value().clone())
-            .collect()
+            .collect();
+        // DashMap iteration order is non-deterministic; sort for stable output.
+        agents.sort_by(|a, b| {
+            a.read().unwrap().agent_id.cmp(&b.read().unwrap().agent_id)
+        });
+        agents
     }
 
     pub fn get_by_role(&self, role: Role, crew: Option<Crew>) -> Vec<Arc<RwLock<Agent>>> {
-        self.agents
+        let mut agents: Vec<Arc<RwLock<Agent>>> = self.agents
             .iter()
             .filter(|e| {
                 let a = e.value().read().unwrap();
                 a.role == role && crew.map_or(true, |c| a.crew == c)
             })
             .map(|e| e.value().clone())
-            .collect()
+            .collect();
+        agents.sort_by(|a, b| {
+            a.read().unwrap().agent_id.cmp(&b.read().unwrap().agent_id)
+        });
+        agents
     }
 
     pub fn all(&self) -> Vec<Arc<RwLock<Agent>>> {
-        self.agents.iter().map(|e| e.value().clone()).collect()
+        let mut agents: Vec<Arc<RwLock<Agent>>> = self.agents
+            .iter()
+            .map(|e| e.value().clone())
+            .collect();
+        agents.sort_by(|a, b| {
+            a.read().unwrap().agent_id.cmp(&b.read().unwrap().agent_id)
+        });
+        agents
     }
 
     pub fn len(&self) -> usize {

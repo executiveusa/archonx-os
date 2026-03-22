@@ -131,7 +131,7 @@ impl TaskManager {
         *counter += 1;
         let now = Utc::now().timestamp_millis();
         let task = Task {
-            id: format!("task-{:06}", counter),
+            id: format!("task-{:06}", *counter),
             title: title.to_string(),
             description: String::new(),
             task_type,
