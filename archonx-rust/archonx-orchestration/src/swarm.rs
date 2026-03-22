@@ -222,7 +222,9 @@ impl SwarmOrchestrator {
                     );
                 }
                 Err(join_err) => {
-                    warn!("JoinSet error: {}", join_err);
+                    let err_msg = format!("agent-panic: {}", join_err);
+                    warn!("JoinSet error: {}", err_msg);
+                    errors.push(err_msg);
                 }
             }
         }

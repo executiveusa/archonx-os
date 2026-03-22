@@ -402,8 +402,10 @@ impl Analyzer {
             }
         }
 
-        // Deduplicate by location
-        findings.dedup_by(|a, b| a.location == b.location && a.kind == b.kind);
+        // Deduplicate by (location, kind) globally — dedup_by only removes adjacent
+        // duplicates, so we use a HashSet to ensure full deduplication.
+        let mut seen: HashSet<(String, String)> = HashSet::new();
+        findings.retain(|f| seen.insert((f.location.clone(), f.kind.clone())));
         findings.truncate(100);
         findings
     }

@@ -85,7 +85,7 @@ impl RepoIndexer {
         }
         let parent = path.parent().unwrap_or(&self.root);
         std::fs::create_dir_all(parent).ok();
-        let clone_url = format!("git@github.com:{}.git", slug);
+        let clone_url = format!("https://github.com/{}.git", slug);
         let output = Command::new("git")
             .args(["clone", "--depth", "1", &clone_url, &path.to_string_lossy()])
             .output();

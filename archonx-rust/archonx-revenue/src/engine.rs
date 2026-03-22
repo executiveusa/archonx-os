@@ -183,6 +183,8 @@ pub struct Invoice {
 /// Main revenue generation engine targeting $100M by 2030.
 /// Replaces Python: class RevenueEngine + LeadGenerator + ClientAcquisition + BillingAutomation
 pub struct RevenueEngine {
+    // TODO: use pool to persist leads/clients/subscriptions/invoices to PostgreSQL
+    #[allow(dead_code)]
     pool: Option<PgPool>,
     leads: Arc<tokio::sync::RwLock<HashMap<String, Lead>>>,
     clients: Arc<tokio::sync::RwLock<HashMap<String, Client>>>,
@@ -240,7 +242,7 @@ impl RevenueEngine {
         let mut counter = self.lead_counter.lock().await;
         *counter += 1;
         let lead = Lead {
-            lead_id: format!("lead-{:06}", counter),
+            lead_id: format!("lead-{:06}", *counter),
             company_name: company_name.to_string(),
             contact_name: contact_name.to_string(),
             contact_email: contact_email.to_string(),
@@ -311,7 +313,7 @@ impl RevenueEngine {
         *counter += 1;
         let now = Utc::now();
         let client = Client {
-            client_id: format!("client-{:06}", counter),
+            client_id: format!("client-{:06}", *counter),
             company_name: lead.company_name.clone(),
             contact_name: lead.contact_name.clone(),
             contact_email: lead.contact_email.clone(),
@@ -370,7 +372,7 @@ impl RevenueEngine {
         let price = custom_price.unwrap_or_else(|| tier.monthly_price());
         let now = Utc::now();
         let sub = Subscription {
-            subscription_id: format!("sub-{:06}", counter),
+            subscription_id: format!("sub-{:06}", *counter),
             client_id: client_id.to_string(),
             tier,
             price,
@@ -395,7 +397,7 @@ impl RevenueEngine {
         *counter += 1;
         let now = Utc::now();
         let invoice = Invoice {
-            invoice_id: format!("inv-{:06}", counter),
+            invoice_id: format!("inv-{:06}", *counter),
             client_id: client_id.to_string(),
             items: client_subs.iter().map(|s| serde_json::json!({
                 "subscription_id": s.subscription_id,
@@ -466,6 +468,11 @@ impl RevenueEngine {
     }
 
     pub async fn full_report(&self) -> serde_json::Value {
+        // Compute mrr and goal_progress before acquiring read locks to avoid
+        // nested lock acquisition (deadlock risk with tokio::sync::RwLock).
+        let goal_progress = self.revenue_progress().await;
+        let mrr = self.mrr().await;
+
         let leads = self.leads.read().await;
         let clients = self.clients.read().await;
         let subs = self.subscriptions.read().await;
@@ -479,7 +486,7 @@ impl RevenueEngine {
 
         serde_json::json!({
             "timestamp": Utc::now().to_rfc3339(),
-            "goal_progress": self.revenue_progress().await,
+            "goal_progress": goal_progress,
             "leads": {
                 "total": leads.len(),
                 "by_status": {
@@ -498,8 +505,8 @@ impl RevenueEngine {
             },
             "billing": {
                 "active_subscriptions": subs.values().filter(|s| s.status == "active").count(),
-                "mrr": self.mrr().await,
-                "arr": self.mrr().await * 12.0,
+                "mrr": mrr,
+                "arr": mrr * 12.0,
                 "total_collected": total_collected,
             }
         })

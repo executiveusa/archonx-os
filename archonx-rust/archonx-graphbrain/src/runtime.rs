@@ -157,8 +157,8 @@ impl GraphBrainRuntime {
         // Phase 5: Patch — analyze and generate work orders
         let work_orders = self.phase_patch(&kg, &repo_indexes, &mut phases);
 
-        // Phase 6: Repeat — save report to disk
-        let report = GraphBrainReport {
+        // Build a preliminary report (phases_completed will be updated after repeat/ship).
+        let mut report = GraphBrainReport {
             mode: self.mode.to_string(),
             timestamp_ms: start_ms,
             repos_indexed: repo_indexes.len(),
@@ -166,21 +166,26 @@ impl GraphBrainRuntime {
             graph_nodes: kg.global_nodes.len(),
             graph_edges: kg.global_edges.len(),
             work_orders,
-            phases_completed: phases
-                .iter()
-                .filter(|p| p.success)
-                .map(|p| p.name.clone())
-                .collect(),
+            // Populated after all 7 phases complete (see below).
+            phases_completed: Vec::new(),
             metadata: serde_json::json!({
                 "duration_ms": chrono::Utc::now().timestamp_millis() - start_ms,
                 "mode": self.mode.to_string(),
             }),
         };
 
+        // Phase 6: Repeat — save report to disk
         self.phase_repeat(&report, &mut phases);
 
         // Phase 7: Ship — deliver report
         self.phase_ship(&report, &mut phases).await;
+
+        // Populate phases_completed AFTER all 7 phases have run.
+        report.phases_completed = phases
+            .iter()
+            .filter(|p| p.success)
+            .map(|p| p.name.clone())
+            .collect();
 
         info!(
             "GraphBrain complete: {} repos, {} docs, {} work orders",
@@ -217,8 +222,15 @@ impl GraphBrainRuntime {
         phases: &mut Vec<PhaseResult>,
     ) -> (Vec<crate::repo_indexer::RepoIndex>, usize) {
         info!("Phase 2: Implement — indexing {} repos", repos.len());
-        let indexer = RepoIndexer::new(self.root.clone(), repos.to_vec());
-        let indexes = indexer.index_all();
+        let root = self.root.clone();
+        let repos_owned = repos.to_vec();
+        // index_all performs blocking file I/O — offload to a dedicated thread.
+        let indexes = tokio::task::spawn_blocking(move || {
+            let indexer = RepoIndexer::new(root, repos_owned);
+            indexer.index_all()
+        })
+        .await
+        .unwrap_or_default();
         let available = indexes.iter().filter(|i| i.status == "available").count();
         let total_docs: usize = indexes.iter().map(|i| i.docs.len()).sum();
         phases.push(PhaseResult::ok(
@@ -317,26 +329,44 @@ impl GraphBrainRuntime {
                 return;
             }
         }
-        match serde_json::to_string_pretty(report) {
-            Ok(json) => {
-                match std::fs::write(&self.report_path, &json) {
-                    Ok(_) => {
-                        phases.push(PhaseResult::ok(
-                            "repeat",
-                            &format!("Saved to {}", self.report_path.display()),
-                        ));
-                    }
-                    Err(e) => {
-                        warn!("Could not write report: {}", e);
-                        phases.push(PhaseResult::fail("repeat", &e.to_string()));
-                    }
-                }
-            }
+        let json = match serde_json::to_string_pretty(report) {
+            Ok(j) => j,
             Err(e) => {
                 error!("Could not serialize report: {}", e);
                 phases.push(PhaseResult::fail("repeat", &e.to_string()));
+                return;
+            }
+        };
+        match std::fs::write(&self.report_path, &json) {
+            Ok(_) => {
+                info!("Saved latest report to {}", self.report_path.display());
+            }
+            Err(e) => {
+                warn!("Could not write report: {}", e);
+                phases.push(PhaseResult::fail("repeat", &e.to_string()));
+                return;
             }
         }
+
+        // Also write a timestamped snapshot to ops/reports/graphbrain/ for
+        // backward compatibility with existing CI checks and schema validators.
+        let snapshot_dir = self.root.join("ops").join("reports").join("graphbrain");
+        if let Err(e) = std::fs::create_dir_all(&snapshot_dir) {
+            warn!("Could not create ops/reports/graphbrain/: {}", e);
+        } else {
+            let ts = chrono::Utc::now().format("%Y%m%dT%H%M%S");
+            let snapshot_path = snapshot_dir.join(format!("GRAPH_SNAPSHOT_{}.json", ts));
+            if let Err(e) = std::fs::write(&snapshot_path, &json) {
+                warn!("Could not write snapshot: {}", e);
+            } else {
+                info!("Saved timestamped snapshot to {}", snapshot_path.display());
+            }
+        }
+
+        phases.push(PhaseResult::ok(
+            "repeat",
+            &format!("Saved to {}", self.report_path.display()),
+        ));
     }
 
     // ------------------------------------------------------------------

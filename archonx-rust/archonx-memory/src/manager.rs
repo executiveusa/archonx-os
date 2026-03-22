@@ -182,10 +182,10 @@ impl MemoryManager {
         max_items: usize,
     ) -> serde_json::Value {
         let patterns = self
-            .search(task, Some(MemoryLayer::Global), max_items, 0.75)
+            .search(task, Some(MemoryLayer::Global), max_items, 0.5)
             .await;
         let related = self
-            .search(task, Some(MemoryLayer::Project), max_items, 0.75)
+            .search(task, Some(MemoryLayer::Project), max_items, 0.5)
             .await;
 
         let expertise: Vec<serde_json::Value> = if let Some(aid) = agent_id {
@@ -260,9 +260,48 @@ impl MemoryManager {
         query: Option<&str>,
         limit: usize,
     ) -> Vec<AgentExpertise> {
-        let cache = self.cache.read().await;
         let prefix = format!("expertise:{}:", agent_id);
 
+        // When a DB pool is set, load persisted expertise into the cache so reads
+        // are consistent with the writes that went to PostgreSQL.
+        if let Some(pool) = &self.pool {
+            match sqlx::query(
+                "SELECT key, value FROM memory_entries WHERE key LIKE $1 AND layer = 'team'"
+            )
+            .bind(format!("expertise:{}:%", agent_id))
+            .fetch_all(pool)
+            .await
+            {
+                Ok(rows) => {
+                    let mut cache = self.cache.write().await;
+                    for row in rows {
+                        use sqlx::Row;
+                        let key: String = row.try_get("key").unwrap_or_default();
+                        let value_str: String = row.try_get("value").unwrap_or_default();
+                        if cache.contains_key(&key) {
+                            continue;
+                        }
+                        if let Ok(value) = serde_json::from_str::<serde_json::Value>(&value_str) {
+                            let entry = MemoryEntry {
+                                key: key.clone(),
+                                value,
+                                layer: MemoryLayer::Team,
+                                tags: vec!["expertise".into(), agent_id.to_string()],
+                                confidence: 1.0,
+                                access_count: 0,
+                                created_at: Utc::now(),
+                            };
+                            cache.insert(key, entry);
+                        }
+                    }
+                }
+                Err(e) => {
+                    warn!("DB read for expertise failed, using cache only: {}", e);
+                }
+            }
+        }
+
+        let cache = self.cache.read().await;
         let mut results: Vec<AgentExpertise> = cache
             .values()
             .filter(|e| e.key.starts_with(&prefix))
