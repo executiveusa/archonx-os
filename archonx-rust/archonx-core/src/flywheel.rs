@@ -157,7 +157,7 @@ impl FlywheelEngine {
                 .unwrap_or_default();
 
             let imp = Improvement {
-                id: format!("imp-{:05}", counter),
+                id: format!("imp-{:05}", *counter),
                 source_skill: source_skill.to_string(),
                 source_task_id: task_id.to_string(),
                 description: raw

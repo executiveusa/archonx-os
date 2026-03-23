@@ -125,26 +125,38 @@ impl AgentRegistry {
     }
 
     pub fn get_by_crew(&self, crew: Crew) -> Vec<Arc<RwLock<Agent>>> {
-        self.agents
+        let mut result: Vec<Arc<RwLock<Agent>>> = self.agents
             .iter()
             .filter(|e| e.value().read().unwrap().crew == crew)
             .map(|e| e.value().clone())
-            .collect()
+            .collect();
+        result.sort_by(|a, b| {
+            a.read().unwrap().agent_id.cmp(&b.read().unwrap().agent_id)
+        });
+        result
     }
 
     pub fn get_by_role(&self, role: Role, crew: Option<Crew>) -> Vec<Arc<RwLock<Agent>>> {
-        self.agents
+        let mut result: Vec<Arc<RwLock<Agent>>> = self.agents
             .iter()
             .filter(|e| {
                 let a = e.value().read().unwrap();
                 a.role == role && crew.map_or(true, |c| a.crew == c)
             })
             .map(|e| e.value().clone())
-            .collect()
+            .collect();
+        result.sort_by(|a, b| {
+            a.read().unwrap().agent_id.cmp(&b.read().unwrap().agent_id)
+        });
+        result
     }
 
     pub fn all(&self) -> Vec<Arc<RwLock<Agent>>> {
-        self.agents.iter().map(|e| e.value().clone()).collect()
+        let mut result: Vec<Arc<RwLock<Agent>>> = self.agents.iter().map(|e| e.value().clone()).collect();
+        result.sort_by(|a, b| {
+            a.read().unwrap().agent_id.cmp(&b.read().unwrap().agent_id)
+        });
+        result
     }
 
     pub fn len(&self) -> usize {
