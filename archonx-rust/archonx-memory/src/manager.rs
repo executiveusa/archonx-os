@@ -182,10 +182,10 @@ impl MemoryManager {
         max_items: usize,
     ) -> serde_json::Value {
         let patterns = self
-            .search(task, Some(MemoryLayer::Global), max_items, 0.75)
+            .search(task, Some(MemoryLayer::Global), max_items, 0.5)
             .await;
         let related = self
-            .search(task, Some(MemoryLayer::Project), max_items, 0.75)
+            .search(task, Some(MemoryLayer::Project), max_items, 0.5)
             .await;
 
         let expertise: Vec<serde_json::Value> = if let Some(aid) = agent_id {
@@ -260,21 +260,51 @@ impl MemoryManager {
         query: Option<&str>,
         limit: usize,
     ) -> Vec<AgentExpertise> {
-        let cache = self.cache.read().await;
-        let prefix = format!("expertise:{}:", agent_id);
-
-        let mut results: Vec<AgentExpertise> = cache
-            .values()
-            .filter(|e| e.key.starts_with(&prefix))
-            .filter_map(|e| serde_json::from_value::<AgentExpertise>(e.value.clone()).ok())
-            .filter(|e| {
-                query.map_or(true, |q| {
-                    let ql = q.to_lowercase();
-                    e.problem.to_lowercase().contains(&ql)
-                        || e.approach.to_lowercase().contains(&ql)
+        // Check in-memory cache first (fast path)
+        let mut results: Vec<AgentExpertise> = {
+            let cache = self.cache.read().await;
+            let prefix = format!("expertise:{}:", agent_id);
+            cache
+                .values()
+                .filter(|e| e.key.starts_with(&prefix))
+                .filter_map(|e| serde_json::from_value::<AgentExpertise>(e.value.clone()).ok())
+                .filter(|e| {
+                    query.map_or(true, |q| {
+                        let ql = q.to_lowercase();
+                        e.problem.to_lowercase().contains(&ql)
+                            || e.approach.to_lowercase().contains(&ql)
+                    })
                 })
-            })
-            .collect();
+                .collect()
+        }; // cache lock released here
+
+        // DB fallback when pool available and cache is empty (e.g. after process restart)
+        if results.is_empty() {
+            if let Some(pool) = &self.pool {
+                if let Ok(rows) = sqlx::query_as::<_, (String, String)>(
+                    "SELECT key, value FROM memory_entries WHERE $1 = ANY(tags) AND layer = 'team_shared'",
+                )
+                .bind(agent_id)
+                .fetch_all(pool)
+                .await
+                {
+                    let mut db_results: Vec<AgentExpertise> = rows
+                        .iter()
+                        .filter_map(|(_, v)| serde_json::from_str::<AgentExpertise>(v).ok())
+                        .filter(|e| {
+                            query.map_or(true, |q| {
+                                let ql = q.to_lowercase();
+                                e.problem.to_lowercase().contains(&ql)
+                                    || e.approach.to_lowercase().contains(&ql)
+                            })
+                        })
+                        .collect();
+                    db_results.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
+                    db_results.truncate(limit);
+                    return db_results;
+                }
+            }
+        }
 
         results.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
         results.truncate(limit);
@@ -422,26 +452,87 @@ impl MemoryManager {
         limit: usize,
         threshold: f64,
     ) -> Vec<SearchResult> {
-        let cache = self.cache.read().await;
         let query_lower = query.to_lowercase();
         let query_terms: Vec<&str> = query_lower.split_whitespace().collect();
 
-        let mut results: Vec<SearchResult> = cache
-            .values()
-            .filter(|e| layer.map_or(true, |l| e.layer == l))
-            .filter_map(|e| {
-                let score = Self::calculate_relevance(e, &query_terms, &query_lower);
-                if score >= threshold {
-                    Some(SearchResult {
-                        entry: e.clone(),
-                        score,
-                        highlights: Self::extract_highlights(e, &query_terms),
-                    })
-                } else {
-                    None
+        // Check in-memory cache first
+        let mut results: Vec<SearchResult> = {
+            let cache = self.cache.read().await;
+            cache
+                .values()
+                .filter(|e| layer.map_or(true, |l| e.layer == l))
+                .filter_map(|e| {
+                    let score = Self::calculate_relevance(e, &query_terms, &query_lower);
+                    if score >= threshold {
+                        Some(SearchResult {
+                            entry: e.clone(),
+                            score,
+                            highlights: Self::extract_highlights(e, &query_terms),
+                        })
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        }; // cache lock released here
+
+        // DB fallback when pool available and cache returned nothing
+        if results.is_empty() {
+            if let Some(pool) = &self.pool {
+                let layer_filter = layer.map(|l| l.to_string());
+                let db_rows = match &layer_filter {
+                    Some(l) => sqlx::query_as::<_, (String, String, String, Vec<String>, f64, i64)>(
+                        "SELECT key, value, layer, tags, confidence, access_count FROM memory_entries WHERE layer = $1",
+                    )
+                    .bind(l)
+                    .fetch_all(pool)
+                    .await,
+                    None => sqlx::query_as::<_, (String, String, String, Vec<String>, f64, i64)>(
+                        "SELECT key, value, layer, tags, confidence, access_count FROM memory_entries",
+                    )
+                    .fetch_all(pool)
+                    .await,
+                };
+                if let Ok(rows) = db_rows {
+                    let layer_val = layer;
+                    let mut db_results: Vec<SearchResult> = rows
+                        .iter()
+                        .filter_map(|(key, val, layer_str, tags, confidence, access_count)| {
+                            let ml = match layer_str.as_str() {
+                                "project_local" => MemoryLayer::Project,
+                                "team_shared"   => MemoryLayer::Team,
+                                _               => MemoryLayer::Global,
+                            };
+                            if layer_val.map_or(false, |lv| lv != ml) {
+                                return None;
+                            }
+                            let entry = MemoryEntry {
+                                key: key.clone(),
+                                value: serde_json::from_str(val).unwrap_or(serde_json::Value::Null),
+                                layer: ml,
+                                tags: tags.clone(),
+                                confidence: *confidence,
+                                access_count: *access_count,
+                                created_at: Utc::now(),
+                            };
+                            let score = Self::calculate_relevance(&entry, &query_terms, &query_lower);
+                            if score >= threshold {
+                                Some(SearchResult {
+                                    highlights: Self::extract_highlights(&entry, &query_terms),
+                                    entry,
+                                    score,
+                                })
+                            } else {
+                                None
+                            }
+                        })
+                        .collect();
+                    db_results.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap_or(std::cmp::Ordering::Equal));
+                    db_results.truncate(limit);
+                    return db_results;
                 }
-            })
-            .collect();
+            }
+        }
 
         results.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap_or(std::cmp::Ordering::Equal));
         results.truncate(limit);

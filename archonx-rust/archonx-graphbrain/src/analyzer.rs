@@ -402,7 +402,8 @@ impl Analyzer {
             }
         }
 
-        // Deduplicate by location
+        // Deduplicate by location — sort first so dedup_by removes all duplicates, not just adjacent
+        findings.sort_by(|a, b| a.location.cmp(&b.location).then(a.kind.cmp(&b.kind)));
         findings.dedup_by(|a, b| a.location == b.location && a.kind == b.kind);
         findings.truncate(100);
         findings

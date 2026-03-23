@@ -44,6 +44,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
     libpq5 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/target/release/archonx-api /usr/local/bin/archonx-api
@@ -56,7 +57,7 @@ ENV API_PORT=8000
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
-    CMD wget -qO- http://localhost:8000/healthz || exit 1
+    CMD curl -sf http://localhost:8000/healthz || exit 1
 
 CMD ["archonx-api"]
 

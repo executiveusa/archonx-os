@@ -67,17 +67,31 @@ impl std::str::FromStr for RunMode {
 // ---------------------------------------------------------------------------
 
 /// The full GraphBrain report produced by one run.
+/// Complies with ecosystem/contracts/graphbrain-report.schema.json.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GraphBrainReport {
+    // Contract-required fields
+    pub report_id: String,        // e.g. "graphbrain.graph_snapshot.v1.<ts>"
+    pub generated_at: String,     // RFC3339 datetime
+    pub repos_indexed: usize,
+    pub graph: GraphSummary,
+    pub recommendations: Vec<serde_json::Value>,
+    // Existing fields
     pub mode: String,
     pub timestamp_ms: i64,
-    pub repos_indexed: usize,
     pub docs_indexed: usize,
-    pub graph_nodes: usize,
-    pub graph_edges: usize,
     pub work_orders: Vec<WorkOrder>,
     pub phases_completed: Vec<String>,
     pub metadata: serde_json::Value,
+}
+
+/// Nested graph summary for the contract schema.
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct GraphSummary {
+    pub nodes: usize,
+    pub edges: usize,
+    pub clusters: usize,
+    pub bridge_terms_top: Vec<serde_json::Value>,
 }
 
 // ---------------------------------------------------------------------------
@@ -157,20 +171,32 @@ impl GraphBrainRuntime {
         // Phase 5: Patch — analyze and generate work orders
         let work_orders = self.phase_patch(&kg, &repo_indexes, &mut phases);
 
-        // Phase 6: Repeat — save report to disk
-        let report = GraphBrainReport {
+        // Phase 6: Repeat — build report and save to disk
+        let now_dt = chrono::Utc::now();
+        let bridge_terms_top: Vec<serde_json::Value> = kg.jaccard_rows.iter().take(5).map(|r| serde_json::json!({
+            "term": format!("{} <-> {}", r.term_a, r.term_b),
+            "betweenness": r.similarity,
+        })).collect();
+
+        let mut report = GraphBrainReport {
+            report_id: format!("graphbrain.graph_snapshot.v1.{}", start_ms),
+            generated_at: now_dt.to_rfc3339(),
             mode: self.mode.to_string(),
             timestamp_ms: start_ms,
             repos_indexed: repo_indexes.len(),
             docs_indexed: total_docs,
-            graph_nodes: kg.global_nodes.len(),
-            graph_edges: kg.global_edges.len(),
-            work_orders,
-            phases_completed: phases
-                .iter()
-                .filter(|p| p.success)
-                .map(|p| p.name.clone())
+            graph: GraphSummary {
+                nodes: kg.global_nodes.len(),
+                edges: kg.global_edges.len(),
+                clusters: kg.repo_graphs.len(),
+                bridge_terms_top,
+            },
+            recommendations: work_orders.iter()
+                .map(|w| serde_json::to_value(w).unwrap_or_default())
                 .collect(),
+            work_orders,
+            // phases_completed set below — after phase_repeat and phase_ship execute
+            phases_completed: vec![],
             metadata: serde_json::json!({
                 "duration_ms": chrono::Utc::now().timestamp_millis() - start_ms,
                 "mode": self.mode.to_string(),
@@ -181,6 +207,13 @@ impl GraphBrainRuntime {
 
         // Phase 7: Ship — deliver report
         self.phase_ship(&report, &mut phases).await;
+
+        // Record all completed phases (including repeat + ship) now that they have run
+        report.phases_completed = phases
+            .iter()
+            .filter(|p| p.success)
+            .map(|p| p.name.clone())
+            .collect();
 
         info!(
             "GraphBrain complete: {} repos, {} docs, {} work orders",
@@ -218,7 +251,14 @@ impl GraphBrainRuntime {
     ) -> (Vec<crate::repo_indexer::RepoIndex>, usize) {
         info!("Phase 2: Implement — indexing {} repos", repos.len());
         let indexer = RepoIndexer::new(self.root.clone(), repos.to_vec());
-        let indexes = indexer.index_all();
+        // index_all is CPU/IO-bound (git clone + file scan) — use spawn_blocking to avoid
+        // blocking the tokio executor thread.
+        let indexes = tokio::task::spawn_blocking(move || indexer.index_all())
+            .await
+            .unwrap_or_else(|e| {
+                warn!("index_all panicked: {}", e);
+                vec![]
+            });
         let available = indexes.iter().filter(|i| i.status == "available").count();
         let total_docs: usize = indexes.iter().map(|i| i.docs.len()).sum();
         phases.push(PhaseResult::ok(
@@ -309,7 +349,30 @@ impl GraphBrainRuntime {
     // ------------------------------------------------------------------
 
     fn phase_repeat(&self, report: &GraphBrainReport, phases: &mut Vec<PhaseResult>) {
-        info!("Phase 6: Repeat — saving report to {}", self.report_path.display());
+        info!("Phase 6: Repeat — saving report");
+
+        let json = match serde_json::to_string_pretty(report) {
+            Ok(j) => j,
+            Err(e) => {
+                error!("Could not serialize report: {}", e);
+                phases.push(PhaseResult::fail("repeat", &e.to_string()));
+                return;
+            }
+        };
+
+        // Write timestamped snapshot to ops/reports/graphbrain/ (GRAPH_SNAPSHOT contract)
+        let snapshot_dir = self.root.join("ops").join("reports").join("graphbrain");
+        if std::fs::create_dir_all(&snapshot_dir).is_ok() {
+            let ts = chrono::Utc::now().format("%Y%m%dT%H%M%SZ");
+            let snapshot_path = snapshot_dir.join(format!("GRAPH_SNAPSHOT_{}.json", ts));
+            if let Err(e) = std::fs::write(&snapshot_path, &json) {
+                warn!("Could not write snapshot: {}", e);
+            } else {
+                info!("Snapshot written to {}", snapshot_path.display());
+            }
+        }
+
+        // Write latest path (backwards-compatibility for consumers of graphbrain_latest.json)
         if let Some(parent) = self.report_path.parent() {
             if let Err(e) = std::fs::create_dir_all(parent) {
                 warn!("Could not create report directory: {}", e);
@@ -317,23 +380,15 @@ impl GraphBrainRuntime {
                 return;
             }
         }
-        match serde_json::to_string_pretty(report) {
-            Ok(json) => {
-                match std::fs::write(&self.report_path, &json) {
-                    Ok(_) => {
-                        phases.push(PhaseResult::ok(
-                            "repeat",
-                            &format!("Saved to {}", self.report_path.display()),
-                        ));
-                    }
-                    Err(e) => {
-                        warn!("Could not write report: {}", e);
-                        phases.push(PhaseResult::fail("repeat", &e.to_string()));
-                    }
-                }
+        match std::fs::write(&self.report_path, &json) {
+            Ok(_) => {
+                phases.push(PhaseResult::ok(
+                    "repeat",
+                    &format!("Saved to {}", self.report_path.display()),
+                ));
             }
             Err(e) => {
-                error!("Could not serialize report: {}", e);
+                warn!("Could not write report: {}", e);
                 phases.push(PhaseResult::fail("repeat", &e.to_string()));
             }
         }
@@ -432,12 +487,19 @@ mod tests {
     #[test]
     fn graphbrain_report_serializes() {
         let report = GraphBrainReport {
+            report_id: "graphbrain.graph_snapshot.v1.0".into(),
+            generated_at: "2023-01-01T00:00:00Z".into(),
             mode: "light".into(),
             timestamp_ms: 1_700_000_000_000,
             repos_indexed: 5,
             docs_indexed: 100,
-            graph_nodes: 500,
-            graph_edges: 1000,
+            graph: GraphSummary {
+                nodes: 500,
+                edges: 1000,
+                clusters: 3,
+                bridge_terms_top: vec![],
+            },
+            recommendations: vec![],
             work_orders: vec![],
             phases_completed: vec!["plan".into(), "implement".into()],
             metadata: serde_json::json!({"duration_ms": 3000}),
@@ -445,5 +507,6 @@ mod tests {
         let json = serde_json::to_string(&report).unwrap();
         assert!(json.contains("\"mode\":\"light\""));
         assert!(json.contains("\"repos_indexed\":5"));
+        assert!(json.contains("\"report_id\""));
     }
 }

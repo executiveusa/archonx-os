@@ -113,12 +113,13 @@ impl GraphBuilder {
         tokens: &[String],
         slug: &str,
         max_edges: usize,
+        window_size: usize,
     ) -> Vec<KnowledgeEdge> {
         // Count weights for each (source, target) pair
         let mut edge_weights: HashMap<(String, String), f64> = HashMap::new();
 
         for (i, term_a) in tokens.iter().enumerate() {
-            let end = (i + WINDOW_SIZE + 1).min(tokens.len());
+            let end = (i + window_size + 1).min(tokens.len());
             for (j, term_b) in tokens[i + 1..end].iter().enumerate() {
                 if term_a == term_b {
                     continue;
@@ -163,7 +164,7 @@ impl GraphBuilder {
             .flat_map(|doc| Self::tokenize(&doc.content))
             .collect();
 
-        let edges = Self::build_cooccurrence_edges(&all_tokens, &repo_index.slug, self.max_edges_per_repo);
+        let edges = Self::build_cooccurrence_edges(&all_tokens, &repo_index.slug, self.max_edges_per_repo, self.window_size);
 
         let nodes: Vec<String> = {
             let mut seen = std::collections::HashSet::new();
@@ -213,7 +214,7 @@ impl GraphBuilder {
             .collect();
 
         let global_edges =
-            Self::build_cooccurrence_edges(&all_tokens, "global", self.max_edges_global);
+            Self::build_cooccurrence_edges(&all_tokens, "global", self.max_edges_global, self.window_size);
 
         let global_nodes: Vec<String> = {
             let mut seen = std::collections::HashSet::new();
@@ -404,7 +405,7 @@ mod tests {
             "alpha".into(), "mid1".into(), "beta".into(), // alpha-beta distance 2 -> 0.5
             "alpha".into(), "mid2".into(), "mid3".into(), "mid4".into(), "gamma".into(), // alpha-gamma distance 5 -> 0.2
         ];
-        let edges = GraphBuilder::build_cooccurrence_edges(&tokens, "test", 1000);
+        let edges = GraphBuilder::build_cooccurrence_edges(&tokens, "test", 1000, WINDOW_SIZE);
         let ab = edges.iter().find(|e| {
             (e.source == "alpha" && e.target == "beta")
                 || (e.source == "beta" && e.target == "alpha")

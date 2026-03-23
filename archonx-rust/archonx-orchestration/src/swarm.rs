@@ -223,6 +223,7 @@ impl SwarmOrchestrator {
                 }
                 Err(join_err) => {
                     warn!("JoinSet error: {}", join_err);
+                    errors.push(format!("agent task panicked: {}", join_err));
                 }
             }
         }
