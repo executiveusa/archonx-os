@@ -4,7 +4,9 @@
 import * as THREE from 'three'
 
 // Emissive intensity and colour per animation state and crew
-const STATE_EMISSIVE: Record<string, Record<'white' | 'black', THREE.ColorRepresentation>> = {
+// ColorRepresentation was added in @types/three 0.130 — use number | string for r128 compat
+type ColorLike = number | string
+const STATE_EMISSIVE: Record<string, Record<'white' | 'black', ColorLike>> = {
   IDLE: { white: 0x000000, black: 0x000000 },
   THINKING: { white: 0x0044ff, black: 0xff4400 },
   MOVING: { white: 0x00ffaa, black: 0xffaa00 },
