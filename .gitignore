@@ -44,9 +44,15 @@ id_ed25519.pub
 .DS_Store
 Thumbs.db
 
-# Node (visualization)
+# Node modules (all apps)
+node_modules/
+**/node_modules/
 visualization/web/node_modules/
 visualization/web/dist/
+chess-theater/node_modules/
+chess-theater/.next/
+synthia-3-0/node_modules/
+synthia-3-0/.next/
 
 # Testing / Coverage
 .coverage
