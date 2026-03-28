@@ -1,0 +1,21 @@
+SUBJECT: 📋 Daily Digest — ${date}
+
+ArchonX OS · Daily Operations Summary
+
+Date        : ${date}
+Uptime      : ${uptime}
+Tasks Run   : ${tasks_run}
+Tasks Failed: ${tasks_failed}
+Active Agents: ${active_agents}
+
+Cost Summary:
+  Today   : $${cost_today} / $${daily_ceiling} ceiling
+  Month   : $${cost_month}
+
+Top Events:
+${top_events}
+
+Alerts:
+${alerts}
+
+— ArchonX OS Kernel · Popebot

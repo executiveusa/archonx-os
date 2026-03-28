@@ -67,6 +67,54 @@
       "retry_on_failure": 1,
       "critical": true,
       "description": "Archon-X voice agent (renamed from ADA v2) — Ivette + Bambu personas"
+    },
+    {
+      "path": "../archon-lovable-nexus",
+      "name": "archon-lovable-nexus",
+      "type": "node",
+      "language": "typescript",
+      "build_commands": ["npm run build"],
+      "test_commands": ["npm run test"],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": true,
+      "description": "ArchonX frontend — React/Vite/Tailwind glassmorphism UI"
+    },
+    {
+      "path": "archonx-synthia",
+      "name": "archonx-synthia",
+      "type": "python",
+      "language": "python",
+      "build_commands": ["pip install -r requirements.txt"],
+      "test_commands": ["pytest tests/ -v"],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": true,
+      "description": "SYNTHIA platform — GLM-5 runtime, P1-P7 agent loops"
+    },
+    {
+      "path": "Open-brain-mcp-server",
+      "name": "open-brain-mcp",
+      "type": "python",
+      "language": "python",
+      "build_commands": ["pip install -r requirements.txt"],
+      "test_commands": ["pytest tests/ -v"],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": true,
+      "description": "Shared pgvector memory layer for all 64 agents"
+    },
+    {
+      "path": "Darya-designs-main/Darya-designs-main",
+      "name": "darya-designs",
+      "type": "python",
+      "language": "python",
+      "build_commands": [],
+      "test_commands": [],
+      "timeout_seconds": 300,
+      "retry_on_failure": 1,
+      "critical": false,
+      "description": "DARYA OpenHands fork — BMAD autonomous coding agent"
     }
   ],
   "orchestration": {

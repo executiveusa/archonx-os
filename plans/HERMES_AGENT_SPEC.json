@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "spec_id": "HERMES_AGENT_SPEC",
+    "version": "1.0.0",
+    "phase": "PHASE_1",
+    "created_at": "2026-03-27T00:00:00Z",
+    "author": "ARCHITECT — BMAD A2A",
+    "status": "AWAITING_BUILDER_REVIEW",
+    "references": [
+      "Karpathy LLM Council pattern",
+      "archonx/kernel.py (WhiteCrew/BlackCrew classes)",
+      ".agent-souls/ (37 soul files)",
+      "GAP_001 from PHASE_0_GAP_ANALYSIS"
+    ]
+  },
+
+  "overview": {
+    "name": "Hermes Agent — Multi-Agent Reasoning Layer",
+    "description": "The Karpathy LLM Council pattern: multiple agents debate a problem, reach consensus, then execute. White Crew challenges assumptions, Black Crew generates solutions. Hermes arbitrates and synthesizes.",
+    "pattern": "Challenge → Debate → Consensus → Execution → Verify",
+    "location": "archonx/agents/hermes/",
+    "integration_point": "archonx/kernel.py execute_task() — routed when task.requires_council == True"
+  },
+
+  "file_structure": {
+    "archonx/agents/hermes/__init__.py": "Package init, exports HermesAgent, Council classes",
+    "archonx/agents/hermes/agent.py": "HermesAgent — top-level orchestrator and arbiter",
+    "archonx/agents/hermes/council.py": "Council base class + consensus mechanism",
+    "archonx/agents/hermes/white_council.py": "WhiteCouncil — challenge and critique layer (uses WhiteCrew souls)",
+    "archonx/agents/hermes/black_council.py": "BlackCouncil — solution generation layer (uses BlackCrew souls)",
+    "archonx/agents/hermes/debate.py": "DebateRound, DebateResult, DebateSummary dataclasses",
+    "archonx/agents/hermes/consensus.py": "ConsensusEngine — weighted voting + Hermes tiebreak",
+    "archonx/agents/hermes/execution.py": "ExecutionPlan, ExecutionResult — wraps agreed-upon action"
+  },
+
+  "data_models": {
+    "CouncilTask": {
+      "description": "Input to Hermes Agent",
+      "fields": {
+        "task_id": "str — unique task identifier",
+        "objective": "str — what needs to be decided/solved",
+        "context": "dict — relevant state, constraints, prior results",
+        "council_mode": "enum: WHITE_ONLY | BLACK_ONLY | FULL_DEBATE",
+        "max_rounds": "int = 3 — maximum debate rounds before forced consensus",
+        "timeout_seconds": "int = 120",
+        "requires_unanimous": "bool = False — if True, must reach full consensus"
+      }
+    },
+    "DebateRound": {
+      "fields": {
+        "round_number": "int",
+        "white_position": "str — White Council challenge/critique",
+        "black_position": "str — Black Council solution/counter",
+        "hermes_synthesis": "str — Hermes synthesis of round",
+        "convergence_score": "float 0-1 — how close to consensus",
+        "timestamp": "datetime"
+      }
+    },
+    "ConsensusResult": {
+      "fields": {
+        "reached": "bool",
+        "rounds_taken": "int",
+        "winning_position": "str",
+        "confidence": "float 0-1",
+        "white_vote": "float 0-1 — White Council agreement score",
+        "black_vote": "float 0-1 — Black Council agreement score",
+        "hermes_override": "bool — Hermes forced tiebreak"
+      }
+    },
+    "ExecutionPlan": {
+      "fields": {
+        "plan_id": "str",
+        "consensus_result": "ConsensusResult",
+        "actions": "list[dict] — ordered action steps",
+        "assigned_crew": "enum: WHITE | BLACK | BOTH",
+        "cost_estimate": "float — USD, must pass CostGuard",
+        "rollback_plan": "list[dict] — undo steps if execution fails"
+      }
+    }
+  },
+
+  "class_specifications": {
+    "HermesAgent": {
+      "file": "archonx/agents/hermes/agent.py",
+      "description": "Top-level orchestrator. Receives CouncilTask, runs debate, synthesizes consensus, kicks off execution.",
+      "constructor": {
+        "params": "white_council: WhiteCouncil, black_council: BlackCouncil, consensus_engine: ConsensusEngine, llm_client: Any, cost_guard: CostGuard",
+        "soul_file": ".agent-souls/white/pauli_king.soul.md (Hermes takes Pauli King's strategic authority)"
+      },
+      "methods": {
+        "async deliberate(task: CouncilTask) -> ConsensusResult": "Run full debate cycle, return consensus",
+        "async execute(plan: ExecutionPlan) -> ExecutionResult": "Execute agreed actions, report result",
+        "async run(task: CouncilTask) -> ExecutionResult": "Full pipeline: deliberate → plan → execute",
+        "_arbitrate(rounds: list[DebateRound]) -> str": "Hermes synthesis logic — finds common ground",
+        "_should_continue(round: DebateRound) -> bool": "Convergence check — stop if score > 0.85 or max rounds hit"
+      }
+    },
+
+    "WhiteCouncil": {
+      "file": "archonx/agents/hermes/white_council.py",
+      "description": "Challenge crew. Finds flaws, edge cases, risks. Always adversarial to the current proposal.",
+      "soul_members": [
+        "synthia_queen (systems thinking critique)",
+        "devika_bishop (technical feasibility check)",
+        "lightning_knight (performance + cost challenge)"
+      ],
+      "key_method": "async challenge(proposal: str, context: dict) -> str — returns critique/challenge text",
+      "prompt_pattern": "You are [agent_soul]. Your job is to find EVERY flaw in this proposal. Be adversarial. Return structured critique."
+    },
+
+    "BlackCouncil": {
+      "file": "archonx/agents/hermes/black_council.py",
+      "description": "Solution crew. Generates solutions, counters challenges, finds paths forward.",
+      "soul_members": [
+        "tyrone_bishop (deep technical solutions)",
+        "cosmos_knight (creative/unexpected approaches)",
+        "flash_knight (speed-optimized solutions)"
+      ],
+      "key_method": "async solve(challenge: str, context: dict) -> str — returns solution proposal",
+      "prompt_pattern": "You are [agent_soul]. You've been given this challenge. Generate the BEST solution. Be constructive. Return actionable proposal."
+    },
+
+    "ConsensusEngine": {
+      "file": "archonx/agents/hermes/consensus.py",
+      "description": "Weighted voting to reach consensus from debate rounds.",
+      "algorithm": {
+        "step_1": "Score each round for convergence (0-1) using semantic similarity of positions",
+        "step_2": "Weight later rounds higher (recency bias: round_n weight = 1 + 0.2*n)",
+        "step_3": "If weighted average > 0.85: consensus reached, extract winning position",
+        "step_4": "If max_rounds exceeded: Hermes override using synthesis of final round",
+        "step_5": "If requires_unanimous and no consensus: return failure, escalate to human"
+      }
+    }
+  },
+
+  "kernel_integration": {
+    "file": "archonx/kernel.py",
+    "integration_point": "execute_task() method",
+    "routing_logic": "if task.get('requires_council') or task.get('complexity') == 'high': use HermesAgent",
+    "add_to_init": "self.hermes = HermesAgent(white_council=WhiteCouncil(...), black_council=BlackCouncil(...), consensus_engine=ConsensusEngine(), llm_client=self.llm_client, cost_guard=self.cost_guard)",
+    "cost_guard_check": "Always check CostGuard BEFORE running council (council = 3-6 LLM calls per round)"
+  },
+
+  "llm_call_budget": {
+    "per_debate_round": "4 calls (white_challenge + black_solve + hermes_synthesis x2)",
+    "max_rounds": 3,
+    "max_calls_per_council_task": 12,
+    "estimated_cost": "$0.01-0.05 per council task (GPT-4o-mini tier)"
+  },
+
+  "error_handling": {
+    "llm_timeout": "Retry once, then use cached position from previous round",
+    "no_consensus": "After max_rounds: Hermes forced synthesis + log 'HERMES_FORCED_CONSENSUS' event",
+    "cost_guard_block": "Raise HermesBudgetExceeded, log task for later retry",
+    "council_member_fail": "Use remaining members, note degraded council in ConsensusResult"
+  },
+
+  "test_requirements": [
+    "test_single_round_consensus: Council agrees in round 1 (convergence > 0.85)",
+    "test_multi_round_debate: Council needs 3 rounds to converge",
+    "test_hermes_forced_tiebreak: max_rounds exceeded, Hermes takes over",
+    "test_cost_guard_blocks_council: Budget exceeded before council starts",
+    "test_council_member_failure: One member fails, council degrades gracefully"
+  ],
+
+  "dependencies": {
+    "python_packages": ["asyncio (stdlib)", "dataclasses (stdlib)", "anthropic or openai (via kernel's llm_client)"],
+    "internal": ["archonx/security/cost_guard.py", "archonx/kernel.py (WhiteCrew/BlackCrew types)"],
+    "soul_files": [".agent-souls/white/*.soul.md", ".agent-souls/black/*.soul.md"]
+  },
+
+  "builder_notes": [
+    "DO NOT implement a new LLM client — use kernel's existing self.llm_client",
+    "DO NOT hardcode any API keys — all flow through kernel's secure config",
+    "Keep council prompt templates in archonx/agents/hermes/prompts/ as .txt files (not in code)",
+    "ConsensusEngine semantic similarity: use simple keyword overlap for MVP; embedding-based similarity for Phase 3",
+    "Full Karpathy LLM Council (embedding-based, full multi-vectorstore) is Phase 3 scope — MVP is single-LLM debate"
+  ]
+}

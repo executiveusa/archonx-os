@@ -63,6 +63,11 @@ from archonx.security.env_scrubber import EnvScrubber
 from archonx.core.memory_sqlite import SQLiteMemory
 from archonx.core.agent_identity import AgentIdentityManager
 
+# --- Phase 2 BEAD modules ---
+from archonx.core.soul_loader import SoulLoader
+from archonx.agents.hermes.agent import HermesAgent
+from archonx.comms.popebot import Popebot
+
 logger = logging.getLogger("archonx.kernel")
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config" / "archonx-config.json"
@@ -266,6 +271,15 @@ class ArchonXKernel:
         else:
             self.agent_identity = None  # type: ignore[assignment]
 
+        # BEAD-SOUL-001: Soul loader — reads .agent-souls/**/*.soul.md and injects
+        self.soul_loader = SoulLoader()
+
+        # BEAD-HERMES-001: Hermes reasoning council
+        self.hermes = HermesAgent()
+
+        # BEAD-POPEBOT-001: External comms router (shared-account pattern)
+        self.popebot: Popebot | None = None  # lazy-init in boot() after vault available
+
         # Daily self-improvement (3 AM tasks + PAULIWHEEL sync 3x/day)
         self.self_improvement = DailySelfImprovement(
             registry=self.registry,
@@ -322,6 +336,22 @@ class ArchonXKernel:
             except Exception as exc:
                 logger.warning("SQLite memory failed to initialize: %s", exc)
 
+        # BEAD-SOUL-001: load + inject souls into registry agents
+        try:
+            loaded_souls = self.soul_loader.load_all()
+            self.soul_loader.inject_into_registry(self.registry)
+            logger.info("Soul Loader: %d souls loaded and injected", len(loaded_souls))
+        except Exception as exc:
+            logger.warning("Soul Loader failed (non-fatal): %s", exc)
+
+        # BEAD-POPEBOT-001: initialise Popebot (lazy, needs env vars)
+        try:
+            from archonx.secrets.vault import Vault  # noqa: PLC0415
+            self.popebot = Popebot(vault=Vault())
+            logger.info("Popebot comms layer ready")
+        except Exception as exc:
+            logger.warning("Popebot failed to init (non-fatal): %s", exc)
+
         self._booted = True
         logger.info("Kernel boot complete — 64 agents online.")
 
@@ -362,13 +392,30 @@ class ArchonXKernel:
         """
         Top-level task execution entry-point.
 
-        1. Applies Bobby Fischer protocol (depth calc, confidence check)
-        2. Applies Tyrone Protocol (Four Pillars ethical alignment)
-        3. Delegates to the appropriate crew
-        4. Returns results with metrics
+        1. CostGuard budget check (hard-stop at $50/day)
+        2. Applies Bobby Fischer protocol (depth calc, confidence check)
+        3. Applies Tyrone Protocol (Four Pillars ethical alignment)
+        4. Delegates to the appropriate crew
+        5. Records cost + action to CostGuard
+        6. Returns results with metrics
         """
         if not self._booted:
             raise RuntimeError("Kernel has not been booted. Call boot() first.")
+
+        agent_id = task.get("agent_id", "kernel")
+
+        # ── CostGuard budget enforcement (Emerald Tablets §COST) ──
+        if self.cost_guard is not None:
+            allowed, reason = self.cost_guard.check_budget(agent_id)
+            if not allowed:
+                logger.warning("CostGuard BLOCKED task for %s: %s", agent_id, reason)
+                return {
+                    "status": "rejected",
+                    "reason": reason,
+                    "protocol": "cost_guard",
+                    "circuit_breaker": True,
+                    "fallback_model": "qwen",
+                }
 
         # Protocol check (Fischer - technical)
         decision = self.protocol.evaluate(task)
@@ -418,6 +465,12 @@ class ArchonXKernel:
 
         crew = self.white_crew if crew_name == "white" else self.black_crew
         result = await crew.execute(task, decision)
+
+        # ── Record cost + action to CostGuard ──
+        if self.cost_guard is not None:
+            estimated_cost_cents = task.get("estimated_cost_cents", 1.0)
+            self.cost_guard.record_cost(agent_id, estimated_cost_cents)
+            self.cost_guard.record_action(agent_id)
 
         return {
             "status": "completed",

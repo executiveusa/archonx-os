@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --color-primary: #7c3aed;
+  --color-surface: #f9f8fc;
+  --color-border: #e4e1f0;
+  --color-text: #13111a;
+  --color-text-muted: #5a5570;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #ffffff;
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Remove default focus outline; add branded ring */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}

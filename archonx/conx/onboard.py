@@ -21,6 +21,42 @@ from archonx.conx.mcp_wirer import MCPWirer
 logger = logging.getLogger("archonx.conx.onboard")
 
 
+def _discover_and_register_cli_skills() -> list[str]:
+    """
+    Discover installed applications and register as CLI skills.
+
+    Returns:
+        List of discovered CLI-enabled applications
+    """
+    try:
+        from archonx.skills.cli_anything.discovery import DiscoveryEngine
+        from archonx.skills.cli_anything.generator import CLIGenerator
+        from archonx.skills.cli_anything.registry import CLIRegistry
+
+        engine = DiscoveryEngine()
+        discovered_apps = engine.discover()
+        logger.info(f"Discovered {len(discovered_apps)} CLI-enabled apps")
+
+        registry = CLIRegistry()
+        for app in discovered_apps:
+            try:
+                generator = CLIGenerator(app)
+                schema = generator.generate()
+                if schema:
+                    registry.register(app, schema)
+                    logger.info(f"Registered CLI skill: {app}")
+            except Exception as e:
+                logger.warning(f"Failed to register CLI for {app}: {e}")
+
+        return discovered_apps
+    except ImportError:
+        logger.warning("CLI-Anything module not available")
+        return []
+    except Exception as e:
+        logger.error(f"CLI discovery failed: {e}")
+        return []
+
+
 def _detect_os() -> str:
     """Detect operating system."""
     return platform.system()  # Returns "Windows", "Darwin", or "Linux"
@@ -213,6 +249,17 @@ def run_onboard() -> None:
         logger.error(f"Failed to wire Claude Desktop: {e}")
         print("✗ Failed to wire Claude Desktop")
         return
+
+    # Step 4.5: Discover and register CLI skills
+    try:
+        cli_apps = _discover_and_register_cli_skills()
+        if cli_apps:
+            print(f"✓ CLI skills registered: {', '.join(cli_apps)}")
+        else:
+            print("ℹ No CLI-enabled apps discovered (non-critical)")
+    except Exception as e:
+        logger.warning(f"CLI discovery failed (non-critical): {e}")
+        print("ℹ CLI discovery skipped (non-critical)")
 
     # Step 5: Register with ARCHON-X
     if _register_machine(hostname, tunnel_url, os_name, mcp_servers):

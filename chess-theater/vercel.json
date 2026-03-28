@@ -1,0 +1,9 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
+  "env": {
+    "CHESS_SERVER_WS_URL": "wss://chess-server.archonx.app"
+  }
+}

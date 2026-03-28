@@ -1,9 +1,17 @@
 {
-<<<<<<< HEAD
-  "eco_prompt_name": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
+  "name": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
+  "version": "1.0.0",
+  "bead_id": "BEAD-0002",
+  "owner": "executiveusa",
+  "source_of_truth_repo": "executiveusa/archonx-os",
   "mode": "archonx_os_autonomous_ops_and_multi_repo_patch",
   "output": "json_only",
   "primary_goal": "Make PAULIWHEEL the default coding behavior across the entire ecosystem by (1) installing it as a universal Toolbox Skill in ArchonX OS, (2) auto-attaching it to new coding agents (via ArchonX agent registry and enrollment flow), (3) running scheduled sync meetings + updates 3x/day via OS scheduler, (4) enforcing beads + Ralphy loop + Agent Lightning first across repos, and (5) running build/test to verify compliance.",
+  "doctrine": [
+    "PAULIWHEEL",
+    "RALPHY",
+    "BEADS"
+  ],
   "non_negotiables": [
     "PAULIWHEEL must be the default coding behavior for all coding agents.",
     "PAULIWHEEL must be a Toolbox Skill discoverable and callable by any agent.",
@@ -13,26 +21,16 @@
     "New agents must be auto-enrolled via ArchonX enrollment flow (event-driven if possible; otherwise polling).",
     "Every scheduled run must run build/test verification and produce a machine-readable report."
   ],
-  "mandatory_loop": {
-    "name": "RALPHY_LOOP",
-    "max_iterations": 30,
-    "stages": ["PLAN", "IMPLEMENT", "TEST", "EVALUATE", "PATCH", "REPEAT"]
-=======
-  "name": "ECO-PROMPT(TM)_PAULIWHEEL_ARCHONX_OS_SYNC_AND_AGENT_TRAINING",
-  "version": "1.0.0",
-  "bead_id": "BEAD-0002",
-  "owner": "executiveusa",
-  "source_of_truth_repo": "executiveusa/archonx-os",
-  "doctrine": [
-    "PAULIWHEEL",
-    "RALPHY",
-    "BEADS"
-  ],
   "execution_policy": {
     "agent_lightning_first": true,
     "require_bead_id_in_commit": true,
     "allow_destructive_git": false,
     "minimal_diff_only": true
+  },
+  "mandatory_loop": {
+    "name": "RALPHY_LOOP",
+    "max_iterations": 30,
+    "stages": ["PLAN", "IMPLEMENT", "TEST", "EVALUATE", "PATCH", "REPEAT"]
   },
   "steps": [
     {
@@ -59,6 +57,5 @@
   "report_targets": {
     "compliance_matrix": "ops/reports/PAULIWHEEL_COMPLIANCE_MATRIX_<timestamp>.json",
     "final_report": "ops/reports/FINAL_ECO_PROMPT_REPORT.json"
->>>>>>> origin/feature/pauliwheel-bead-0005-0006
   }
 }
