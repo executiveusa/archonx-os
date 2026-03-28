@@ -150,5 +150,5 @@ if FAIL:
         print(tb)
     sys.exit(1)
 else:
-    print("\nALL TESTS PASSED ✅")
+    print("\nALL TESTS PASSED [OK]")
     sys.exit(0)
