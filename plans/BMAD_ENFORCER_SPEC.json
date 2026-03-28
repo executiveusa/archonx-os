@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "spec_id": "BMAD_ENFORCER_SPEC",
+    "version": "1.0.0",
+    "phase": "PHASE_1",
+    "created_at": "2026-03-27T00:00:00Z",
+    "author": "ARCHITECT — BMAD A2A",
+    "status": "AWAITING_BUILDER_REVIEW",
+    "references": [
+      "AGENTS.md (BMAD A2A protocol description)",
+      "archonx/kernel.py execute_task() (integration point)",
+      "GAP_005 from PHASE_0_GAP_ANALYSIS",
+      "agents/devika/task_loop.py (existing PAULIWHEEL stages reference)"
+    ]
+  },
+
+  "overview": {
+    "name": "BMAD Protocol Enforcer",
+    "description": "Mechanical enforcement of the Architect↔Builder A2A discipline. PhaseGates block execution until approved. ArchitectHandoff structures spec delivery. BuilderBlocker structures blocker reporting. PAULIWHEEL loop stages enforced during execution.",
+    "location": "archonx/protocols/bmad.py",
+    "philosophy": "DISCIPLINE IS CODE. If it's not enforced mechanically, it won't run under pressure."
+  },
+
+  "file_structure": {
+    "archonx/protocols/__init__.py": "Package init, exports BMAdProtocol, PhaseGate, ArchitectHandoff, BuilderBlocker",
+    "archonx/protocols/bmad.py": "Main BMAD enforcer — all classes in one file for simplicity",
+    "archonx/protocols/phases.py": "Phase definitions, valid transitions, gate conditions",
+    "archonx/protocols/state.py": "BMAdState persistence (JSON file: .archonx/bmad_state.json)"
+  },
+
+  "phases": {
+    "PHASE_0": {
+      "name": "PREPARATION",
+      "description": "Scan codebase, identify gaps, produce gap analysis",
+      "entry_condition": "none (start state)",
+      "exit_condition": "gap analysis produced + explicit APPROVED: START PHASE_1 received",
+      "deliverable": "PHASE_0_GAP_ANALYSIS.json"
+    },
+    "PHASE_1": {
+      "name": "ARCHITECTURE",
+      "description": "Architect produces specs, Builder reviews, clarifies",
+      "entry_condition": "APPROVED: START PHASE_1",
+      "exit_condition": "all 6 specs produced + APPROVED: START PHASE_2",
+      "deliverable": "6x JSON spec files in plans/"
+    },
+    "PHASE_2": {
+      "name": "IMPLEMENTATION",
+      "description": "Builder implements specs with zero human loop",
+      "entry_condition": "APPROVED: START PHASE_2",
+      "exit_condition": "all implementations complete + all tests green + APPROVED: START PHASE_3",
+      "deliverable": "Working production code (no stubs)"
+    },
+    "PHASE_3": {
+      "name": "DEPLOYMENT",
+      "description": "Final deployment — human provides Vercel Project IDs",
+      "entry_condition": "APPROVED: START PHASE_3 + human provides Vercel Project IDs",
+      "exit_condition": "live Vercel deployment + smoke tests pass",
+      "deliverable": "Live production system"
+    }
+  },
+
+  "data_models": {
+    "BMAdPhase": {
+      "type": "enum",
+      "values": ["PHASE_0", "PHASE_1", "PHASE_2", "PHASE_3", "COMPLETE", "BLOCKED"]
+    },
+    "PhaseGate": {
+      "description": "Blocks execution at phase boundaries. Must be explicitly unlocked by Architect.",
+      "fields": {
+        "gate_id": "str — e.g. 'GATE_P0_TO_P1'",
+        "from_phase": "BMAdPhase",
+        "to_phase": "BMAdPhase",
+        "locked": "bool = True (default locked)",
+        "unlock_token": "str | None — the explicit approval phrase required",
+        "required_token": "str — exact phrase that unlocks (e.g. 'APPROVED: START PHASE_1')",
+        "unlocked_at": "datetime | None",
+        "unlocked_by": "str | None — who provided the approval"
+      },
+      "behavior": "If gate is locked and builder tries to execute phase, raise PhaseGateLocked exception with clear message"
+    },
+    "ArchitectHandoff": {
+      "description": "Structured spec delivery from Architect to Builder.",
+      "fields": {
+        "handoff_id": "str",
+        "phase": "BMAdPhase — which phase this handoff governs",
+        "spec_files": "list[str] — paths to JSON spec files",
+        "approval_phrase": "str — exact phrase Builder must emit to proceed",
+        "notes": "str — Architect's notes to Builder",
+        "timestamp": "datetime",
+        "acknowledged_by_builder": "bool = False"
+      }
+    },
+    "BuilderBlocker": {
+      "description": "Structured blocker report from Builder to Architect.",
+      "fields": {
+        "blocker_id": "str",
+        "phase": "BMAdPhase — current phase",
+        "component": "str — what's blocked",
+        "description": "str — detailed description of the blocker",
+        "options_considered": "list[str] — what Builder already tried/considered",
+        "request": "str — explicit question to Architect",
+        "severity": "enum: CRITICAL | HIGH | MEDIUM",
+        "blocks_phase_completion": "bool",
+        "timestamp": "datetime",
+        "resolved": "bool = False",
+        "resolution": "str | None"
+      }
+    },
+    "BMAdState": {
+      "description": "Persisted state across sessions. Survives process restarts.",
+      "fields": {
+        "current_phase": "BMAdPhase",
+        "gates": "dict[str, PhaseGate]",
+        "handoffs": "list[ArchitectHandoff]",
+        "blockers": "list[BuilderBlocker]",
+        "phase_history": "list[dict: {phase, entered_at, exited_at, deliverables}]",
+        "last_updated": "datetime"
+      },
+      "persistence": ".archonx/bmad_state.json — written atomically on every state change"
+    }
+  },
+
+  "class_specifications": {
+    "BMAdProtocol": {
+      "file": "archonx/protocols/bmad.py",
+      "description": "Main enforcement class. Kernel holds one instance. All phase transitions go through this.",
+      "constructor": "BMAdProtocol(state_file: Path = Path('.archonx/bmad_state.json'))",
+      "methods": {
+        "check_phase_allowed(target_phase: BMAdPhase) -> None": "Raises PhaseGateLocked if gate to target_phase is locked",
+        "advance_phase(approval_token: str) -> BMAdPhase": "Check token matches required_token for next gate, unlock, return new phase",
+        "register_blocker(blocker: BuilderBlocker) -> str": "Save blocker to state, return blocker_id",
+        "resolve_blocker(blocker_id: str, resolution: str) -> None": "Mark blocker resolved",
+        "record_handoff(handoff: ArchitectHandoff) -> None": "Record spec handoff, mark gate ready for unlock",
+        "get_current_phase() -> BMAdPhase": "Return current phase from state",
+        "get_active_blockers() -> list[BuilderBlocker]": "Return unresolved blockers",
+        "export_status() -> dict": "Full JSON status report (current phase, gates, active blockers, history)"
+      }
+    }
+  },
+
+  "pauliwheel_integration": {
+    "description": "PAULIWHEEL loop stages are enforced WITHIN Phase 2 implementation tasks",
+    "stages": ["PLAN", "IMPLEMENT", "TEST", "EVALUATE", "PATCH", "REPEAT"],
+    "file": "agents/devika/task_loop.py (existing — reference this pattern)",
+    "bmad_requirement": "Every PHASE_2 implementation bead MUST include bead_id + go through PAULIWHEEL stages. BeadExecutor in agents/lightning/bead_executor.py already implements this — Hermes, Popebot, Chess Theater builders MUST use BeadExecutor for their work.",
+    "bead_naming": {
+      "hermes_agent": "BEAD-HERMES-001",
+      "chess_theater": "BEAD-CHESS-001",
+      "popebot": "BEAD-POPEBOT-001",
+      "soul_loader": "BEAD-SOUL-001",
+      "synthia_30": "BEAD-SYNTHIA-001"
+    }
+  },
+
+  "kernel_integration": {
+    "file": "archonx/kernel.py",
+    "add_to_init": "self.bmad = BMAdProtocol(state_file=Path('.archonx/bmad_state.json'))",
+    "execute_task_guard": "At top of execute_task(): self.bmad.check_phase_allowed(BMAdPhase.PHASE_2) (raises if not in active phase)",
+    "phase_advance_hook": "kernel.advance_bmad_phase(token: str) -> called when Architect provides approval phrase",
+    "blocker_hook": "kernel.report_blocker(component, description, request) -> saves BuilderBlocker to state"
+  },
+
+  "approval_tokens": {
+    "PHASE_0_TO_PHASE_1": "APPROVED: START PHASE_1",
+    "PHASE_1_TO_PHASE_2": "APPROVED: START PHASE_2",
+    "PHASE_2_TO_PHASE_3": "APPROVED: START PHASE_3",
+    "note": "These EXACT strings must be present in the approval message to unlock the gate. Case-sensitive."
+  },
+
+  "exception_classes": {
+    "PhaseGateLocked": "Raised when Builder attempts to execute in a locked phase. Message includes: current phase, required token to unlock.",
+    "UnknownPhaseTransition": "Raised when approval token doesn't match any known gate.",
+    "DuplicateBlocker": "Raised when same component+description blocker already exists (prevent spam)."
+  },
+
+  "state_file": {
+    "path": ".archonx/bmad_state.json",
+    "create_if_missing": true,
+    "initial_state": {
+      "current_phase": "PHASE_1",
+      "gates": {
+        "GATE_P1_TO_P2": {"locked": true, "required_token": "APPROVED: START PHASE_2"},
+        "GATE_P2_TO_P3": {"locked": true, "required_token": "APPROVED: START PHASE_3"}
+      },
+      "handoffs": [],
+      "blockers": [],
+      "phase_history": [{"phase": "PHASE_0", "completed": true, "deliverable": "ops/reports/PHASE_0_GAP_ANALYSIS_2026-03-27.json"}],
+      "last_updated": "2026-03-27T00:00:00Z"
+    },
+    "atomic_write": "Write to .archonx/bmad_state.json.tmp then rename to avoid corruption"
+  },
+
+  "test_requirements": [
+    "test_gate_blocks_wrong_phase: builder tries to execute phase 2 while in phase 1 → PhaseGateLocked raised",
+    "test_correct_token_advances_phase: 'APPROVED: START PHASE_2' → phase advances to PHASE_2",
+    "test_wrong_token_rejected: wrong approval phrase → phase stays locked",
+    "test_blocker_registered_and_resolved: BuilderBlocker saved and resolved in state",
+    "test_state_persists_across_reload: save state, reload BMAdProtocol, verify same state",
+    "test_pauliwheel_stages_enforced: BeadExecutor.run_bead() goes through PLAN→IMPLEMENT→TEST→EVALUATE"
+  ],
+
+  "builder_notes": [
+    "State file lives in .archonx/ — this directory already exists (archonx/reportback.json is there)",
+    "BMAD enforcer should be LIGHTWEIGHT — it's governance, not business logic. Keep bmad.py under 300 lines.",
+    "Phase gate checking is synchronous (no async needed — it's just a state check)",
+    "Initial state when first deployed: current_phase = PHASE_1 (we are in Phase 1 now)",
+    "The approval tokens are case-sensitive exact matches — no fuzzy matching",
+    "BuilderBlocker must be LOGGED to ops/reports/ as well as state file (for Architect visibility)"
+  ]
+}

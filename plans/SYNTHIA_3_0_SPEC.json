@@ -1,0 +1,327 @@
+{
+  "meta": {
+    "spec_id": "SYNTHIA_3_0_SPEC",
+    "version": "1.0.0",
+    "phase": "PHASE_1",
+    "created_at": "2026-03-27T00:00:00Z",
+    "author": "ARCHITECT — BMAD A2A",
+    "status": "AWAITING_BUILDER_REVIEW",
+    "references": [
+      ".agent-souls/white/synthia_queen.soul.md",
+      "GAP_006 from PHASE_0_GAP_ANALYSIS",
+      "archonx-config.json (product definitions)",
+      "AGENTS.md (mandatory-design-law + UDEC requirements)"
+    ]
+  },
+
+  "overview": {
+    "name": "SYNTHIA 3.0 — Spanish-First LATAM Design AI",
+    "description": "A standalone Next.js web application. AI-powered design tool targeting LATAM female entrepreneurs. Non-technical users (Ivette runs it). Spanish-first UI with MXN pricing. Subscription model.",
+    "location": "synthia-3-0/ (new app at repo root)",
+    "deployed_at": "Vercel (synthia.archonx.io or synthia-3-0.vercel.app)",
+    "target_market": "LATAM female entrepreneurs — Mexico, Colombia, Argentina, Peru primary",
+    "quality_gate": "UDEC 14-axis 8.5/10 MINIMUM — no exceptions"
+  },
+
+  "technology_stack": {
+    "framework": "Next.js 15 (App Router)",
+    "language": "TypeScript",
+    "styling": "Tailwind CSS 3 + shadcn/ui components",
+    "auth": "Supabase Auth (email/password + Google OAuth)",
+    "database": "Supabase PostgreSQL",
+    "payments": "Stripe (MXN currency, recurring subscriptions)",
+    "ai_backend": "ARCHON-X API (calls kernel.execute_task for AI features)",
+    "i18n": "next-intl (Spanish default, English available)",
+    "package_manager": "pnpm",
+    "deployment": "Vercel"
+  },
+
+  "file_structure": {
+    "synthia-3-0/": {
+      "package.json": "deps: next@15, react@18, tailwindcss, supabase-js, stripe, next-intl, shadcn/ui",
+      "tsconfig.json": "strict TypeScript",
+      "next.config.ts": "i18n routing, image optimization, Vercel config",
+      "middleware.ts": "Auth guard + locale detection",
+      "src/": {
+        "app/": {
+          "[locale]/": {
+            "page.tsx": "Landing page (Spanish default)",
+            "layout.tsx": "Root layout with nav + locale provider",
+            "dashboard/": {
+              "page.tsx": "User dashboard — projects overview",
+              "layout.tsx": "Dashboard shell with sidebar"
+            },
+            "design/": {
+              "[projectId]/page.tsx": "Design workspace — AI-assisted",
+              "new/page.tsx": "Create new design project"
+            },
+            "pricing/page.tsx": "Pricing page (MXN, Free/Pro/Premium)",
+            "auth/": {
+              "login/page.tsx": "Login page",
+              "signup/page.tsx": "Signup page",
+              "callback/page.tsx": "OAuth callback"
+            }
+          },
+          "api/": {
+            "ai/generate/route.ts": "POST — AI design generation (calls ARCHON-X kernel)",
+            "ai/refine/route.ts": "POST — AI design refinement",
+            "stripe/checkout/route.ts": "POST — Stripe checkout session creation",
+            "stripe/webhook/route.ts": "POST — Stripe webhook handler",
+            "projects/route.ts": "GET/POST — project CRUD",
+            "projects/[id]/route.ts": "GET/PUT/DELETE — single project"
+          }
+        },
+        "components/": {
+          "ui/": "shadcn/ui components (button, card, dialog, input, etc.)",
+          "landing/": {
+            "Hero.tsx": "Hero section — Spanish headline, CTA",
+            "Features.tsx": "Feature cards — design capabilities",
+            "Pricing.tsx": "Pricing cards — Free/Pro/Premium MXN",
+            "Testimonials.tsx": "Social proof — LATAM entrepreneurs",
+            "Footer.tsx": "Footer with links and LATAM contact"
+          },
+          "dashboard/": {
+            "ProjectCard.tsx": "Project preview card",
+            "ProjectGrid.tsx": "Projects grid layout",
+            "CreateProjectButton.tsx": "+ New Project CTA",
+            "UsageIndicator.tsx": "Plan usage (designs this month)"
+          },
+          "design/": {
+            "DesignCanvas.tsx": "Main design workspace",
+            "AIAssistPanel.tsx": "AI prompt input + suggestions panel",
+            "StyleGuide.tsx": "Brand colors, fonts, assets panel",
+            "ExportButton.tsx": "Export design as PNG/PDF/SVG"
+          },
+          "shared/": {
+            "Navbar.tsx": "Top navigation with logo + user menu",
+            "Sidebar.tsx": "Dashboard sidebar nav",
+            "LanguageSwitcher.tsx": "ES/EN toggle",
+            "SubscriptionBadge.tsx": "User's current plan badge"
+          }
+        },
+        "lib/": {
+          "supabase/": {
+            "client.ts": "Supabase browser client",
+            "server.ts": "Supabase server client (SSR)"
+          },
+          "stripe/": {
+            "client.ts": "Stripe client (uses Infisical key)",
+            "plans.ts": "Plan definitions + MXN pricing"
+          },
+          "archonx/": {
+            "client.ts": "ARCHON-X API client (calls kernel REST API)"
+          },
+          "i18n/": {
+            "messages/es.json": "Spanish translations",
+            "messages/en.json": "English translations"
+          }
+        },
+        "types/": {
+          "project.ts": "Project, DesignAsset, ProjectStatus types",
+          "user.ts": "User, Subscription, PlanTier types",
+          "ai.ts": "AIRequest, AIResponse, GenerationMode types"
+        }
+      },
+      "supabase/": {
+        "migrations/": {
+          "001_init.sql": "users, projects, subscriptions, usage tables"
+        }
+      }
+    }
+  },
+
+  "subscription_plans": {
+    "free": {
+      "name_es": "Gratis",
+      "name_en": "Free",
+      "price_mxn": 0,
+      "price_usd": 0,
+      "features": [
+        "3 proyectos activos",
+        "10 generaciones de IA por mes",
+        "Exportar PNG",
+        "Plantillas básicas"
+      ],
+      "ai_generations_per_month": 10,
+      "active_projects": 3,
+      "stripe_price_id_env": "STRIPE_FREE_PRICE_ID"
+    },
+    "pro": {
+      "name_es": "Pro",
+      "name_en": "Pro",
+      "price_mxn": 299,
+      "price_usd": 15,
+      "billing": "monthly",
+      "features": [
+        "Proyectos ilimitados",
+        "100 generaciones de IA por mes",
+        "Exportar PNG/PDF/SVG",
+        "Todas las plantillas",
+        "Paletas de marca personalizadas",
+        "Soporte prioritario"
+      ],
+      "ai_generations_per_month": 100,
+      "active_projects": -1,
+      "stripe_price_id_env": "STRIPE_PRO_PRICE_ID"
+    },
+    "premium": {
+      "name_es": "Premium",
+      "name_en": "Premium",
+      "price_mxn": 799,
+      "price_usd": 40,
+      "billing": "monthly",
+      "features": [
+        "Todo lo de Pro",
+        "Generaciones de IA ilimitadas",
+        "Acceso a SYNTHIA AI personalizada",
+        "Colaboración en equipo",
+        "API access",
+        "Cuenta manager dedicada",
+        "White-label disponible"
+      ],
+      "ai_generations_per_month": -1,
+      "active_projects": -1,
+      "stripe_price_id_env": "STRIPE_PREMIUM_PRICE_ID"
+    }
+  },
+
+  "database_schema": {
+    "users": {
+      "id": "uuid PK (Supabase Auth user_id)",
+      "email": "text NOT NULL",
+      "full_name": "text",
+      "preferred_language": "text DEFAULT 'es'",
+      "plan_tier": "text DEFAULT 'free'",
+      "stripe_customer_id": "text",
+      "created_at": "timestamptz"
+    },
+    "projects": {
+      "id": "uuid PK",
+      "user_id": "uuid FK → users.id",
+      "name": "text NOT NULL",
+      "description": "text",
+      "status": "text (draft|active|archived)",
+      "design_data": "jsonb (design state)",
+      "thumbnail_url": "text",
+      "created_at": "timestamptz",
+      "updated_at": "timestamptz"
+    },
+    "subscriptions": {
+      "id": "uuid PK",
+      "user_id": "uuid FK → users.id",
+      "stripe_subscription_id": "text",
+      "plan_tier": "text",
+      "status": "text (active|past_due|canceled)",
+      "current_period_end": "timestamptz",
+      "created_at": "timestamptz"
+    },
+    "ai_usage": {
+      "id": "uuid PK",
+      "user_id": "uuid FK → users.id",
+      "month_year": "text (YYYY-MM)",
+      "generations_used": "int DEFAULT 0",
+      "updated_at": "timestamptz"
+    }
+  },
+
+  "ai_integration": {
+    "endpoint": "ARCHON-X kernel REST API",
+    "env_var": "ARCHONX_API_URL (from Infisical: SYNTHIA_ARCHONX_API_URL)",
+    "auth": "Bearer token from Infisical: SYNTHIA_ARCHONX_API_KEY",
+    "design_generation_flow": {
+      "1": "User inputs prompt in Spanish",
+      "2": "Frontend POST /api/ai/generate with {prompt, style_preferences, brand_colors}",
+      "3": "API route calls ARCHON-X kernel: task requires synthia_queen agent",
+      "4": "Kernel routes to synthia_queen soul with prompt context",
+      "5": "AI generates design spec (JSON: colors, layout, typography, imagery direction)",
+      "6": "Frontend renders design spec in DesignCanvas",
+      "7": "User can refine via /api/ai/refine"
+    }
+  },
+
+  "i18n": {
+    "default_locale": "es",
+    "supported_locales": ["es", "en"],
+    "routing": "/es/dashboard, /en/dashboard (locale prefix)",
+    "auto_detect": "browser Accept-Language header → redirect to correct locale",
+    "key_spanish_strings": {
+      "nav_dashboard": "Mi Espacio",
+      "nav_pricing": "Precios",
+      "hero_headline": "Diseña tu marca como una profesional",
+      "hero_sub": "SYNTHIA es tu asistente de diseño con inteligencia artificial. Sin experiencia previa necesaria.",
+      "cta_primary": "Empieza gratis",
+      "cta_secondary": "Ver cómo funciona",
+      "plan_free_cta": "Empieza gratis",
+      "plan_pro_cta": "Empieza con Pro",
+      "plan_premium_cta": "Contactar ventas"
+    }
+  },
+
+  "udec_design_requirements": {
+    "target_score": "8.5/10 minimum",
+    "color_palette": {
+      "primary": "#7C3AED (vibrant purple — feminine, professional, tech)",
+      "primary_dark": "#5B21B6",
+      "accent": "#F59E0B (gold — premium feel)",
+      "background": "#0F0F23 (near-black — sophisticated)",
+      "surface": "#1A1A3E (dark surface)",
+      "text_primary": "#F0F0FF",
+      "text_secondary": "#9CA3AF",
+      "success": "#10B981",
+      "error": "#EF4444"
+    },
+    "typography": {
+      "heading": "Plus Jakarta Sans (Google Fonts — modern, clean, LATAM appeal)",
+      "body": "Inter",
+      "accent": "Space Grotesk (for badges, labels, technical)"
+    },
+    "non_negotiables": [
+      "Spanish FIRST — English is not the default",
+      "MXN pricing ALWAYS displayed first, USD in small text parentheses",
+      "No generic SaaS templates (Vercel/Linear-inspired but distinct)",
+      "Mobile responsive — LATAM users are mobile-first",
+      "Accessibility: WCAG AA contrast ratios, proper aria labels",
+      "Load performance: < 2s LCP on 4G mobile connection",
+      "Error states: never blank/silent — always helpful message in Spanish",
+      "Progress indicators: AI generation must show progress (not just spinner)",
+      "Onboarding: 3-step setup for new users (name → brand colors → first project)"
+    ]
+  },
+
+  "env_vars_required": [
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "STRIPE_SECRET_KEY",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "STRIPE_FREE_PRICE_ID",
+    "STRIPE_PRO_PRICE_ID",
+    "STRIPE_PREMIUM_PRICE_ID",
+    "ARCHONX_API_URL",
+    "ARCHONX_API_KEY",
+    "NEXT_PUBLIC_APP_URL"
+  ],
+  "infisical_key_prefix": "SYNTHIA_",
+
+  "test_requirements": [
+    "test_pricing_page_renders_mxn: Verify $ MXN shown, USD secondary",
+    "test_spanish_default_locale: Root / redirects to /es/",
+    "test_auth_guard_dashboard: Unauthenticated /dashboard → redirect to /auth/login",
+    "test_stripe_checkout_creates_session: Mock Stripe, verify checkout session fields",
+    "test_ai_generation_rate_limit: Free plan at 10/10 → 429 response with upgrade CTA",
+    "test_supabase_rls: User cannot access another user's projects (Row Level Security)",
+    "test_mobile_viewport: All pages functional at 375px width"
+  ],
+
+  "builder_notes": [
+    "MANDATORY: Load uncodixfy SKILL.md before writing ANY UI component. No generic AI UI.",
+    "shadcn/ui uses CSS variables — override with SYNTHIA color palette in globals.css",
+    "Stripe Checkout hosted page for MVP — no custom card forms (reduce PCI scope)",
+    "Supabase RLS MUST be enabled on all tables — no bypasses",
+    "AI generation endpoint rate-limits based on ai_usage table check before calling kernel",
+    "DesignCanvas for MVP: structured JSON-to-HTML rendering (NOT a full canvas editor in Phase 2)",
+    "Full canvas editor (Fabric.js or similar) is Phase 3 scope",
+    "DO NOT use Vercel AI SDK for AI calls — proxy through ARCHON-X kernel API (consistent with system)"
+  ]
+}

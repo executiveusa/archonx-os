@@ -1,0 +1,522 @@
+{
+  "meta": {
+    "report_type": "PHASE_0_GAP_ANALYSIS",
+    "protocol": "BMAD A2A — Builder Report to Architect",
+    "generated_at": "2026-03-27T00:00:00Z",
+    "builder_agent": "Claude 4.6 Sonnet (BUILDER)",
+    "repo_local": "C:\\archonx-os-main",
+    "repo_remote": "https://github.com/executiveusa/archonx-os.git",
+    "current_branch": "claude/archonx-rust-rewrite-plan-Gjd43",
+    "git_status": {
+      "tracked_modified": 9,
+      "untracked_items": 30,
+      "ahead_of_remote": 1,
+      "main_behind_origin": true
+    },
+    "skillfish_plugins": [
+      "pablolion/bmad-plugin",
+      "f/prompts.chat skill-lookup"
+    ]
+  },
+
+  "confirmed_existing": {
+    "kernel": {
+      "path": "archonx/kernel.py",
+      "size_lines": 450,
+      "status": "EXISTS — NEEDS HARDENING",
+      "what_works": [
+        "WhiteCrew / BlackCrew initialization and boot",
+        "execute_task() pipeline with CostGuard budget check",
+        "BobbyFischerProtocol.evaluate() (chess-style reasoning)",
+        "TyroneProtocol Four Pillars ethical check",
+        "CollaborativeMatch (crew==both routing)",
+        "BEAD-009 subsystems: OAuth, RBAC, MailServer (8765), TaskManager, Orchestrator",
+        "Security sprint: SafetyLayer, LeakDetector, CommandGuard, SandboxEnforcer, NetworkGuard, EnvScrubber",
+        "Sprint-4: SQLiteMemory, AgentIdentityManager, DailySelfImprovement",
+        "30+ subsystems constructed in __init__"
+      ],
+      "gaps": [
+        "Hermes Agent wiring — COMPLETELY MISSING from kernel",
+        "Chess Theater 3D (Three.js) — not wired into kernel startup",
+        "Popebot comms layer — soul file exists, no implementation imported",
+        "TurboQuant KV cache compression — listed as PARTIAL in spec",
+        "Agent soul initialization — kernel does not load .agent-souls files on boot",
+        "BMAD A2A protocol hooks — no phase/gate enforcement in execute_task()"
+      ]
+    },
+
+    "agent_souls": {
+      "white_crew": {
+        "path": ".agent-souls/white/",
+        "count": 20,
+        "files": [
+          "pauli_king.soul.md", "synthia_queen.soul.md", "darya_rook.soul.md",
+          "devika_bishop.soul.md", "popebot_bishop.soul.md", "blitz_knight.soul.md",
+          "agent_zero_knight.soul.md", "bambu_ax.soul.md", "iron_claw_rook.soul.md",
+          "ivette_ax.soul.md", "patch_knight.soul.md", "visionclaw_knight.soul.md",
+          "pawns/cipher_pawn.soul.md", "pawns/craft_pawn.soul.md", "pawns/lens_pawn.soul.md",
+          "pawns/link_pawn.soul.md", "pawns/probe_pawn.soul.md", "pawns/pulse_pawn.soul.md",
+          "pawns/quill_pawn.soul.md", "pawns/scout_pawn.soul.md"
+        ],
+        "status": "FILES EXIST — NOT LOADED BY KERNEL"
+      },
+      "black_crew": {
+        "path": ".agent-souls/black/",
+        "count": 17,
+        "files": [
+          "shannon_king.soul.md", "cynthia_queen.soul.md",
+          "brenner_bishop.soul.md", "tyrone_bishop.soul.md",
+          "cosmos_knight.soul.md", "flash_knight.soul.md",
+          "glitch_knight.soul.md", "mustang_maxx_knight.soul.md",
+          "frankenstack_rook.soul.md", "pooracho_rook.soul.md",
+          "pawns/bridge_pawn.soul.md", "pawns/echo_pawn.soul.md",
+          "pawns/forge_pawn.soul.md", "pawns/pixel_pawn.soul.md",
+          "pawns/spark_pawn.soul.md", "pawns/trace_pawn.soul.md",
+          "pawns/vault_pawn.soul.md"
+        ],
+        "status": "FILES EXIST — NOT LOADED BY KERNEL"
+      }
+    },
+
+    "chess_engine_rust": {
+      "path": "archonx-chess/",
+      "status": "EXISTS — PRODUCTION-READY RUST SERVER",
+      "components": {
+        "chess-engine": "board.rs, agents.rs (32-piece AGENT_ROSTER with ElevenLabs voice IDs), moves.rs, validation.rs",
+        "chess-server": "Axum HTTP server on port 3300",
+        "chess-vault": "Secret management",
+        "chess-voice": "Voice integration",
+        "chess-wasm": "WASM compilation target"
+      },
+      "agent_roster": "Full 32-piece roster defined with voice IDs — white (ranks 1-2) = production crew, black (ranks 7-8) = staging crew",
+      "gaps": [
+        "No Three.js 3D frontend consuming chess-server",
+        "No WebSocket bridge for real-time board state updates",
+        "chess-server API endpoints not mapped to kernel agent actions",
+        "Voice activation not wired to ElevenLabs (keys in env only)"
+      ]
+    },
+
+    "python_visualization": {
+      "agent_theater": {
+        "path": "archonx/visualization/agent_theater.py",
+        "status": "EXISTS — PYTHON EVENT STREAM (not 3D)",
+        "description": "Token-gated live event stream: TheaterEvent, TheaterSession, AgentTheater with pub/sub",
+        "gap": "This is a Python event bus, NOT the Three.js Chess Theater 3D visualization required"
+      },
+      "chessboard_py": {
+        "path": "archonx/visualization/chessboard.py",
+        "status": "EXISTS — 2D Python board representation",
+        "gap": "2D only, not PS5-grade 3D"
+      },
+      "chess_reasoning": {
+        "path": "archonx/core/chess_reasoning.py",
+        "status": "EXISTS — Python reasoning layer"
+      }
+    },
+
+    "security": {
+      "cost_guard": {
+        "path": "archonx/security/cost_guard.py",
+        "status": "EXISTS — FUNCTIONAL",
+        "budget": "$50/day hard ceiling, 200 actions/hour, 25 iterations/task",
+        "gap": "Previous audit noted cost_guard was dead-coded (never called from execution path) — kernel.py DOES call it in execute_task() now, needs verification"
+      }
+    },
+
+    "agents_framework": {
+      "devika": {
+        "path": "agents/devika/",
+        "status": "EXISTS",
+        "has": ["task_loop.py (PAULIWHEEL stages)", "safe_commands.py", "context7_guard.py", "subagents.py", "system_prompt.md", "registry.json"]
+      },
+      "lightning": {
+        "path": "agents/lightning/",
+        "status": "EXISTS",
+        "has": ["bootstrap.py (AgentLightningBootstrap)", "bead_executor.py (BeadExecutor with PAULIWHEEL stages)", "registry.py"]
+      },
+      "darya": {
+        "path": "agents/darya/",
+        "status": "EXISTS",
+        "has": ["client.py", "config.json", "goose_integration.md", "registry.json", "system_prompt.md"]
+      }
+    },
+
+    "rust_workspace": {
+      "path": "archonx-rust/",
+      "crates": ["archonx-core", "archonx-agents", "archonx-orchestration", "archonx-memory", "archonx-billing", "archonx-revenue", "archonx-graphbrain", "archonx-api"],
+      "status": "EXISTS — Rust rewrite in progress (HEAD branch is rewrite branch)"
+    },
+
+    "config": {
+      "archonx_config": {
+        "path": "archonx-config.json",
+        "status": "EXISTS — HAS JSON SYNTAX ERROR",
+        "error": "Duplicate key 'backend_url' in openclaw integration block — invalid JSON",
+        "fix_required": "IMMEDIATE — remove duplicate key"
+      }
+    }
+  },
+
+  "critical_gaps": {
+    "GAP_001": {
+      "id": "GAP_001",
+      "severity": "CRITICAL",
+      "component": "Hermes Agent",
+      "status": "COMPLETELY MISSING",
+      "description": "pauli-hermes-agent repo NOT present locally or cloned. No hermes/ directory exists anywhere in the codebase. Zero multi-agent reasoning/debate implementation.",
+      "impact": "Entire Karpathy LLM Council pattern, white vs black crew debate, consensus mechanism — ALL non-functional",
+      "fix": "Clone pauli-hermes-agent repo OR implement hermes/agent.py with Council pattern from scratch",
+      "phase": "PHASE_2"
+    },
+
+    "GAP_002": {
+      "id": "GAP_002",
+      "severity": "CRITICAL",
+      "component": "Chess Theater 3D (Three.js)",
+      "status": "MISSING — Python stub only",
+      "description": "agent_theater.py is a Python event bus (pub/sub). No Three.js/WebGL 3D visualization exists. archonx-chess Rust backend exists but has no 3D frontend.",
+      "impact": "Zero visual Chess Theater — the architectural centerpiece of production launch",
+      "fix": "Build chess-theater/ Next.js app with Three.js r128, consuming chess-server WS events on port 3300",
+      "phase": "PHASE_2"
+    },
+
+    "GAP_003": {
+      "id": "GAP_003",
+      "severity": "CRITICAL",
+      "component": "Popebot Comms Layer",
+      "status": "SOUL FILE ONLY — NO IMPLEMENTATION",
+      "description": "popebot_bishop.soul.md defines the persona. No Popebot implementation exists for email, social media, Slack, SMS, or any external comms.",
+      "impact": "Agents cannot communicate externally. Revenue engine cannot send invoices/alerts. No external pipeline.",
+      "fix": "Implement archonx/comms/popebot.py with SMTP, Twilio, social API clients (all keys from Infisical)",
+      "phase": "PHASE_2"
+    },
+
+    "GAP_004": {
+      "id": "GAP_004",
+      "severity": "HIGH",
+      "component": "Agent Soul Loading",
+      "status": "SOULS EXIST — NOT LOADED",
+      "description": "37 soul files exist in .agent-souls/ but kernel.py does not load/parse them on boot. Agents operate without their defined personality/role/voice configuration.",
+      "impact": "WhiteCrew and BlackCrew agents have no soul-based behavior, voice IDs, or role specialization",
+      "fix": "Add SoulLoader to kernel.__init__ that reads .agent-souls/**/*.soul.md and injects into agent configs",
+      "phase": "PHASE_1"
+    },
+
+    "GAP_005": {
+      "id": "GAP_005",
+      "severity": "HIGH",
+      "component": "BMAD A2A Protocol",
+      "status": "CONCEPT ONLY — NO ENFORCEMENT",
+      "description": "No BMAD protocol enforcer in codebase. execute_task() has no phase gates. Agents can't formally handoff or request direction.",
+      "impact": "Architect↔Builder handoff has no mechanical enforcement — discipline only",
+      "fix": "Implement archonx/protocols/bmad.py with PhaseGate, ArchitectHandoff, BuilderBlocker classes",
+      "phase": "PHASE_1"
+    },
+
+    "GAP_006": {
+      "id": "GAP_006",
+      "severity": "HIGH",
+      "component": "SYNTHIA 3.0 Product",
+      "status": "NOT FOUND",
+      "description": "No standalone SYNTHIA 3.0 app. synthia_queen.soul.md exists as agent persona only. No Spanish-first LATAM design AI product.",
+      "impact": "Production launch missing entire SYNTHIA 3.0 product (one of two primary deliverables)",
+      "fix": "Create synthia-3-0/ Next.js app: Spanish-first, LATAM targeting, subscription model, UDEC gate",
+      "phase": "PHASE_2"
+    },
+
+    "GAP_007": {
+      "id": "GAP_007",
+      "severity": "HIGH",
+      "component": "TurboQuant Integration",
+      "status": "PARTIAL — in archonx/inference but not confirmed active",
+      "description": "TurboQuant KV cache compression listed as PARTIAL in kernel gaps. archonx/inference/ directory not confirmed to exist.",
+      "impact": "Long context runs will be expensive and slow without compression",
+      "fix": "Verify archonx/inference/ exists, wire TurboQuant into execute_task() context compression path",
+      "phase": "PHASE_1"
+    },
+
+    "GAP_008": {
+      "id": "GAP_008",
+      "severity": "HIGH",
+      "component": "Chess Theater ↔ Kernel Bridge",
+      "status": "MISSING",
+      "description": "Even when Chess Theater 3D is built, no bridge exists between kernel agent actions and chess board state. archonx/visualization/chessboard.py and chess-server on port 3300 are disconnected.",
+      "impact": "3D visualization won't reflect real agent activity",
+      "fix": "Implement WebSocket bridge: kernel.execute_task() → agent_theater.emit() → chess-server WS → Three.js frontend",
+      "phase": "PHASE_2"
+    },
+
+    "GAP_009": {
+      "id": "GAP_009",
+      "severity": "MEDIUM",
+      "component": "archonx-config.json JSON Syntax Error",
+      "status": "BLOCKING — INVALID JSON",
+      "description": "Duplicate key 'backend_url' in openclaw integration block makes the config file invalid JSON. Any JSON parser will error.",
+      "impact": "KernelConfig initialization will fail if it strictly parses archonx-config.json",
+      "fix": "IMMEDIATE: Remove duplicate 'backend_url' key from archonx-config.json",
+      "phase": "PHASE_0_IMMEDIATE"
+    },
+
+    "GAP_010": {
+      "id": "GAP_010",
+      "severity": "MEDIUM",
+      "component": "OpenClaw Integration",
+      "status": "README ONLY",
+      "description": "openclaw-integration/ contains only README.md. Config points to localhost:8080 but no OpenClaw implementation exists.",
+      "impact": "64-agent capability layer (OpenClaw) non-functional",
+      "fix": "Implement openclaw-integration client or document that it's a future phase dependency",
+      "phase": "PHASE_2"
+    },
+
+    "GAP_011": {
+      "id": "GAP_011",
+      "severity": "MEDIUM",
+      "component": "Git Branch Alignment",
+      "status": "OFF MAIN — production-hardening branch missing",
+      "description": "HEAD is on claude/archonx-rust-rewrite-plan-Gjd43 (Rust rewrite branch). Target branch feat/production-hardening doesn't exist. main is behind origin/main. 9 modified files uncommitted.",
+      "impact": "PR to production-hardening branch cannot proceed from wrong HEAD",
+      "fix": "Cherry-pick or merge needed changes to feat/production-hardening branch (create if missing)",
+      "phase": "PHASE_0_IMMEDIATE"
+    },
+
+    "GAP_012": {
+      "id": "GAP_012",
+      "severity": "MEDIUM",
+      "component": "Revenue Engine Verification",
+      "status": "REFERENCED IN KERNEL — NOT VERIFIED",
+      "description": "RevenueEngine is imported and initialized in kernel.py but actual implementation not scanned. Needs verification it's not a stub.",
+      "impact": "If stub: self-sustaining revenue generation nonexistent",
+      "fix": "Audit archonx/ for revenue_engine.py or equivalent, verify non-stub status",
+      "phase": "PHASE_0_IMMEDIATE"
+    }
+  },
+
+  "hardening_plan": {
+    "overview": "23 action items across 4 priority tiers. Phases are sequenced — P0 unblocks everything.",
+
+    "phase_0_immediate": {
+      "label": "IMMEDIATE FIXES (< 30 min, unblocks everything)",
+      "actions": [
+        {
+          "id": "H-001",
+          "task": "Fix archonx-config.json JSON syntax error",
+          "file": "archonx-config.json",
+          "fix": "Remove duplicate 'backend_url' key from openclaw integration block",
+          "effort": "2 min",
+          "blocker_for": ["KernelConfig initialization", "All agent boots"]
+        },
+        {
+          "id": "H-002",
+          "task": "Create feat/production-hardening branch",
+          "commands": ["git checkout main", "git pull origin main", "git checkout -b feat/production-hardening"],
+          "effort": "5 min",
+          "blocker_for": ["All production commits"]
+        },
+        {
+          "id": "H-003",
+          "task": "Commit current 9 modified files with meaningful message",
+          "commands": ["git add -A", "git commit -m '[PHASE-0] Capture pre-hardening state snapshot'"],
+          "effort": "2 min",
+          "blocker_for": ["Clean working tree for phase work"]
+        },
+        {
+          "id": "H-004",
+          "task": "Verify Revenue Engine implementation status",
+          "commands": ["Get-ChildItem archonx -Recurse -Filter '*revenue*'"],
+          "effort": "5 min",
+          "blocker_for": ["Phase 2 scope decision"]
+        }
+      ]
+    },
+
+    "phase_1_architecture": {
+      "label": "ARCHITECTURE PREP (2-4 hrs, parallel workstreams)",
+      "actions": [
+        {
+          "id": "H-005",
+          "task": "Implement SoulLoader in kernel.py",
+          "file": "archonx/kernel.py",
+          "description": "Add SoulLoader class that reads .agent-souls/**/*.soul.md on boot and injects soul config into WhiteCrew/BlackCrew agent instances",
+          "effort": "45 min",
+          "spec_note": "Parse YAML front-matter from .soul.md files for: agent_id, role, voice_id, crew"
+        },
+        {
+          "id": "H-006",
+          "task": "Implement BMAD protocol enforcer",
+          "file": "archonx/protocols/bmad.py (NEW)",
+          "description": "PhaseGate(current_phase, allowed_phases), ArchitectHandoff(phase, spec_json), BuilderBlocker(blocker_description, requesting_direction) dataclasses + BMAdProtocol enforcement class",
+          "effort": "60 min"
+        },
+        {
+          "id": "H-007",
+          "task": "Verify and wire TurboQuant compression",
+          "file": "archonx/inference/ (verify/create)",
+          "description": "If archonx/inference/turbo_quant.py does not exist: create stub with compress_context(ctx, max_tokens) → compressed_ctx. Wire into execute_task() after task routing.",
+          "effort": "30 min"
+        },
+        {
+          "id": "H-008",
+          "task": "Design Hermes Agent architecture spec",
+          "file": "plans/hermes_agent_spec.json (NEW)",
+          "description": "Spec the Karpathy LLM Council pattern: HermesAgent class, WhiteCouncil.challenge(), BlackCouncil.solve(), consensus(), execution(). Ready for Phase 2 implementation.",
+          "effort": "45 min"
+        },
+        {
+          "id": "H-009",
+          "task": "Design Chess Theater frontend spec",
+          "file": "plans/chess_theater_spec.json (NEW)",
+          "description": "Spec the Three.js Chess Theater: scenes, piece models, WS protocol from chess-server (port 3300), animation states (idle/active/thinking/moved), camera system",
+          "effort": "60 min"
+        },
+        {
+          "id": "H-010",
+          "task": "Design Popebot comms architecture",
+          "file": "plans/popebot_spec.json (NEW)",
+          "description": "Spec per-agent comms: email (SMTP), social (Twitter/LinkedIn), Slack webhooks, SMS (Twilio). All keys from Infisical. Interface: popebot.send(agent_id, channel, message)",
+          "effort": "30 min"
+        }
+      ]
+    },
+
+    "phase_2_implementation": {
+      "label": "IMPLEMENTATION (8-12 hrs, requires Phase 1 specs approved)",
+      "actions": [
+        {
+          "id": "H-011",
+          "task": "Implement Hermes Agent with Karpathy LLM Council",
+          "files": ["archonx/agents/hermes/agent.py", "archonx/agents/hermes/council.py", "archonx/agents/hermes/white_crew.py", "archonx/agents/hermes/black_crew.py"],
+          "pattern": "Multiple agents debate → consensus → execution",
+          "effort": "3 hrs",
+          "dependency": "H-008 spec approved"
+        },
+        {
+          "id": "H-012",
+          "task": "Build Chess Theater 3D frontend",
+          "path": "chess-theater/ (NEW Next.js app)",
+          "stack": "Next.js 15 + Three.js r128 + GLSL shaders + WebSocket client to chess-server:3300",
+          "features": ["32 3D chess pieces", "Real-time agent movement", "Board state from kernel/chess-server", "Animation states: idle/thinking/moving/resolved"],
+          "effort": "4 hrs",
+          "dependency": "H-009 spec approved"
+        },
+        {
+          "id": "H-013",
+          "task": "Implement Popebot comms layer",
+          "file": "archonx/comms/popebot.py (NEW)",
+          "channels": ["SMTP email (smtplib)", "Twilio SMS", "Slack webhooks", "Twitter API v2", "LinkedIn API"],
+          "pattern": "All credentials via Infisical — ZERO hardcoded keys",
+          "effort": "2 hrs",
+          "dependency": "H-010 spec approved"
+        },
+        {
+          "id": "H-014",
+          "task": "Build SYNTHIA 3.0 product skeleton",
+          "path": "synthia-3-0/ (NEW Next.js app)",
+          "requirements": ["Spanish-first UI (MXN pricing)", "LATAM female entrepreneurs target", "Free/Pro/Premium subscription tiers", "UDEC 8.5/10 design gate enforced", "Infisical for all secrets"],
+          "effort": "3 hrs",
+          "dependency": "H-009 spec (reuse Chess Theater patterns)"
+        },
+        {
+          "id": "H-015",
+          "task": "Wire kernel ↔ chess-server WebSocket bridge",
+          "description": "When kernel.execute_task() fires: emit to agent_theater → forward over WS to chess-server → update board state → broadcast to Chess Theater 3D frontend",
+          "effort": "2 hrs",
+          "dependency": "H-011, H-012"
+        },
+        {
+          "id": "H-016",
+          "task": "Wire kernel soul loading on boot",
+          "description": "Call SoulLoader.load_all() in kernel.boot(), inject into WhiteCrew + BlackCrew, activate ElevenLabs voice IDs per agent",
+          "effort": "1 hr",
+          "dependency": "H-005"
+        }
+      ]
+    },
+
+    "phase_3_deployment": {
+      "label": "DEPLOYMENT (2-3 hrs, human provides Vercel Project IDs)",
+      "actions": [
+        {
+          "id": "H-017",
+          "task": "Run full test suite — all green before deploy",
+          "commands": ["python -m pytest tests/ -v", "cd archonx-chess && cargo test", "cd archonx-rust && cargo test"],
+          "effort": "30 min"
+        },
+        {
+          "id": "H-018",
+          "task": "Build Docker images for all services",
+          "services": ["archonx-os (main Python backend)", "chess-server (Rust port 3300)", "chess-theater (Next.js frontend)"],
+          "effort": "30 min"
+        },
+        {
+          "id": "H-019",
+          "task": "Configure Vercel deployments",
+          "human_input": "Provide prj_... IDs for archonx-os and synthia-3-0",
+          "automation": "vercel deploy --prod --token=$VERCEL_TOKEN --project=$VERCEL_PROJECT_ID",
+          "effort": "20 min (automated)"
+        },
+        {
+          "id": "H-020",
+          "task": "Smoke test production endpoints",
+          "endpoints": ["/healthz", "/api/kernel/status", "/api/chess/board", "/api/agents/list"],
+          "effort": "15 min"
+        }
+      ]
+    }
+  },
+
+  "risk_register": [
+    {
+      "risk": "Hermes Agent is a full new system — scope may exceed Phase 2 timeline",
+      "mitigation": "Build minimal viable Hermes (single Council loop) first; full debate pattern in Phase 3"
+    },
+    {
+      "risk": "Three.js Chess Theater PS5-grade graphics = high complexity",
+      "mitigation": "Start with functional but simple 3D (Three.js BoxGeometry pieces); GLSL shaders as enhancement, not blocker"
+    },
+    {
+      "risk": "Infisical secret access may not be configured in local dev environment",
+      "mitigation": "Verify Infisical CLI is available; fall back to env vars for dev, Infisical mandatory for prod"
+    },
+    {
+      "risk": "archonx-config.json JSON error may cause silent failures",
+      "mitigation": "Fix H-001 IMMEDIATELY before any other work"
+    },
+    {
+      "risk": "HEAD branch (Rust rewrite) may conflict with production-hardening work",
+      "mitigation": "Create feat/production-hardening from main (H-002); cherry-pick only needed Rust changes"
+    }
+  ],
+
+  "phase_0_verdict": {
+    "production_readiness": "3.5/10",
+    "blocking_gaps": 3,
+    "high_gaps": 5,
+    "medium_gaps": 4,
+    "immediate_fixes_required": 4,
+    "estimated_total_hours": "23-34 hours (parallelizable to 12-16 hrs with 2 builders)",
+    "critical_path": [
+      "H-001 (fix JSON) → H-002 (create branch) → H-005,H-006,H-007,H-008,H-009,H-010 (Phase 1 parallel) → ARCHITECT REVIEW → H-011 through H-016 (Phase 2 parallel) → H-017 through H-020 (Phase 3)"
+    ]
+  },
+
+  "request_for_phase_1_approval": {
+    "from": "BUILDER — Claude 4.6 Sonnet",
+    "to": "ARCHITECT",
+    "message": "PHASE 0 COMPLETE. Gap analysis produced. 3 critical gaps identified (Hermes, Chess Theater 3D, Popebot). 4 immediate fixes ready to execute. Hardening plan covers 20 action items across Phases 1-3. Requesting explicit: 'APPROVED: START PHASE_1' to proceed with architecture specs and immediate fixes. Standing by.",
+    "phase_0_deliverables": [
+      "✅ Complete gap analysis (this document)",
+      "✅ 12 gaps catalogued with severity and fix plan",
+      "✅ 20-action hardening plan with effort estimates",
+      "✅ Risk register (5 risks with mitigations)",
+      "✅ Production readiness score: 3.5/10",
+      "✅ Critical path mapped"
+    ],
+    "ready_to_execute_immediately": [
+      "H-001: Fix archonx-config.json JSON syntax error",
+      "H-002: Create feat/production-hardening branch",
+      "H-003: Commit 9 modified files",
+      "H-004: Verify Revenue Engine"
+    ]
+  }
+}

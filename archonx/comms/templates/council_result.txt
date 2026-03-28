@@ -1,0 +1,20 @@
+SUBJECT: ⚖️ Council Result — ${task_id}
+
+Hermes Agent Council deliberation complete.
+
+Task        : ${task_id}
+Objective   : ${objective}
+Consensus   : ${consensus_reached}
+Confidence  : ${confidence}
+Rounds Taken: ${rounds_taken}
+
+Winning Position:
+${winning_position}
+
+Execution Plan:
+${execution_plan}
+
+White Council: ${white_vote}
+Black Council: ${black_vote}
+
+— Hermes · ArchonX OS
