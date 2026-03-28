@@ -1,0 +1,13 @@
+SUBJECT: 💰 Revenue Update — ${period}
+
+Revenue report from ArchonX OS.
+
+Period    : ${period}
+Revenue   : ${revenue}
+Currency  : ${currency}
+Stripe ID : ${stripe_payment_id}
+
+Breakdown:
+${breakdown}
+
+— ArchonX OS · Popebot

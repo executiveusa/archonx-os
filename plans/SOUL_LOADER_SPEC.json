@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "spec_id": "SOUL_LOADER_SPEC",
+    "version": "1.0.0",
+    "phase": "PHASE_1",
+    "created_at": "2026-03-27T00:00:00Z",
+    "author": "ARCHITECT — BMAD A2A",
+    "status": "AWAITING_BUILDER_REVIEW",
+    "references": [
+      ".agent-souls/ directory (37 soul files)",
+      "archonx/kernel.py (WhiteCrew/BlackCrew integration point)",
+      "GAP_004 from PHASE_0_GAP_ANALYSIS"
+    ]
+  },
+
+  "overview": {
+    "name": "SoulLoader — Agent Soul Initialization System",
+    "description": "Reads all .soul.md files from .agent-souls/ on kernel boot, parses YAML front-matter and personality sections, injects soul config into WhiteCrew/BlackCrew agent instances. Activates ElevenLabs voice IDs per agent.",
+    "location": "archonx/core/soul_loader.py",
+    "integration_point": "archonx/kernel.py __init__ or boot() — called before any agent initialization"
+  },
+
+  "soul_file_format": {
+    "description": "Each .soul.md file has YAML front-matter fenced by --- markers followed by markdown body",
+    "example_front_matter": {
+      "format": "---\nagent_id: pauli_king\nrole: master_orchestrator\ncrew: white\npiece_type: king\nvoice_id: EXAVITQu4vr4xnSDxMaL\nvoice_name: Pauli Prime\nmodel: claude-3-5-sonnet-20241022\npersonality_traits:\n  - strategic\n  - decisive\n  - calm under pressure\ncommunication_style: direct, brief, authoritative\nprimary_tools:\n  - task_routing\n  - council_invocation\n  - human_escalation\nemail: pauli@archonx.io\ntwitter_handle: '@PauliKingAI'\n---"
+    },
+    "required_fields": ["agent_id", "role", "crew", "piece_type"],
+    "optional_fields": ["voice_id", "model", "personality_traits", "communication_style", "primary_tools", "email", "twitter_handle", "linkedin_url"],
+    "body_sections": "Markdown body contains personality narrative, soul backstory — parsed as soul.description"
+  },
+
+  "data_models": {
+    "AgentSoul": {
+      "fields": {
+        "agent_id": "str — unique identifier e.g. pauli_king",
+        "role": "str — role name e.g. master_orchestrator",
+        "crew": "enum: white | black",
+        "piece_type": "enum: king | queen | rook | bishop | knight | pawn",
+        "voice_id": "str | None — ElevenLabs voice ID",
+        "voice_name": "str | None — human-readable voice name",
+        "model": "str — LLM model identifier (default: claude-3-5-sonnet-20241022)",
+        "personality_traits": "list[str]",
+        "communication_style": "str",
+        "primary_tools": "list[str]",
+        "email": "str | None — agent's email address",
+        "twitter_handle": "str | None",
+        "description": "str — body of soul.md (personality narrative)",
+        "soul_file_path": "Path — source file for debugging",
+        "loaded_at": "datetime"
+      }
+    },
+    "SoulRegistry": {
+      "description": "Collection of all loaded souls, indexed by agent_id",
+      "type": "dict[str, AgentSoul]",
+      "methods": {
+        "get(agent_id: str) -> AgentSoul | None": "Look up soul by agent_id",
+        "get_crew(crew: str) -> list[AgentSoul]": "Get all souls for a crew (white/black)",
+        "get_by_piece(piece_type: str) -> list[AgentSoul]": "Get all souls of a piece type",
+        "all() -> list[AgentSoul]": "Return all loaded souls",
+        "count() -> int": "Return number of loaded souls"
+      }
+    }
+  },
+
+  "class_specifications": {
+    "SoulLoader": {
+      "file": "archonx/core/soul_loader.py",
+      "description": "Reads .soul.md files, builds SoulRegistry, injects into agents.",
+      "constructor": "SoulLoader(souls_dir: Path = Path('.agent-souls'))",
+      "methods": {
+        "load_all() -> SoulRegistry": "Scan souls_dir recursively, parse all .soul.md files, return SoulRegistry",
+        "_parse_soul_file(path: Path) -> AgentSoul": "Parse YAML front-matter + markdown body from one file",
+        "_extract_yaml_frontmatter(content: str) -> tuple[dict, str]": "Split --- YAML --- from body",
+        "inject_into_crew(crew_agents: list, registry: SoulRegistry) -> None": "For each agent in crew, find matching soul by agent_id, attach soul to agent.soul property",
+        "validate_registry(registry: SoulRegistry) -> list[str]": "Return list of warnings: missing required fields, unknown piece types, duplicate agent_ids"
+      }
+    }
+  },
+
+  "parsing_rules": {
+    "frontmatter_extraction": {
+      "pattern": "Content between first --- and second --- markers (YAML block)",
+      "library": "PyYAML — yaml.safe_load(frontmatter_str)",
+      "error_handling": "If YAML parse fails: log warning, skip file, include in validate_registry() warnings"
+    },
+    "body_extraction": "Everything after closing --- is the markdown body (soul description)",
+    "file_encoding": "UTF-8 (soul files may contain Spanish/unicode characters)"
+  },
+
+  "directory_scan": {
+    "root": ".agent-souls/",
+    "pattern": "**/*.soul.md",
+    "expected_files": {
+      "white_crew": [
+        ".agent-souls/white/pauli_king.soul.md",
+        ".agent-souls/white/synthia_queen.soul.md",
+        ".agent-souls/white/darya_rook.soul.md",
+        ".agent-souls/white/devika_bishop.soul.md",
+        ".agent-souls/white/popebot_bishop.soul.md",
+        ".agent-souls/white/blitz_knight.soul.md",
+        ".agent-souls/white/agent_zero_knight.soul.md",
+        ".agent-souls/white/bambu_ax.soul.md",
+        ".agent-souls/white/iron_claw_rook.soul.md",
+        ".agent-souls/white/ivette_ax.soul.md",
+        ".agent-souls/white/patch_knight.soul.md",
+        ".agent-souls/white/visionclaw_knight.soul.md",
+        ".agent-souls/white/pawns/*.soul.md (8 files)"
+      ],
+      "black_crew": [
+        ".agent-souls/black/shannon_king.soul.md",
+        ".agent-souls/black/cynthia_queen.soul.md",
+        ".agent-souls/black/brenner_bishop.soul.md",
+        ".agent-souls/black/tyrone_bishop.soul.md",
+        ".agent-souls/black/cosmos_knight.soul.md",
+        ".agent-souls/black/flash_knight.soul.md",
+        ".agent-souls/black/glitch_knight.soul.md",
+        ".agent-souls/black/mustang_maxx_knight.soul.md",
+        ".agent-souls/black/frankenstack_rook.soul.md",
+        ".agent-souls/black/pooracho_rook.soul.md",
+        ".agent-souls/black/pawns/*.soul.md (7 files)"
+      ]
+    },
+    "total_expected": 37
+  },
+
+  "kernel_integration": {
+    "file": "archonx/kernel.py",
+    "integration_location": "__init__ or boot() method, BEFORE WhiteCrew/BlackCrew are initialized",
+    "code_pattern": {
+      "step_1": "self.soul_loader = SoulLoader(souls_dir=Path('.agent-souls'))",
+      "step_2": "self.soul_registry = self.soul_loader.load_all()",
+      "step_3": "warnings = self.soul_loader.validate_registry(self.soul_registry)",
+      "step_4": "if warnings: logger.warning(f'SoulLoader warnings: {warnings}')",
+      "step_5": "self.soul_loader.inject_into_crew(self.white_crew.agents, self.soul_registry)",
+      "step_6": "self.soul_loader.inject_into_crew(self.black_crew.agents, self.soul_registry)",
+      "step_7": "logger.info(f'SoulLoader: {self.soul_registry.count()} souls loaded')"
+    }
+  },
+
+  "voice_activation": {
+    "description": "ElevenLabs voice IDs from soul files can be used when agents speak",
+    "usage": "When kernel needs to generate agent voice: use soul.voice_id with ElevenLabs API",
+    "scope": "Voice activation is Phase 2 scope — SoulLoader just LOADS the voice_id, doesn't call ElevenLabs",
+    "elevenlabs_key": "Infisical key: ELEVENLABS_API_KEY"
+  },
+
+  "soul_enrichment": {
+    "description": "After loading, each agent has a soul property with full personality + tools",
+    "usage_in_prompts": "When building system prompts for agents, include soul.description and soul.personality_traits for roleplay fidelity",
+    "example": "system_prompt = f'You are {soul.agent_id}, a {soul.role}. {soul.description}. Your style: {soul.communication_style}'"
+  },
+
+  "error_handling": {
+    "missing_souls_dir": "Log warning: '.agent-souls directory not found — agents will run soulless'. Do not crash kernel.",
+    "malformed_soul_file": "Log warning with file path, skip file, continue loading others",
+    "missing_required_field": "Log warning, use None as default, continue",
+    "duplicate_agent_id": "Log error, keep first occurrence, skip duplicate"
+  },
+
+  "test_requirements": [
+    "test_load_all_37_souls: Load all files, assert registry.count() == 37",
+    "test_parse_yaml_frontmatter: Parse sample soul file, verify all fields extracted correctly",
+    "test_parse_body_description: Verify body text after --- is in soul.description",
+    "test_missing_soul_file_skipped: Malformed file in directory, verify others still loaded",
+    "test_inject_into_crew: Crew agents get matching soul attached",
+    "test_validate_warnings: Soul missing required field produces warning in validate_registry()",
+    "test_voice_id_loaded: Voice ID from YAML front-matter is accessible in AgentSoul"
+  ],
+
+  "dependencies": {
+    "python_packages": ["pyyaml", "pathlib (stdlib)", "dataclasses (stdlib)"],
+    "internal": ["archonx/kernel.py (WhiteCrew/BlackCrew)"],
+    "external_files": [".agent-souls/**/*.soul.md"]
+  },
+
+  "builder_notes": [
+    "PyYAML is safe_load only — never yaml.load() (security: prevents code execution from YAML)",
+    "glob pattern '.agent-souls/**/*.soul.md' must use pathlib.Path.rglob('*.soul.md') on Python",
+    "Soul files may not have perfect YAML front-matter yet — handle gracefully, log what's missing",
+    "If .agent-souls doesn't exist in a test env: create test soul files as fixtures, not real files",
+    "The property name on agents must be .soul (not .config or .personality) for consistency across codebase"
+  ]
+}

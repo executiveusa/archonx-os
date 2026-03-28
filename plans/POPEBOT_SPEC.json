@@ -1,0 +1,241 @@
+{
+  "meta": {
+    "spec_id": "POPEBOT_SPEC",
+    "version": "1.0.0",
+    "phase": "PHASE_1",
+    "created_at": "2026-03-27T00:00:00Z",
+    "author": "ARCHITECT — BMAD A2A",
+    "status": "AWAITING_BUILDER_REVIEW",
+    "references": [
+      ".agent-souls/white/popebot_bishop.soul.md",
+      "GAP_003 from PHASE_0_GAP_ANALYSIS",
+      "archonx/kernel.py (integration point)",
+      "security/codex/ (Infisical key naming conventions)"
+    ]
+  },
+
+  "overview": {
+    "name": "Popebot — Multi-Channel Agent Communications Layer",
+    "description": "Every agent gets a communications voice. Popebot routes outbound messages across email, Slack, Twitter, LinkedIn, and SMS on behalf of any agent. All credentials from Infisical — ZERO hardcoded.",
+    "location": "archonx/comms/",
+    "integration_point": "kernel.py self.popebot — accessible to all agents via kernel.send_comms()",
+    "persona": "popebot_bishop.soul.md — diplomatic, clear, professional communicator for the entire agent crew"
+  },
+
+  "file_structure": {
+    "archonx/comms/__init__.py": "Package init, exports Popebot, Channel, CommMessage",
+    "archonx/comms/popebot.py": "Popebot orchestrator — routes messages to correct channel handler",
+    "archonx/comms/channels/": {
+      "__init__.py": "exports all channel handlers",
+      "email.py": "EmailChannel — SMTP via smtplib + Infisical credentials",
+      "slack.py": "SlackChannel — Incoming Webhook POST (no OAuth needed for MVP)",
+      "sms.py": "SMSChannel — Twilio REST API",
+      "twitter.py": "TwitterChannel — Twitter API v2 OAuth2 (tweepy)",
+      "linkedin.py": "LinkedInChannel — LinkedIn API v2 Share endpoint"
+    },
+    "archonx/comms/templates/": {
+      "task_complete.txt": "Template: agent completed task notification",
+      "error_alert.txt": "Template: agent error requiring attention",
+      "revenue_update.txt": "Template: revenue milestone hit",
+      "council_result.txt": "Template: Hermes council decision summary",
+      "daily_digest.txt": "Template: daily summary from Pauli King to Bambu"
+    },
+    "archonx/comms/rate_limiter.py": "Per-channel rate limiting (prevent API abuse)"
+  },
+
+  "data_models": {
+    "Channel": {
+      "type": "enum",
+      "values": ["EMAIL", "SLACK", "SMS", "TWITTER", "LINKEDIN"]
+    },
+    "MessagePriority": {
+      "type": "enum",
+      "values": {
+        "CRITICAL": "Send immediately, bypass rate limit",
+        "HIGH": "Send within 60s",
+        "NORMAL": "Batch with other normal messages (5 min window)",
+        "LOW": "Queue for daily digest"
+      }
+    },
+    "CommMessage": {
+      "fields": {
+        "message_id": "str — UUID",
+        "from_agent_id": "str — which agent is sending (e.g. pauli_king)",
+        "to": "str — recipient (email address / slack channel / phone number / @handle)",
+        "channel": "Channel enum",
+        "subject": "str | None — email/slack only",
+        "body": "str — message content (plain text, rendered from template if template_id set)",
+        "template_id": "str | None — template name in comms/templates/",
+        "template_vars": "dict — substitution variables for template",
+        "priority": "MessagePriority = NORMAL",
+        "metadata": "dict — optional context (task_id, bead_id, etc)",
+        "scheduled_at": "datetime | None — if set, queue until this time",
+        "sent_at": "datetime | None — filled on successful send",
+        "status": "enum: PENDING | SENT | FAILED | QUEUED"
+      }
+    },
+    "CommResult": {
+      "fields": {
+        "success": "bool",
+        "message_id": "str",
+        "channel": "Channel",
+        "external_id": "str | None — e.g. email message ID, tweet ID, Twilio SID",
+        "error": "str | None",
+        "retry_after": "int | None — seconds to wait before retry"
+      }
+    }
+  },
+
+  "class_specifications": {
+    "Popebot": {
+      "file": "archonx/comms/popebot.py",
+      "description": "Central router. Takes CommMessage, picks channel handler, sends, logs result.",
+      "constructor": {
+        "params": "vault: VaultClient, rate_limiter: RateLimiter",
+        "note": "vault is archonx/security/vault.py client — all keys loaded from Infisical there"
+      },
+      "methods": {
+        "async send(message: CommMessage) -> CommResult": "Route to correct channel, send, return result",
+        "async send_template(from_agent: str, channel: Channel, to: str, template_id: str, vars: dict, priority: MessagePriority) -> CommResult": "Convenience method — build CommMessage from template then send",
+        "async broadcast(from_agent: str, channels: list[Channel], body: str) -> list[CommResult]": "Send same message to multiple channels simultaneously",
+        "async queue_digest(message: CommMessage) -> None": "Defer to LOW priority daily digest batch",
+        "_get_channel_handler(channel: Channel) -> BaseChannel": "Return instantiated channel object with credentials"
+      }
+    },
+
+    "BaseChannel": {
+      "description": "Abstract base for all channel handlers",
+      "abstract_methods": {
+        "async send(message: CommMessage, credentials: dict) -> CommResult": "Channel-specific send logic",
+        "validate_recipient(to: str) -> bool": "Validate recipient format (email regex, phone E.164, etc)"
+      }
+    },
+
+    "EmailChannel": {
+      "file": "archonx/comms/channels/email.py",
+      "credentials_keys": {
+        "SMTP_HOST": "Infisical key: POPEBOT_SMTP_HOST",
+        "SMTP_PORT": "Infisical key: POPEBOT_SMTP_PORT (587 default)",
+        "SMTP_USER": "Infisical key: POPEBOT_SMTP_USER",
+        "SMTP_PASS": "Infisical key: POPEBOT_SMTP_PASS",
+        "FROM_EMAIL": "Infisical key: POPEBOT_FROM_EMAIL"
+      },
+      "implementation": "smtplib.SMTP_SSL or SMTP+STARTTLS, MIMEMultipart for HTML emails",
+      "per_agent_from": "Each agent sends from their own email: pauli@archonx.io, synthia@archonx.io, etc.",
+      "rate_limit": "100 emails/hour, 500/day"
+    },
+
+    "SlackChannel": {
+      "file": "archonx/comms/channels/slack.py",
+      "credentials_keys": {
+        "WEBHOOK_URL": "Infisical key: POPEBOT_SLACK_WEBHOOK_URL",
+        "DEFAULT_CHANNEL": "Infisical key: POPEBOT_SLACK_DEFAULT_CHANNEL (#archonx-ops)"
+      },
+      "implementation": "httpx.AsyncClient POST to webhook URL with JSON payload",
+      "message_format": "Slack Block Kit — attachments with agent color coding",
+      "rate_limit": "1 message/second Slack webhook limit"
+    },
+
+    "SMSChannel": {
+      "file": "archonx/comms/channels/sms.py",
+      "credentials_keys": {
+        "TWILIO_ACCOUNT_SID": "Infisical key: TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN": "Infisical key: TWILIO_AUTH_TOKEN",
+        "TWILIO_FROM_NUMBER": "Infisical key: TWILIO_FROM_NUMBER"
+      },
+      "implementation": "twilio Python client — messages.create()",
+      "use_case": "CRITICAL priority only — emergency alerts, Bambu direct notifications",
+      "rate_limit": "10 SMS/hour (cost control)"
+    },
+
+    "TwitterChannel": {
+      "file": "archonx/comms/channels/twitter.py",
+      "credentials_keys": {
+        "API_KEY": "Infisical key: TWITTER_API_KEY",
+        "API_SECRET": "Infisical key: TWITTER_API_SECRET",
+        "ACCESS_TOKEN": "Infisical key: TWITTER_ACCESS_TOKEN",
+        "ACCESS_SECRET": "Infisical key: TWITTER_ACCESS_SECRET"
+      },
+      "implementation": "tweepy.Client v2 — create_tweet()",
+      "per_agent_accounts": "Each agent has own Twitter account (keys per-agent in Infisical)",
+      "rate_limit": "300 tweets/3hr (Twitter API v2 limits)"
+    },
+
+    "LinkedInChannel": {
+      "file": "archonx/comms/channels/linkedin.py",
+      "credentials_keys": {
+        "ACCESS_TOKEN": "Infisical key: LINKEDIN_ACCESS_TOKEN",
+        "PERSON_URN": "Infisical key: LINKEDIN_PERSON_URN"
+      },
+      "implementation": "httpx.AsyncClient POST to https://api.linkedin.com/v2/ugcPosts",
+      "use_case": "Content sharing, updates (not real-time comms)",
+      "rate_limit": "150 posts/day"
+    }
+  },
+
+  "infisical_key_naming_convention": {
+    "pattern": "{SERVICE}_{AGENT}_{KEY_TYPE} or {SERVICE}_{KEY_TYPE} for shared",
+    "examples": [
+      "POPEBOT_SMTP_HOST",
+      "POPEBOT_SMTP_PASS",
+      "TWILIO_ACCOUNT_SID",
+      "TWITTER_PAULI_API_KEY (per-agent)",
+      "TWITTER_SYNTHIA_API_KEY (per-agent)",
+      "LINKEDIN_ACCESS_TOKEN",
+      "POPEBOT_SLACK_WEBHOOK_URL"
+    ],
+    "note": "vault.py already provides get_secret(key) → reads from Infisical. Use that, never os.getenv for secrets."
+  },
+
+  "rate_limiter": {
+    "file": "archonx/comms/rate_limiter.py",
+    "implementation": "In-memory token bucket per channel (asyncio.Semaphore)",
+    "buckets": {
+      "EMAIL": {"tokens": 100, "refill_interval_seconds": 3600},
+      "SLACK": {"tokens": 60, "refill_interval_seconds": 60},
+      "SMS": {"tokens": 10, "refill_interval_seconds": 3600},
+      "TWITTER": {"tokens": 300, "refill_interval_seconds": 10800},
+      "LINKEDIN": {"tokens": 150, "refill_interval_seconds": 86400}
+    },
+    "overflow_behavior": "Queue for next refill window (do not drop), except CRITICAL priority which bypasses"
+  },
+
+  "kernel_integration": {
+    "file": "archonx/kernel.py",
+    "add_to_init": "self.popebot = Popebot(vault=self.vault, rate_limiter=RateLimiter())",
+    "public_method": "async kernel.send_comms(from_agent: str, channel: str, to: str, body: str, priority: str = 'NORMAL') -> CommResult",
+    "usage_examples": [
+      "await kernel.send_comms('pauli_king', 'SLACK', '#archonx-ops', 'Phase 2 complete — all systems green')",
+      "await kernel.send_comms('synthia_queen', 'EMAIL', 'bambu@archonx.io', 'SYNTHIA 3.0 UDEC score: 9.1/10', priority='HIGH')",
+      "await kernel.send_comms('popebot_bishop', 'SMS', '+1XXXXXXXXXX', 'CRITICAL: CostGuard triggered', priority='CRITICAL')"
+    ]
+  },
+
+  "daily_digest": {
+    "description": "LOW priority messages batched and sent daily at 08:00 Mexico City time (UTC-6)",
+    "sender": "pauli_king",
+    "channels": ["EMAIL (bambu@archonx.io)", "SLACK (#archonx-daily)"],
+    "template": "comms/templates/daily_digest.txt",
+    "content": ["Tasks completed", "Revenue metrics", "Errors encountered", "Cost summary", "Next priorities"]
+  },
+
+  "test_requirements": [
+    "test_email_send: Mock SMTP, verify CommMessage fields map to correct MIME fields",
+    "test_slack_send: Mock httpx, verify Block Kit JSON format",
+    "test_sms_critical_bypass_rate_limit: SMS CRITICAL priority sends despite full bucket",
+    "test_rate_limit_queuing: Normal priority blocked by full bucket, queued correctly",
+    "test_template_rendering: template_id + vars → rendered body string",
+    "test_broadcast: Same message sent to 2 channels simultaneously (asyncio.gather)",
+    "test_no_hardcoded_credentials: assert 'password' not in source, assert 'token' not in source"
+  ],
+
+  "builder_notes": [
+    "ZERO hardcoded credentials — all tests must use MockVaultClient that returns fake test credentials",
+    "For MVP: Email + Slack are priority 1 (most used in practice)",
+    "Twitter + LinkedIn are priority 2 (schedule for Phase 2.5 if time is tight)",
+    "SMS is priority 3 (Twilio setup needs account — flag as 'needs human Twilio SID' if blocked)",
+    "httpx must be used for async HTTP (not requests — requests is sync)",
+    "All channel handlers must handle network errors gracefully (timeout=10s, one retry)",
+    "Log every send attempt to archonx/data/comms_log.jsonl (append-only audit trail)"
+  ]
+}

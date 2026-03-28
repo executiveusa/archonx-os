@@ -1,0 +1,15 @@
+SUBJECT: 🚨 Error Alert — ${error_code}
+
+An error occurred in the ArchonX OS.
+
+Agent   : ${agent_id}
+Error   : ${error_code}
+Message : ${error_message}
+Time    : ${timestamp}
+
+Context:
+${context}
+
+Action required: ${action_required}
+
+— ArchonX OS Kernel

@@ -16,6 +16,6 @@ openai==1.12.0
 anthropic==0.31.0
 playwright==1.40.0
 aiostream==0.4.5
-python-multipart==0.0.6
+python-multipart==0.0.22
 pydantic-json-schema==2.9.1
 corsheaders==4.3.1

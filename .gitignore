@@ -18,6 +18,11 @@ secrets/
 .direnv/
 .venv/
 venv/
+.venv-1/
+
+# BMAD runtime state — persisted locally, not committed
+.archonx/bmad_state.json
+.archonx/bmad_state.tmp
 
 # Keys / certs (never commit)
 *.pem
@@ -39,9 +44,15 @@ id_ed25519.pub
 .DS_Store
 Thumbs.db
 
-# Node (visualization)
+# Node modules (all apps)
+node_modules/
+**/node_modules/
 visualization/web/node_modules/
 visualization/web/dist/
+chess-theater/node_modules/
+chess-theater/.next/
+synthia-3-0/node_modules/
+synthia-3-0/.next/
 
 # Testing / Coverage
 .coverage
@@ -97,3 +108,19 @@ ops/reports/rotation_checklist.md
 ops/reports/safe_template.env
 ops/reports/cron.log
 .env.test
+
+# ============================================
+# SECRETS — NEVER COMMIT (BEAD-MASTER-002)
+# ============================================
+*.env
+!.env.example
+!.env.template
+master.env
+*-secrets.json
+GITHUB_TOKEN*.txt
+*KEYS*.txt
+*PASSWORD*.txt
+*SECRET*.txt
+*TOKEN*.txt
+*PRIVATE_KEY*.txt
+vault/local/

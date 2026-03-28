@@ -19,3 +19,6 @@
 [submodule "archon-x"]
 	path = archon-x
 	url = https://github.com/nazirlouis/ada_v2.git
+[submodule "dashboard-agent-swarm"]
+	path = dashboard-agent-swarm
+	url = https://github.com/executiveusa/dashboard-agent-swarm.git

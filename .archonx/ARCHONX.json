@@ -2,6 +2,12 @@
   "repo": "executiveusa/archonx-os",
   "guardian_subagent": "Devika",
   "reports_to": "executiveusa/archonx-os",
+  "governance": {
+    "prime_directive": ".archonx/emerald-tablets/PRIME_DIRECTIVE.md",
+    "manifest": ".archonx/emerald-tablets/manifest.json",
+    "version": "1.0",
+    "authority": "Kupuri Media\u2122 \u00d7 Executive USA / Pauli Digital"
+  },
   "openclaw": {
     "enabled": true,
     "skills": ["OpenClaw", "VisionClaw"]

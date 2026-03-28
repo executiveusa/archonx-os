@@ -1,0 +1,12 @@
+SUBJECT: ✅ Task Complete — ${task_id}
+
+Task ${task_id} has been completed successfully.
+
+Agent   : ${agent_id}
+Duration: ${duration}
+Status  : SUCCESS
+
+Summary:
+${summary}
+
+— ArchonX OS Kernel
