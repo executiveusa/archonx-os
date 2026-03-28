@@ -1,0 +1,313 @@
+{
+  "meta": {
+    "spec_id": "CHESS_THEATER_SPEC",
+    "version": "1.0.0",
+    "phase": "PHASE_1",
+    "created_at": "2026-03-27T00:00:00Z",
+    "author": "ARCHITECT — BMAD A2A",
+    "status": "AWAITING_BUILDER_REVIEW",
+    "references": [
+      "archonx-chess/ (Rust chess-server port 3300)",
+      "archonx/visualization/agent_theater.py (Python event bus — source of WS events)",
+      "archonx/visualization/chessboard.py (2D Python board state)",
+      "GAP_002 + GAP_008 from PHASE_0_GAP_ANALYSIS",
+      "Three.js r128 documentation",
+      "archonx-chess/chess-engine/src/agents.rs (AGENT_ROSTER reference)"
+    ]
+  },
+
+  "overview": {
+    "name": "Chess Theater — 3D Agent Orchestration Visualization",
+    "description": "A Next.js 15 app with Three.js r128 rendering 32 3D chess pieces representing the agent roster. Real-time board state from chess-server WebSocket (port 3300). Agent actions in kernel map to chess piece movements.",
+    "location": "chess-theater/ (new Next.js app at repo root)",
+    "deployed_at": "Vercel (subdomain: chess-theater.archonx.io)",
+    "quality_gate": "UDEC 8.5/10 minimum — PS5-grade graphics, not pixel trash"
+  },
+
+  "technology_stack": {
+    "framework": "Next.js 15 (App Router)",
+    "renderer": "Three.js r128",
+    "shaders": "GLSL (custom vertex + fragment shaders for pieces)",
+    "state_sync": "WebSocket client → chess-server port 3300",
+    "styling": "Tailwind CSS 3 (minimal — most UI is Three.js canvas)",
+    "typescript": true,
+    "package_manager": "pnpm"
+  },
+
+  "file_structure": {
+    "chess-theater/": {
+      "package.json": "deps: three@0.128.0, next@15, react@18, tailwindcss",
+      "tsconfig.json": "strict TypeScript",
+      "tailwind.config.ts": "dark theme, custom chess colors",
+      "next.config.ts": "static export for Vercel, WASM support",
+      "src/": {
+        "app/": {
+          "page.tsx": "Root page — mounts ChessTheater canvas",
+          "layout.tsx": "Root layout — dark background, no navbar",
+          "globals.css": "CSS reset + canvas full-screen"
+        },
+        "components/": {
+          "ChessTheater.tsx": "Main Three.js canvas component (useEffect mounts, useRef canvas)",
+          "AgentHUD.tsx": "Overlay showing active agent name, action, status (HTML over canvas)",
+          "ConnectionStatus.tsx": "WebSocket connection status badge"
+        },
+        "lib/": {
+          "scene/": {
+            "SceneManager.ts": "Three.js scene, camera, renderer, lights setup",
+            "BoardGeometry.ts": "64-square board mesh (alternating dark/light squares)",
+            "PieceFactory.ts": "Creates 32 piece meshes from AGENT_ROSTER data",
+            "PieceMaterial.ts": "White crew: metallic silver, Black crew: matte obsidian (GLSL)",
+            "CameraController.ts": "OrbitControls wrapper with cinematic constraints"
+          },
+          "ws/": {
+            "ChessWebSocket.ts": "WebSocket client connecting to chess-server:3300",
+            "EventParser.ts": "Parse chess-server WS messages → BoardStateUpdate type",
+            "ReconnectStrategy.ts": "Exponential backoff reconnect (max 30s)"
+          },
+          "animation/": {
+            "PieceAnimator.ts": "GSAP-style lerp for piece movement (arc trajectory, not linear)",
+            "PieceStates.ts": "Idle (breathe pulse), Thinking (glow pulse), Moving (arc fly), Active (bright aura), Done (settle)"
+          },
+          "types/": {
+            "agents.ts": "AgentPiece, BoardSquare, BoardState, WsMessage, PieceAnimState types",
+            "events.ts": "ChessEvent, AgentAction, ActionType enum"
+          }
+        },
+        "shaders/": {
+          "piece.vert": "Vertex shader — subtle breathing animation via sin(time)",
+          "piece.frag": "Fragment shader — metallic BRDF for white pieces, obsidian for black",
+          "board.frag": "Board square shader — emissive pulse when piece is active",
+          "aura.frag": "Agent aura/glow effect when actively processing"
+        }
+      }
+    }
+  },
+
+  "agent_roster_mapping": {
+    "source": "archonx-chess/chess-engine/src/agents.rs AGENT_ROSTER const",
+    "white_pieces": {
+      "rank_1": [
+        {"square": "a1", "type": "rook", "agent": "iron_claw_rook", "color": "#E8E8F0"},
+        {"square": "b1", "type": "knight", "agent": "lightning_knight", "color": "#E8E8F0"},
+        {"square": "c1", "type": "bishop", "agent": "devika_bishop", "color": "#E8E8F0"},
+        {"square": "d1", "type": "queen", "agent": "synthia_queen", "color": "#FFD700"},
+        {"square": "e1", "type": "king", "agent": "pauli_king", "color": "#FFFFFF"},
+        {"square": "f1", "type": "bishop", "agent": "popebot_bishop", "color": "#E8E8F0"},
+        {"square": "g1", "type": "knight", "agent": "agent_zero_knight", "color": "#E8E8F0"},
+        {"square": "h1", "type": "rook", "agent": "visionclaw_rook", "color": "#E8E8F0"}
+      ],
+      "rank_2_pawns": [
+        "cipher_pawn", "craft_pawn", "lens_pawn", "link_pawn",
+        "probe_pawn", "pulse_pawn", "quill_pawn", "scout_pawn"
+      ]
+    },
+    "black_pieces": {
+      "rank_8": [
+        {"square": "a8", "type": "rook", "agent": "frankenstack_rook", "color": "#1A0A2E"},
+        {"square": "b8", "type": "knight", "agent": "flash_knight", "color": "#1A0A2E"},
+        {"square": "c8", "type": "bishop", "agent": "brenner_bishop", "color": "#1A0A2E"},
+        {"square": "d8", "type": "queen", "agent": "cynthia_queen", "color": "#9B30FF"},
+        {"square": "e8", "type": "king", "agent": "shannon_king", "color": "#0D0D1A"},
+        {"square": "f8", "type": "bishop", "agent": "tyrone_bishop", "color": "#1A0A2E"},
+        {"square": "g8", "type": "knight", "agent": "cosmos_knight", "color": "#1A0A2E"},
+        {"square": "h8", "type": "rook", "agent": "pooracho_rook", "color": "#1A0A2E"}
+      ],
+      "rank_7_pawns": [
+        "bridge_pawn", "echo_pawn", "forge_pawn", "pixel_pawn",
+        "spark_pawn", "trace_pawn", "vault_pawn", "glitch_knight"
+      ]
+    }
+  },
+
+  "websocket_protocol": {
+    "server": "chess-server on port 3300 (Rust Axum)",
+    "client_connects_to": "ws://localhost:3300/ws (dev) | wss://chess.archonx.io/ws (prod)",
+    "message_types": {
+      "board_state": {
+        "type": "board_state",
+        "payload": {
+          "pieces": "array of {agent_id, square, status: idle|thinking|active|done}",
+          "active_agent": "string agent_id or null",
+          "last_action": "{agent_id, action_type, from_square, to_square, timestamp}"
+        }
+      },
+      "agent_action": {
+        "type": "agent_action",
+        "payload": {
+          "agent_id": "string",
+          "action_type": "TASK_START | TASK_COMPLETE | COUNCIL_ENTER | COUNCIL_EXIT | COMMS_SEND | ERROR",
+          "from_square": "string (current position) or null",
+          "to_square": "string (target position) or null",
+          "metadata": "dict — optional action context"
+        }
+      },
+      "ping": {"type": "ping", "timestamp": "ISO string"},
+      "pong": {"type": "pong", "timestamp": "ISO string"}
+    }
+  },
+
+  "animation_states": {
+    "IDLE": {
+      "description": "Agent waiting — subtle breathing pulse",
+      "shader_effect": "sin(time * 0.5) * 0.05 scale oscillation",
+      "color_modifier": "none"
+    },
+    "THINKING": {
+      "description": "Agent processing — warm glow pulse",
+      "shader_effect": "emissive intensity 0.2 → 0.6 oscillation at 2Hz",
+      "color_modifier": "ambient orange tint (#FF8C00 at 30% opacity)"
+    },
+    "MOVING": {
+      "description": "Agent executing action — arc trajectory to target square",
+      "trajectory": "arc height = board_width * 0.3, duration = 800ms cubic-ease-out",
+      "shader_effect": "motion trail via vertex shader (stretch along velocity vector)"
+    },
+    "ACTIVE": {
+      "description": "Agent is currently executing a task on its square",
+      "shader_effect": "radial aura pulse around piece base, cyan (#00BFFF) for white crew, magenta (#FF00FF) for black crew",
+      "board_effect": "current square emissive pulse synchronized with piece aura"
+    },
+    "DONE": {
+      "description": "Agent completed action — brief flash then settle",
+      "shader_effect": "quick white flash (0.3s) then return to idle"
+    },
+    "ERROR": {
+      "description": "Agent encountered error",
+      "shader_effect": "red pulse (#FF0000) 3x rapid flash, then dim to 50% brightness until resolved"
+    }
+  },
+
+  "scene_setup": {
+    "camera": {
+      "type": "PerspectiveCamera",
+      "fov": 45,
+      "initial_position": "[0, 12, 14]",
+      "look_at": "[0, 0, 0]",
+      "controls": "OrbitControls — allow rotation and zoom, clamp polar angle 15-75deg",
+      "cinematic_mode": "Slow auto-rotation at 0.001 rad/frame when idle"
+    },
+    "lighting": {
+      "ambient": "AmbientLight #0a0a1a intensity 0.3 (dark base)",
+      "key_light": "DirectionalLight #ffffff intensity 1.2 position [5, 10, 5]",
+      "fill_light": "DirectionalLight #4040ff intensity 0.4 position [-5, 5, -5] (cool fill)",
+      "rim_light": "PointLight #ff4400 intensity 0.6 position [0, 2, -8] (dramatic rim)",
+      "board_glow": "RectAreaLight #1a1a3e intensity 0.5 (subtle board ambience)"
+    },
+    "board": {
+      "size": "8x8 squares, each 1.0 unit",
+      "dark_squares": "#1a1a2e (deep navy)",
+      "light_squares": "#16213e (slightly lighter navy) — NOT white/black chess (it's the AGENT board)",
+      "border": "thin gold border (#FFD700 at 0.8 opacity)",
+      "coordinates": "a-h, 1-8 inscribed in gold on board edge (small, tasteful)"
+    },
+    "piece_geometry": {
+      "king": "custom GLTF or lathe geometry — crown silhouette, height 1.2",
+      "queen": "lathe geometry — elegant curved form, height 1.1",
+      "rook": "BoxGeometry with chamfered top — solid, strong",
+      "bishop": "lathe geometry — pointed top, height 1.0",
+      "knight": "SphereGeometry with offset — abstracted horse head silhouette",
+      "pawn": "SphereGeometry + CylinderGeometry — compact, height 0.7",
+      "fallback": "If GLTF loading fails, use geometric primitives (never null/invisible)"
+    }
+  },
+
+  "hud_overlay": {
+    "technology": "React HTML overlay (position: absolute, pointer-events: none)",
+    "elements": {
+      "active_agent_card": {
+        "position": "top-right",
+        "content": "Agent name, role, current action, elapsed time",
+        "style": "glass card, backdrop-blur, agent crew color border"
+      },
+      "council_view": {
+        "position": "bottom-center",
+        "content": "When council active: White vs Black crew icons + debate round indicator",
+        "visible_when": "council_mode == true"
+      },
+      "system_metrics": {
+        "position": "top-left",
+        "content": "Active agents count, tasks/hr, cost today",
+        "style": "minimal monospace, #00ff88 color"
+      },
+      "ws_status": {
+        "position": "bottom-right",
+        "content": "Connection status dot (green/yellow/red) + last event timestamp"
+      }
+    }
+  },
+
+  "performance_requirements": {
+    "target_fps": 60,
+    "min_fps": 30,
+    "draw_call_budget": 200,
+    "triangle_budget_total": 500000,
+    "lod": "Implement 2 LOD levels per piece: full detail < 10 units, simplified > 10 units from camera",
+    "frustum_culling": "enabled (Three.js default)",
+    "shadow_maps": "Enabled for key light only — shadow map 1024x1024"
+  },
+
+  "kernel_bridge": {
+    "description": "How kernel agent actions flow to the Chess Theater frontend",
+    "flow": [
+      "1. kernel.execute_task(task) fires",
+      "2. kernel calls self.agent_theater.emit(TheaterEvent(agent_id, action, metadata))",
+      "3. agent_theater.py (existing Python pub/sub) receives event",
+      "4. NEW: agent_theater.py forwards event to chess-server via HTTP POST /api/events",
+      "5. chess-server (Rust) updates internal board state",
+      "6. chess-server broadcasts BoardStateUpdate over WebSocket to all connected Three.js clients",
+      "7. Three.js client receives WS message → triggers piece animation"
+    ],
+    "new_endpoint_required": {
+      "file": "archonx-chess/chess-server/src/main.rs",
+      "endpoint": "POST /api/events",
+      "body": "{agent_id: str, action_type: str, metadata: dict}",
+      "response": "{success: bool, new_state: BoardState}"
+    },
+    "agent_theater_change": {
+      "file": "archonx/visualization/agent_theater.py",
+      "change": "Add chess_server_url config + forward_to_chess_server() method that POSTs events to chess-server"
+    }
+  },
+
+  "udec_design_requirements": {
+    "target_score": "8.5/10 minimum",
+    "non_negotiables": [
+      "All 32 pieces ALWAYS visible (never hidden or errored out)",
+      "Active agent immediately identifiable (< 1s visual latency from WS event)",
+      "Color palette: dark navy + gold + crew colors — NO default Three.js colors",
+      "Typography: Space Grotesk for HUD (Google Fonts, load in Next.js)",
+      "Piece materials: metallic shader for white crew, matte obsidian for black crew — NO BasicMaterial",
+      "Error states visible (piece dims/flashes red) — never silent failure",
+      "Responsive: works 1280px+ (not mobile-optimized in MVP)"
+    ]
+  },
+
+  "chess_theater_to_agent_theater_mapping": {
+    "existing_TheaterEvent_fields": "session_id, agent_id, event_type, data, timestamp",
+    "mapping": {
+      "event_type == 'task_start'": "→ chess action TASK_START, animate piece to active",
+      "event_type == 'task_complete'": "→ chess action TASK_COMPLETE, animate piece to done",
+      "event_type == 'council_enter'": "→ chess action COUNCIL_ENTER, show council HUD",
+      "event_type == 'error'": "→ chess action ERROR, red flash"
+    }
+  },
+
+  "deployment": {
+    "vercel_project": "chess-theater (separate from archonx-os)",
+    "env_vars_required": [
+      "NEXT_PUBLIC_CHESS_WS_URL — WebSocket endpoint",
+      "NEXT_PUBLIC_CHESS_API_URL — REST endpoint"
+    ],
+    "build_command": "pnpm run build",
+    "output_dir": ".next"
+  },
+
+  "builder_notes": [
+    "Context7 REQUIRED before writing Three.js code: resolve three.js library ID, fetch r128 API docs",
+    "Use Three.js ShaderMaterial for piece rendering — NOT MeshStandardMaterial (too generic)",
+    "GLTF piece models: generate simple lathe geometries in code for MVP (no external assets required)",
+    "WebSocket reconnect MUST be implemented — chess-server restart shouldn't break frontend",
+    "Three.js canvas MUST be responsive (ResizeObserver on container, update camera aspect ratio)",
+    "DO NOT use Three.js examples/jsm OrbitControls import path — use three/examples/jsm/controls/OrbitControls.js"
+  ]
+}

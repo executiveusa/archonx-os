@@ -1,0 +1,48 @@
+{
+  "session": "2026-03-27 Phase 2 Build",
+  "errors_logged": [
+    {
+      "id": "ERR-001",
+      "description": "cgt.clearMarks is not a function",
+      "source": "VS Code extension runtime (CodeGPT / performance-tracing extension)",
+      "scope": "IDE only — NOT in ARCHON-X codebase",
+      "resolution": "No action required in-repo. Disable or update the offending VS Code extension if it causes instability.",
+      "grep_result": "0 matches in any .js/.ts/.py file"
+    },
+    {
+      "id": "ERR-002",
+      "description": "Session context exhaustion — builder got stuck mid-BEAD-SYNTHIA-001",
+      "root_cause": "Long context window overflow; tool-call queue depth exceeded during parallel builds",
+      "resolution": "Audit file state at session start, identify last completed bead, resume from exact gap",
+      "prevention": "Always run file-existence audit as first step when resuming — do not re-build files that already exist",
+      "recovery_protocol": [
+        "1. list_dir all bead output directories",
+        "2. read first 20 lines of each key file to confirm completeness",
+        "3. Build only missing files",
+        "4. Wire kernel last"
+      ]
+    },
+    {
+      "id": "ERR-003",
+      "description": "ActionType used but not defined in chess-theater/src/lib/types/agents.ts",
+      "fix_commit": "Added ActionType union type before PieceAnimState in agents.ts",
+      "severity": "TypeScript compile error"
+    },
+    {
+      "id": "ERR-004",
+      "description": "Duplicate identifier ConnectionStatus in ChessTheater.tsx — type import and component import had same name",
+      "fix_commit": "Renamed type import to ConnectionStatusType in ChessTheater.tsx",
+      "severity": "TypeScript compile error"
+    },
+    {
+      "id": "ERR-005",
+      "description": "Implicit any for obj parameter in PieceAnimator.ts forEach callback",
+      "fix_commit": "Typed obj as THREE.Object3D in forEach callback",
+      "severity": "TypeScript strict mode error"
+    }
+  ],
+  "notes": {
+    "missing_node_modules": "chess-theater and synthia-3-0 both need npm install before tsc will resolve three/react/next types. This is expected pre-install state, not a code bug.",
+    "skipLibCheck": "Both chess-theater and synthia-3-0 tsconfig have skipLibCheck:true — reduces noise during development"
+  }
+}

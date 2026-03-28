@@ -18,6 +18,11 @@ secrets/
 .direnv/
 .venv/
 venv/
+.venv-1/
+
+# BMAD runtime state — persisted locally, not committed
+.archonx/bmad_state.json
+.archonx/bmad_state.tmp
 
 # Keys / certs (never commit)
 *.pem

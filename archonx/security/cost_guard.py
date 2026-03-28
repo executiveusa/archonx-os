@@ -18,11 +18,17 @@ logger = logging.getLogger("archonx.security.cost_guard")
 
 @dataclass
 class CostBudget:
-    """Budget configuration for an agent or globally."""
-    max_cost_per_day_cents: int = 5000
+    """Budget configuration for an agent or globally.
+
+    Emerald Tablets §COST mandates:
+      - $50 USD daily hard ceiling (5000¢)
+      - $40 USD alert threshold (80%)
+      - Circuit breaker → free model (Qwen) on breach
+    """
+    max_cost_per_day_cents: int = 5000    # $50 USD
     max_actions_per_hour: int = 200
     max_tool_iterations: int = 25
-    alert_threshold_percent: int = 80
+    alert_threshold_percent: int = 80     # alert at $40
 
 
 @dataclass
