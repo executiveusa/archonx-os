@@ -14,7 +14,7 @@ export function parseWsMessage(raw: string): WsMessage | null {
       msg.type === 'ping' ||
       msg.type === 'pong'
     ) {
-      return msg as WsMessage
+      return msg as unknown as WsMessage
     }
     return null
   } catch {

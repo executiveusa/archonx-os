@@ -108,12 +108,36 @@ async function main() {
   }
 
   if (synthiaProject) {
-    console.log(`   Found existing synthia project: ${synthiaProject.id} (${synthiaProject.name})`);
-    const sp = await apiRequest('PATCH', `/v9/projects/${synthiaProject.id}`, {
-      rootDirectory: 'synthia-3-0',
-      framework: 'nextjs',
-    }, token);
-    console.log(`   Update status: ${sp.status}`);
+    // Check if it's linked to the correct repo
+    const sproj = await apiRequest('GET', `/v9/projects/${synthiaProject.id}`, null, token);
+    const linkedRepo = sproj.body?.link?.repo || '';
+    console.log(`   Linked repo: ${linkedRepo}`);
+
+    if (!linkedRepo.includes('archonx-os')) {
+      // Wrong repo — create a fresh project linked to archonx-os
+      console.log('   Wrong repo — creating new synthia-3-0 project linked to archonx-os...');
+      const repoInfo = proj.body.link; // from chess-theater project (archonx-os)
+      const createBody = {
+        name: 'synthia-3-0-archonx',
+        framework: 'nextjs',
+        rootDirectory: 'synthia-3-0',
+        gitRepository: repoInfo ? { repo: repoInfo.repo, type: repoInfo.type || 'github' } : undefined,
+      };
+      const cp = await apiRequest('POST', '/v9/projects', createBody, token);
+      if (cp.status === 200 || cp.status === 201) {
+        console.log(`   Created new project: ${cp.body.id} (${cp.body.name})`);
+        synthiaProject = cp.body;
+      } else {
+        console.log(`   Create failed: ${cp.status} — ${JSON.stringify(cp.body).slice(0, 200)}`);
+      }
+    } else {
+      // Correct repo, just patch rootDirectory
+      const sp = await apiRequest('PATCH', `/v9/projects/${synthiaProject.id}`, {
+        rootDirectory: 'synthia-3-0',
+        framework: 'nextjs',
+      }, token);
+      console.log(`   Update status: ${sp.status}`);
+    }
   } else {
     // Create new project linked to same repo
     const repoInfo = proj.body.link;
@@ -173,7 +197,7 @@ async function main() {
   }
 
   // 5. Trigger synthia-3-0 deployment
-  const SYNTHIA_PROJECT_ID = synthiaProject ? synthiaProject.id : null;
+  const SYNTHIA_PROJECT_ID = synthiaProject ? (synthiaProject.id || synthiaProject.body?.id) : null;
   if (SYNTHIA_PROJECT_ID) {
     console.log('\n[5] Triggering new production deployment for synthia-3-0...');
     const sproj = await apiRequest('GET', `/v9/projects/${SYNTHIA_PROJECT_ID}`, null, token);
