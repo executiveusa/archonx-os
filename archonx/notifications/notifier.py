@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-"""ZTE-20260303-9001: Deployment notification back-channel."""
-
-from __future__ import annotations
-
 import json
 import logging
 import os

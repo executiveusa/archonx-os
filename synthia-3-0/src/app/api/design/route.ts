@@ -33,9 +33,26 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     projectName?: string
   }
 
+  // Try remote SYNTHIA backend first (no secrets needed in frontend)
+  const backendUrl = process.env.SYNTHIA_BACKEND_URL
+  if (backendUrl) {
+    try {
+      const backendRes = await fetch(`${backendUrl}/api/design`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, projectName }),
+        signal: AbortSignal.timeout(30_000),
+      })
+      if (backendRes.ok) return NextResponse.json(await backendRes.json())
+    } catch { /* fallback to direct call below */ }
+  }
+
+  // Fallback: direct Anthropic call (server-side only — key never exposed to browser)
   const apiKey = process.env.ANTHROPIC_API_KEY
   if (!apiKey) {
-    return NextResponse.json({ error: 'ANTHROPIC_API_KEY no configurada' }, { status: 500 })
+    // No backend and no key — return default spec
+    const fallback = defaultDesignSpec(projectName)
+    return NextResponse.json({ spec: fallback, html: renderDesignToHTML(fallback) })
   }
 
   const systemPrompt = `Eres SYNTHIA™, una IA de diseño especializada en emprendedoras latinoamericanas.
