@@ -1,5 +1,7 @@
 // Chess Theater — Agent type definitions
 // Maps to AGENT_ROSTER in archonx-chess/chess-engine/src/agents.rs
+import { ActionType } from './events'
+export type { ActionType }
 
 export type PieceType = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 export type Crew = 'white' | 'black'
@@ -12,17 +14,6 @@ export interface AgentPiece {
   color: string         // hex color for material
   label?: string        // display name
 }
-
-export type ActionType =
-  | 'move'
-  | 'execute_task'
-  | 'debate'
-  | 'consensus'
-  | 'escalate'
-  | 'block'
-  | 'commit'
-  | 'deploy'
-  | 'idle'
 
 export type PieceAnimState = 'idle' | 'thinking' | 'moving' | 'active' | 'done' | 'error'
 
