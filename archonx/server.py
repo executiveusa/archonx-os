@@ -26,6 +26,7 @@ from archonx.visualization.chessboard import ChessboardView
 from archonx.visualization.dashboard import MetricsDashboard
 from archonx.visualization.paulis_place_view import PaulisPlaceView
 from archonx.api.state import AppState
+from archonx.api.state_supabase import SupabaseStateManager
 from archonx.api.v1 import v1_router
 
 logger = logging.getLogger("archonx.server")
@@ -54,6 +55,15 @@ def _parse_allowed_origins() -> list[str]:
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     state = AppState()
 
+    # Initialize Supabase persistent state (replaces in-memory globals)
+    db_url = os.getenv(
+        "DATABASE_URL",
+        "postgresql://postgres:072090156d28a9df6502d94083e47990@31.220.58.212:5434/second_brain"
+    )
+    state_mgr = SupabaseStateManager(db_url)
+    await state_mgr.initialize()
+    state.db = state_mgr
+
     # Boot kernel
     state.kernel = ArchonXKernel()
     await state.kernel.boot()
@@ -65,11 +75,22 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     state.paulis_view = PaulisPlaceView()
 
     app.state.app_state = state
-    logger.info("Server ready — v2 routers live, %d agents.", len(state.kernel.registry.all()))
+
+    # Start cron scheduler
+    from archonx.jobs.scheduler import build_scheduler
+    scheduler = build_scheduler()
+    if scheduler:
+        scheduler.start()
+        logger.info("APScheduler started with %d jobs.", len(scheduler.get_jobs()))
+
+    logger.info("Server ready — v2 routers live, %d agents, Supabase persistent state.", len(state.kernel.registry.all()))
     yield
 
     # Shutdown
+    if scheduler and scheduler.running:
+        scheduler.shutdown(wait=False)
     await state.kernel.shutdown()
+    await state_mgr.close()
     logger.info("Server shutdown complete.")
 
 
