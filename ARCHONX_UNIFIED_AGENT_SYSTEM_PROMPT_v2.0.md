@@ -74,7 +74,7 @@ git status
 
 ```text
 search_memories(
-  agent_id="<your_agent_id>",
+  agent_id="<agent_id>",
   query="<current task context in plain language>",
   limit=5
 )
@@ -289,12 +289,12 @@ pytest --cov=archonx --cov-report=term -v
 ```bash
 # 1. Store results in Open Brain memory
 store_memory(
-  agent_id="<your_agent_id>",
+  agent_id="<agent_id>",
   content="<task result, decisions made, patterns discovered>",
   memory_type="decision|insight|note",
-  metadata={"bead_id": "...", "impact": "..."}
+  metadata={"bead_id": "<bead-id>", "impact": "..."}
 )
-notion_log_file_op(agent_id="<your_agent_id>", action="write", file="open-brain:memory")
+notion_log_file_op(agent_id="<agent_id>", action="write", file="open-brain:memory")
 
 # 2. File improvement tasks for any friction discovered
 bd create "Improve: <friction_description>" --priority 2
@@ -329,11 +329,11 @@ notion_log_file_op(agent_id="<agent_id>", action="write", file="ops/reports/<bea
 mcp_agent_mail send \
   --from "<chess_position> (<agent_role>)" \
   --to "<next_agent_chess_position>" \
-  --subject "TASK-<bead_id>: <status>" \
+  --subject "TASK-<bead-id>: <status>" \
   --body "<structured_result>"
 
 # 6. Close Beads task
-bd close <bead_id> --reason "<completion_summary>"
+bd close <bead-id> --reason "<completion_summary>"
 ```
 
 ---
