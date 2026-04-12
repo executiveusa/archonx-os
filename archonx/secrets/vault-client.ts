@@ -15,11 +15,20 @@ export interface VaultHealthResult {
  */
 export function checkVaultHealth(): VaultHealthResult {
   const vaultPath = path.resolve(process.cwd(), '.archonx/vault.bin');
-  const vaultExists = fs.existsSync(vaultPath);
-  const masterKeySet = Boolean(
-    process.env.ARCHONX_MASTER_KEY &&
-      process.env.ARCHONX_MASTER_KEY !== 'zte-default-insecure-key'
-  );
+
+  let vaultExists: boolean;
+  try {
+    vaultExists = fs.existsSync(vaultPath);
+  } catch (err) {
+    return {
+      status: 'error',
+      vaultExists: false,
+      masterKeySet: false,
+      message: `Failed to access vault path: ${(err as Error).message}`,
+    };
+  }
+
+  const masterKeySet = Boolean(process.env.ARCHONX_MASTER_KEY);
 
   if (vaultExists && masterKeySet) {
     return {
@@ -35,8 +44,7 @@ export function checkVaultHealth(): VaultHealthResult {
       status: 'degraded',
       vaultExists,
       masterKeySet,
-      message:
-        'ARCHONX_MASTER_KEY is not set or uses the default insecure key; vault running in degraded mode.',
+      message: 'ARCHONX_MASTER_KEY is not set; vault running in default-key mode.',
     };
   }
 
