@@ -14,6 +14,9 @@ build/
 master.env
 .secrets/
 secrets/
+# Allow the vault client module (source code, not secrets)
+!archonx/secrets/
+!archonx/secrets/vault-client.ts
 .envrc
 .direnv/
 .venv/
