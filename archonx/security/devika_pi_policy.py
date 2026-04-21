@@ -9,12 +9,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import structlog
+import logging
 
 from archonx.security.command_guard import CommandGuard
 
 
-logger = structlog.get_logger("archonx.security.devika_pi_policy")
+logger = logging.getLogger("archonx.security.devika_pi_policy")
 
 ALLOWED_EXECUTION_PROFILES: frozenset[str] = frozenset(
     {
@@ -107,10 +107,7 @@ class DevikaPIGovernance:
         self._audit_log: list[AuditEntry] = []
         self._current_stage: str | None = None
         self._report_dir.mkdir(parents=True, exist_ok=True)
-        logger.info(
-            "DevikaPIGovernance initialised",
-            report_dir=str(self._report_dir),
-        )
+        logger.info("DevikaPIGovernance initialised report_dir=%s", self._report_dir)
 
     # ------------------------------------------------------------------
     # Public policy check methods
@@ -297,21 +294,17 @@ class DevikaPIGovernance:
         if decision.allowed:
             if requested_stage == "REPEAT":
                 self._current_stage = None
-                logger.info("PAULIWHEEL cycle reset via REPEAT", bead_id=bead_id)
+                logger.info("PAULIWHEEL cycle reset via REPEAT bead_id=%s", bead_id)
             else:
                 self._current_stage = requested_stage
-                logger.info(
-                    "PAULIWHEEL stage advanced",
-                    stage=requested_stage,
-                    bead_id=bead_id,
-                )
+                logger.info("PAULIWHEEL stage advanced stage=%s bead_id=%s", requested_stage, bead_id)
         else:
             logger.warning(
-                "PAULIWHEEL stage advance blocked",
-                from_stage=self._current_stage,
-                to_stage=requested_stage,
-                reason=decision.reason,
-                bead_id=bead_id,
+                "PAULIWHEEL stage advance blocked from_stage=%s to_stage=%s reason=%s bead_id=%s",
+                self._current_stage,
+                requested_stage,
+                decision.reason,
+                bead_id,
             )
         return decision
 
@@ -331,11 +324,7 @@ class DevikaPIGovernance:
             "entries": [e.to_dict() for e in self._audit_log],
         }
         report_path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
-        logger.info(
-            "Audit report emitted",
-            path=str(report_path),
-            entries=len(self._audit_log),
-        )
+        logger.info("Audit report emitted path=%s entries=%d", report_path, len(self._audit_log))
         return report_path
 
     def get_audit_log(self) -> list[AuditEntry]:
@@ -372,12 +361,12 @@ class DevikaPIGovernance:
         self._audit_log.append(entry)
         log_fn = logger.info if decision.allowed else logger.warning
         log_fn(
-            "policy_check",
-            check_type=check_type,
-            allowed=decision.allowed,
-            reason=decision.reason,
-            error_code=decision.error_code,
-            bead_id=bead_id,
-            profile=profile,
-            stage=stage,
+            "policy_check check_type=%s allowed=%s reason=%s error_code=%s bead_id=%s profile=%s stage=%s",
+            check_type,
+            decision.allowed,
+            decision.reason,
+            decision.error_code,
+            bead_id,
+            profile,
+            stage,
         )

@@ -25,10 +25,31 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Optional, Callable, Awaitable
+from typing import Any, Awaitable, Callable, Optional
+import importlib
 
-import websockets
-from websockets.server import WebSocketServerProtocol
+if importlib.util.find_spec("websockets") is not None:
+    import websockets  # type: ignore[import-not-found]
+    from websockets.server import WebSocketServerProtocol  # type: ignore[import-not-found]
+else:
+    class _FallbackConnectionClosed(Exception):
+        """Raised when simulated websocket connection closes."""
+
+    class _FallbackWebsockets:
+        class exceptions:
+            ConnectionClosed = _FallbackConnectionClosed
+
+        @staticmethod
+        async def serve(*args: Any, **kwargs: Any) -> Any:
+            raise RuntimeError("websockets dependency is not installed")
+
+    websockets = _FallbackWebsockets()  # type: ignore[assignment]
+
+    class WebSocketServerProtocol:  # type: ignore[no-redef]
+        """Fallback protocol type when websockets dependency is unavailable."""
+
+        async def close(self, code: int = 1000, reason: str = "") -> None:
+            return None
 
 logger = logging.getLogger("archonx.mail.server")
 
