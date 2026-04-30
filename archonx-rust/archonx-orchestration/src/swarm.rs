@@ -5,7 +5,7 @@
 /// Replaces Python's asyncio.gather() with JoinSet for structured concurrency.
 use std::time::Instant;
 
-use archonx_core::{AgentRegistry, AgentStatus, Crew, Role};
+use archonx_core::types::Crew;
 use serde::{Deserialize, Serialize};
 use tokio::task::JoinSet;
 use tracing::{info, warn};

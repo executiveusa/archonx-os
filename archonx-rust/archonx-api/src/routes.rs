@@ -41,6 +41,12 @@ impl AppState {
     }
 }
 
+impl Default for AppState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Response types — exact match with TypeScript interface in page.tsx
 // ---------------------------------------------------------------------------

@@ -410,8 +410,14 @@ impl Orchestrator {
             None => return OrchestratorResult::err(OrchestratorCommand::Assign, format!("Agent not found: {}", agent_id)),
         };
 
-        if agent_arc.read().unwrap().status == AgentStatus::Busy {
-            return OrchestratorResult::err(OrchestratorCommand::Assign, format!("Agent {} is busy", agent_id));
+        // Atomic claim: acquire write lock, check status, and mark Busy before releasing.
+        // Prevents TOCTOU race where two concurrent callers both see Available and both assign.
+        {
+            let mut agent = agent_arc.write().unwrap();
+            if agent.status == AgentStatus::Busy {
+                return OrchestratorResult::err(OrchestratorCommand::Assign, format!("Agent {} is busy", agent_id));
+            }
+            agent.status = AgentStatus::Busy;
         }
 
         let task = match self.task_manager.assign_task(&task_id, &agent_id) {

@@ -112,11 +112,14 @@ impl RepoIndexer {
         // Parallel file collection using walkdir + rayon
         let docs: Vec<RepoDocument> = self.collect_docs_parallel(&repo_path);
         let all_text: String = docs.iter().map(|d| d.content.as_str()).collect::<Vec<_>>().join("\n");
-        let terms: Vec<String> = self
-            .token_re
-            .find_iter(&all_text)
-            .map(|m| m.as_str().to_lowercase())
-            .collect();
+        let terms: Vec<String> = {
+            let mut seen = std::collections::HashSet::new();
+            self.token_re
+                .find_iter(&all_text)
+                .map(|m| m.as_str().to_lowercase())
+                .filter(|t| seen.insert(t.clone()))
+                .collect()
+        };
 
         let doc_count = docs.len().to_string();
         RepoIndex {
@@ -190,11 +193,14 @@ impl RepoIndexer {
     pub fn index_directory(&self, dir: &Path) -> RepoIndex {
         let docs = self.collect_docs_parallel(dir);
         let all_text: String = docs.iter().map(|d| d.content.as_str()).collect::<Vec<_>>().join("\n");
-        let terms: Vec<String> = self
-            .token_re
-            .find_iter(&all_text)
-            .map(|m| m.as_str().to_lowercase())
-            .collect();
+        let terms: Vec<String> = {
+            let mut seen = std::collections::HashSet::new();
+            self.token_re
+                .find_iter(&all_text)
+                .map(|m| m.as_str().to_lowercase())
+                .filter(|t| seen.insert(t.clone()))
+                .collect()
+        };
 
         let slug = dir.file_name().and_then(|n| n.to_str()).unwrap_or("unknown");
         RepoIndex {

@@ -27,7 +27,7 @@ impl AgentRouter {
         self.registry
             .get_by_role(role, None)
             .first()
-            .map(|a| a.read().unwrap().agent_id.clone())
+            .and_then(|a| a.read().ok().map(|g| g.agent_id.clone()))
     }
 
     /// Map TaskType → Role — exact match with Python routing table.

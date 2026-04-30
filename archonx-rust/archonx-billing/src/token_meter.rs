@@ -162,8 +162,8 @@ impl TokenMeter {
             match entry.compare_exchange(
                 current,
                 current - amount,
-                Ordering::Relaxed,
-                Ordering::Relaxed,
+                Ordering::AcqRel,
+                Ordering::Acquire,
             ) {
                 Ok(_) => break,
                 Err(_) => continue, // CAS failed — retry
@@ -230,14 +230,16 @@ impl TokenMeter {
         let active_balances: serde_json::Map<String, serde_json::Value> = self
             .balances
             .iter()
-            .filter(|e| e.value().load(Ordering::Relaxed) > 0)
-            .map(|e| {
-                (
-                    e.key().clone(),
-                    serde_json::Value::Number(
-                        serde_json::Number::from(e.value().load(Ordering::Relaxed)),
-                    ),
-                )
+            .filter_map(|e| {
+                let v = e.value().load(Ordering::Relaxed);
+                if v > 0 {
+                    Some((
+                        e.key().clone(),
+                        serde_json::Value::Number(serde_json::Number::from(v)),
+                    ))
+                } else {
+                    None
+                }
             })
             .collect();
 
