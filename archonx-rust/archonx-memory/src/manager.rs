@@ -231,24 +231,24 @@ impl MemoryManager {
         let key = format!("expertise:{}:{}", agent_id, uuid::Uuid::new_v4());
 
         // Save to PostgreSQL if pool available
-        if let Some(pool) = &self.pool {
-            let value = serde_json::to_value(&expertise)?;
-            self.db_upsert(pool, &key, &value, MemoryLayer::Team, &["expertise", agent_id], confidence).await?;
-        } else {
-            // Fallback to in-memory cache
-            let entry = MemoryEntry {
-                key: key.clone(),
-                value: serde_json::to_value(&expertise)?,
-                layer: MemoryLayer::Team,
-                tags: vec!["expertise".into(), agent_id.to_string()],
-                confidence,
-                access_count: 0,
-                created_at: Utc::now(),
-            };
-            self.cache.write().await.insert(key, entry);
-        }
+        let entry = MemoryEntry {
+            key: key.clone(),
+            value: serde_json::to_value(&expertise)?,
+            layer: MemoryLayer::Team,
+            tags: vec!["expertise".into(), agent_id.to_string()],
+            confidence,
+            access_count: 0,
+            created_at: Utc::now(),
+        };
 
-        info!("Recorded expertise for {}: {}...", agent_id, &problem[..problem.len().min(50)]);
+        if let Some(pool) = &self.pool {
+            self.db_upsert(pool, &key, &entry.value, MemoryLayer::Team, &["expertise", agent_id], confidence).await?;
+        }
+        // Always hydrate in-memory cache so get_expertise/search surface the record.
+        self.cache.write().await.insert(key, entry);
+
+        let preview: String = problem.chars().take(50).collect();
+        info!("Recorded expertise for {}: {}...", agent_id, preview);
         Ok(expertise)
     }
 

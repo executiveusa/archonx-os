@@ -99,6 +99,6 @@ docker run -v $(pwd):/workspace archonx-graphbrain:latest --mode light
 - **AtomicI64 + CAS**: overdraft-safe billing hot path
 - **sqlx**: compile-time SQL verification with PostgreSQL
 - **axum 0.7**: type-safe HTTP routing, zero-cost extractors
-- **serde**: zero-copy JSON ser/de throughout
+- **serde**: efficient JSON ser/de throughout
 
 See `MIGRATION_NOTES.md` for detailed Python→Rust behavioral differences.
