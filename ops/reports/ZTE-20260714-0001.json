@@ -8,6 +8,8 @@
   "blast_radius": 1,
   "repository": "executiveusa/archonx-os",
   "branch": "zte/ZTE-20260714-0001/pauli-brand-studio",
+  "pull_request": 33,
+  "pull_request_url": "https://github.com/executiveusa/archonx-os/pull/33",
   "base_commit": "f86e8eb7af240dd13780df66b965fc9cf5e20d55",
   "files_created": [
     ".archonx/toolbox/skills/pauli-brand-studio/SKILL.md",
@@ -26,7 +28,6 @@
     ".archonx/toolbox/skills/mandatory-design-law/SKILL.md"
   ],
   "validation": {
-    "branch_ahead_by": 12,
     "branch_behind_by": 0,
     "allowlisted_files_only": true,
     "skill_metadata_present": true,
@@ -36,7 +37,8 @@
     "runtime_code_changed": false,
     "dependencies_changed": false,
     "secrets_changed": false,
-    "production_changed": false
+    "production_changed": false,
+    "pr_title_format_corrected": true
   },
   "tests": {
     "type": "documentation and governance validation",
