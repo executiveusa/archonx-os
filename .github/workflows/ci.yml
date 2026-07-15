@@ -12,50 +12,91 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
+      - name: Detect Python changes
+        id: python_changes
+        shell: bash
+        run: |
+          if git diff --name-only origin/${{ github.base_ref || github.ref_name }}...HEAD | grep -Eq '^(archonx/|tests/|pyproject\.toml|setup\.cfg|tox\.ini)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "No Python runtime or test changes detected; skipping Python test matrix."
+          fi
+
       - name: Set up Python
+        if: steps.python_changes.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Cache dependencies
+        if: steps.python_changes.outputs.run == 'true'
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
-      
+
       - name: Install dependencies
+        if: steps.python_changes.outputs.run == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
-      
+
       - name: Run tests
+        if: steps.python_changes.outputs.run == 'true'
         run: |
           pytest --cov=archonx --cov-report=xml --cov-report=term
-      
+
       - name: Upload coverage
+        if: steps.python_changes.outputs.run == 'true'
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
-  
+
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect Python changes
+        id: python_changes
+        shell: bash
+        run: |
+          if git diff --name-only origin/${{ github.base_ref || github.ref_name }}...HEAD | grep -Eq '^(archonx/|tests/|pyproject\.toml|setup\.cfg|tox\.ini)'; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "No Python runtime or test changes detected; skipping Python lint checks."
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.python_changes.outputs.run == 'true'
         with:
           python-version: "3.11"
+
       - name: Install linters
+        if: steps.python_changes.outputs.run == 'true'
         run: |
           pip install ruff black mypy
+
       - name: Run ruff
+        if: steps.python_changes.outputs.run == 'true'
         run: ruff check archonx/
+
       - name: Run black
+        if: steps.python_changes.outputs.run == 'true'
         run: black --check archonx/
+
       - name: Run mypy
+        if: steps.python_changes.outputs.run == 'true'
         run: mypy archonx/
