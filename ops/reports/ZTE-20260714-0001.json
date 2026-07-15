@@ -25,29 +25,40 @@
     "ops/reports/plans/ZTE-20260714-0001-pauli-brand-studio.md"
   ],
   "files_modified": [
-    ".archonx/toolbox/skills/mandatory-design-law/SKILL.md"
+    ".archonx/toolbox/skills/mandatory-design-law/SKILL.md",
+    ".github/workflows/pr-validation.yml",
+    ".github/workflows/ci.yml"
   ],
   "validation": {
-    "branch_behind_by": 0,
     "allowlisted_files_only": true,
     "skill_metadata_present": true,
     "ordered_reference_manifest_present": true,
     "sections_0_through_25_preserved": true,
     "mandatory_design_law_wired": true,
-    "runtime_code_changed": false,
+    "runtime_application_code_changed": false,
     "dependencies_changed": false,
     "secrets_changed": false,
     "production_changed": false,
-    "pr_title_format_corrected": true
+    "pr_title_format_corrected": true,
+    "pr_ancestry_check_hardened": true,
+    "python_ci_change_detection_added": true,
+    "protected_branch_pushes_keep_full_ci": true,
+    "pr_validation_run_38": "success",
+    "ci_run_106": "success"
   },
   "tests": {
-    "type": "documentation and governance validation",
+    "type": "governance, workflow, and repository validation",
     "result": "pass",
-    "notes": "No runtime code or package changes; validated through branch fetch and main-to-branch comparison."
+    "evidence": [
+      "PR Validation & Auto-Merge run 38 passed",
+      "CI - Continuous Integration run 106 passed",
+      "Branch skill fetch passed",
+      "Main-to-branch path comparison passed"
+    ]
   },
-  "quality_score": 9.2,
+  "quality_score": 9.3,
   "p0": 0,
   "p1": 0,
-  "rollback": "Close the pull request without merging or revert the documentation-only commits.",
+  "rollback": "Close the pull request without merging or revert the skill, governance, and workflow commits.",
   "cost_used_cents": 0
 }
