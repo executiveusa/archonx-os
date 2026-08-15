@@ -12,19 +12,30 @@ Security (BEAD-019 / Sprint 1):
 
 from __future__ import annotations
 
-import asyncio
 import hmac
 import logging
 import secrets
 import time
+from dataclasses import dataclass
 from typing import Any
 
+from archonx.openclaw.channels import ChannelRouter, OutgoingMessage
 from archonx.security.safety_layer import SafetyLayer
 
 logger = logging.getLogger("archonx.openclaw.backend")
 
 # Default bind to loopback — external access requires explicit config
 _DEFAULT_HOST = "127.0.0.1"
+
+
+@dataclass
+class OpenClawConfig:
+    """Minimal runtime config for OpenClaw backend."""
+
+    host: str = _DEFAULT_HOST
+    port: int = 18789
+    auth_required: bool = True
+    auth_token: str | None = None
 
 
 class OpenClawBackend:
@@ -46,18 +57,29 @@ class OpenClawBackend:
         host: str = _DEFAULT_HOST,
         auth_token: str | None = None,
         auth_required: bool = True,
+        config: OpenClawConfig | None = None,
     ) -> None:
+        if config is not None:
+            port = config.port
+            host = config.host
+            auth_required = config.auth_required
+            auth_token = config.auth_token
+
         self.port = port
         self.host = host
         self.auth_token = auth_token or secrets.token_urlsafe(48)
         self.auth_required = auth_required
         self.sessions: dict[str, ClientSession] = {}
         self.channels: dict[str, ChannelHandler] = {}
+        self.channel_router = ChannelRouter()
+        self.channel_router.register_defaults()
         self.safety = SafetyLayer()
         self._running = False
         logger.info(
             "OpenClaw Backend initialized on %s:%d (auth=%s)",
-            host, port, "required" if auth_required else "open",
+            host,
+            port,
+            "required" if auth_required else "open",
         )
 
     # ------------------------------------------------------------------
@@ -71,15 +93,11 @@ class OpenClawBackend:
         return hmac.compare_digest(token, self.auth_token)
 
     @staticmethod
-    def verify_webhook_signature(
-        payload: bytes, signature: str, secret: str
-    ) -> bool:
+    def verify_webhook_signature(payload: bytes, signature: str, secret: str) -> bool:
         """HMAC-SHA256 webhook signature verification."""
         import hashlib
 
-        expected = hmac.new(
-            secret.encode(), payload, hashlib.sha256
-        ).hexdigest()
+        expected = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()
         return hmac.compare_digest(expected, signature)
 
     @staticmethod
@@ -111,6 +129,21 @@ class OpenClawBackend:
         self.sessions.clear()
         logger.info("OpenClaw Backend stopped")
 
+    async def send_message(self, channel: str, client_id: str, text: str) -> dict[str, Any]:
+        """Send a channel message via registered handlers."""
+        try:
+            result = await self.channel_router.route_outgoing(
+                OutgoingMessage(
+                    channel=channel,
+                    client_id=client_id,
+                    recipient=client_id,
+                    text=text,
+                )
+            )
+            return result
+        except ValueError as exc:
+            return {"status": "error", "channel": channel, "error": str(exc)}
+
     # ------------------------------------------------------------------
     # Tool dispatch with safety
     # ------------------------------------------------------------------
@@ -131,7 +164,6 @@ class OpenClawBackend:
         3. Execute (placeholder)
         4. Scan output
         """
-        # Safety gate
         safety_result = self.safety.check_tool_call(
             agent_id=agent_id,
             tool_name=tool_name,
@@ -142,7 +174,9 @@ class OpenClawBackend:
             violations = [v.message for v in safety_result.violations]
             logger.warning(
                 "Tool dispatch BLOCKED for %s/%s: %s",
-                client_id, tool_name, violations,
+                client_id,
+                tool_name,
+                violations,
             )
             return {
                 "status": "blocked",
@@ -152,10 +186,8 @@ class OpenClawBackend:
             }
 
         logger.info("Dispatching tool: %s for client %s", tool_name, client_id)
-        # Placeholder — wire to actual tools
         result = {"status": "success", "tool": tool_name, "client": client_id}
 
-        # Output leak scan
         result_text = str(result)
         _, output_safety = self.safety.check_output(result_text)
         if not output_safety.safe:
