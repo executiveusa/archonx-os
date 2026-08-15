@@ -6,6 +6,18 @@ brand surface, or interaction design work inside ArchonX and any managed repo.
 
 This is not optional guidance. It is policy.
 
+## Brand Studio escalation
+
+Any task involving a brand kit, brand voice, logo system, image campaign, KAKU-style brand book, branded website, branded application surface, marketing collateral, packaging, merchandise, or developer design handoff must also load:
+
+```text
+.archonx/toolbox/skills/pauli-brand-studio/SKILL.md
+```
+
+The Pauli Brand Studio skill extends this law with source forensics, prebuild scoring, KAKU sequencing, image and asset locking, voice evidence, rights and provenance, anti-slop gates, HTML-first review, independent guardians, and delivery requirements.
+
+No creative generation may begin until its prebuild gate passes.
+
 ## Core Law
 Every interface must satisfy two standards at the same time:
 
@@ -78,10 +90,14 @@ Frontend and visual work must produce:
 - intentional typography, spacing, and composition
 - a short design rationale explaining why the chosen direction is correct
 
+Brand-system work must additionally produce the evidence and outputs required by the Pauli Brand Studio skill.
+
 ## Enforcement
 - Any agent doing frontend or visual work must load this skill first.
+- Any agent doing brand-system work must then load the Pauli Brand Studio skill.
 - AGENTS doctrine references this skill as mandatory.
 - Reviewers should reject UI work that violates this skill even if the code functions.
+- Reviewers should reject brand work that skips source inspection, prebuild scoring, KAKU structure, guardian review, or rights checks.
 
 ## Short Rule
 Make it clear. Make it intentional. Make it easy to use. Do not make the user think.

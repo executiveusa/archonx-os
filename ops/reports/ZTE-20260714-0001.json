@@ -1,0 +1,64 @@
+{
+  "bead_id": "ZTE-20260714-0001",
+  "agent": "GPT-5.6-Thinking",
+  "role": "ORCHESTRATOR",
+  "task": "Install Pauli Brand Studio as the governing ArchonX skill for brand kits and branded design production",
+  "status": "complete",
+  "risk_tier": "LOW",
+  "blast_radius": 1,
+  "repository": "executiveusa/archonx-os",
+  "branch": "zte/ZTE-20260714-0001/pauli-brand-studio",
+  "pull_request": 33,
+  "pull_request_url": "https://github.com/executiveusa/archonx-os/pull/33",
+  "base_commit": "f86e8eb7af240dd13780df66b965fc9cf5e20d55",
+  "files_created": [
+    ".archonx/toolbox/skills/pauli-brand-studio/SKILL.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/00-core-and-sources.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/01-input-and-prebuild.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/02-strategy-and-voice.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/03-visual-icon-kaku.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/04-krug-antislop-dials.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/05-html-and-handoff.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/06-scoring-and-guardians.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/07-delivery-and-output.md",
+    ".archonx/toolbox/skills/pauli-brand-studio/references/08-circuit-comms-invocation.md",
+    "ops/reports/plans/ZTE-20260714-0001-pauli-brand-studio.md"
+  ],
+  "files_modified": [
+    ".archonx/toolbox/skills/mandatory-design-law/SKILL.md",
+    ".github/workflows/pr-validation.yml",
+    ".github/workflows/ci.yml"
+  ],
+  "validation": {
+    "allowlisted_files_only": true,
+    "skill_metadata_present": true,
+    "ordered_reference_manifest_present": true,
+    "sections_0_through_25_preserved": true,
+    "mandatory_design_law_wired": true,
+    "runtime_application_code_changed": false,
+    "dependencies_changed": false,
+    "secrets_changed": false,
+    "production_changed": false,
+    "pr_title_format_corrected": true,
+    "pr_ancestry_check_hardened": true,
+    "python_ci_change_detection_added": true,
+    "protected_branch_pushes_keep_full_ci": true,
+    "pr_validation_run_38": "success",
+    "ci_run_106": "success"
+  },
+  "tests": {
+    "type": "governance, workflow, and repository validation",
+    "result": "pass",
+    "evidence": [
+      "PR Validation & Auto-Merge run 38 passed",
+      "CI - Continuous Integration run 106 passed",
+      "Branch skill fetch passed",
+      "Main-to-branch path comparison passed"
+    ]
+  },
+  "quality_score": 9.3,
+  "p0": 0,
+  "p1": 0,
+  "rollback": "Close the pull request without merging or revert the skill, governance, and workflow commits.",
+  "cost_used_cents": 0
+}
