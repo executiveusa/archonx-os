@@ -1,3 +1,6 @@
+# Rust build output
+archonx-rust/target/
+
 # Python
 __pycache__/
 *.py[cod]
