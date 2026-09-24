@@ -1,0 +1,20 @@
+[package]
+name = "archonx-orchestration"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+archonx-core = { path = "../archonx-core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+dashmap = { workspace = true }
+async-trait = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
